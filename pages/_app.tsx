@@ -1,6 +1,15 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { ThemeProvider } from '@emotion/react';
+import { Themes } from '@styles/themes';
+import type { AppProps } from 'next/app';
+import { GlobalStyles } from '@styles/global';
+import { Global } from '@emotion/react';
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <ThemeProvider theme={Themes['dark']}>
+      <Component {...pageProps} />;
+      <Global styles={GlobalStyles} />
+    </ThemeProvider>
+  );
 }

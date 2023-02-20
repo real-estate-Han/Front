@@ -1,4 +1,5 @@
 {
+  "root": true,
   "env": {
     "browser": true,
     "es6": true,
@@ -17,10 +18,11 @@
     "plugin:import/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:storybook/recommended",
+    "plugin:react/recommended",
     "plugin:prettier/recommended",
-    "plugin:react/recommended"
+    "plugin:testing-library/react"
   ],
-  "plugins": ["react", "react-hooks", "prettier"],
+  "plugins": ["react", "react-hooks"],
   "rules": {
     "comma-dangle": "off", // trailing comma 생략 가능
     "consistent-return": "off", // 함수에 return문 생략 가능
@@ -64,10 +66,7 @@
     "jsx-a11y/control-has-associated-label": ["off"], // button 등의 interactive element를 텍스트 라벨 없이 사용할 수 있음
     "jsx-a11y/label-has-associated-control": ["off"], // label과 input을 연관시키지(htmlFor - id) 않아도 됨
     "react/destructuring-assignment": "off", // props를 사용할 때 반드시 비구조화 할당을 하지 않아도 됨
-    "react/jsx-filename-extension": [
-      "error",
-      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
-    ], // jsx 파일 확장자 제한
+    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx", ".ts", ".tsx"] }], // jsx 파일 확장자 제한
     "react/jsx-props-no-spreading": "off", // JSX에 props를 스프레드 연산자로 전달할 수 있음
     "react/jsx-no-useless-fragment": ["off"], // 무의미한(자식 요소가 1개 또는 fragment가 html의 자식인 경우) fragment 사용 가능
     "react/react-in-jsx-scope": "off", // jsx를 사용하기 위해 반드시 React를 import 하지 않아도 됨
@@ -82,5 +81,12 @@
       },
       "typescript": {}
     }
-  }
+  },
+  "overrides": [
+    // Only uses Testing Library lint rules in test files
+    {
+      "files": ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
+      "extends": ["plugin:testing-library/react"]
+    }
+  ]
 }
