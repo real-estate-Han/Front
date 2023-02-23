@@ -4,11 +4,14 @@ import { Themes } from '@styles/themes';
 import type { AppProps } from 'next/app';
 import { GlobalStyles } from '@styles/global';
 import { Global } from '@emotion/react';
+import { Layout } from '@components/Layout';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={Themes['dark']}>
-      <Component {...pageProps} />;
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
       <Global styles={GlobalStyles} />
     </ThemeProvider>
   );
