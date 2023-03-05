@@ -1,19 +1,29 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
+import useStore from '@zustand/store';
 import { Map, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Modal from '@components/Modal';
 const srcURL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=services,clusterer&autoload=false`;
-
+import { postShorten } from '@components/PostItem';
 export default function Home() {
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
+  const { modalState, changeModalState } = useStore((state) => state);
   const KakaomapUtil = dynamic(() => import('@components/KakaomapUtil'), {
     ssr: false,
   });
   return (
     <div>
+      {modalState ? (
+        <Modal closeModal={changeModalState}>
+          <></>
+        </Modal>
+      ) : (
+        <></>
+      )}
+
       <Warp>
         <MapPostList>
           <Kakomap center={{ lat: 37.558090961074825, lng: 126.99847210567884 }} level={3}>
@@ -22,7 +32,7 @@ export default function Home() {
           <PostList>asd</PostList>
         </MapPostList>
         <section>
-          <h1>카테고리</h1>
+          <h1 onClick={changeModalState}>카테고리</h1>
           <nav>매물 이모티콘 모음 자리</nav>
         </section>
         <section>

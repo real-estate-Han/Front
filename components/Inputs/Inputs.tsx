@@ -1,15 +1,19 @@
-import React, { ForwardedRef, forwardRef } from 'react';
-import styled from '@emotion/styled';
+import React, { ForwardedRef, forwardRef } from "react";
+import styled from "@emotion/styled";
 
 interface InputProps {
   type: string;
+  width?: string;
   defaultValue?: string;
   disabled?: boolean;
   text?: string;
 }
 
 export const Inputs = forwardRef(
-  ({ type, defaultValue, disabled, text, ...rest }: InputProps, ref: ForwardedRef<HTMLInputElement>) => {
+  (
+    { type, defaultValue, disabled, text, ...rest }: InputProps,
+    ref: ForwardedRef<HTMLInputElement>
+  ) => {
     return (
       <StyledDiv>
         <IdInput
@@ -28,7 +32,7 @@ export const Inputs = forwardRef(
 
 const IdInput = styled.input`
   margin: 20px 0 0 0;
-  padding: 25px 0 5px 5px;
+  padding: 10px 0 5px 10px;
   border: 1px solid rgb(214, 218, 227);
   border-radius: 5px;
   background-color: transparent;
@@ -43,11 +47,15 @@ const IdInput = styled.input`
   &::placeholder {
     color: transparent;
   }
-
+  /* &:placeholder-shown {
+    + span {
+      display: none;
+    }
+  } */
   &:not(:placeholder-shown) {
     outline: none;
     + span {
-      font-family: 'neodgm';
+      font-family: "neodgm";
       position: absolute;
       top: 11%;
       left: 3%;
@@ -61,11 +69,11 @@ const IdInput = styled.input`
     border: 2px solid black; //#1d9bf0 파랑
 
     + span {
-      font-family: 'neodgm';
+      font-family: "neodgm";
       position: absolute;
       top: 11%;
       left: 3%;
-      color: black;
+      color: ${({ theme }) => theme.font.regular};
       pointer-events: none;
       font-size: 1rem;
       background-color: ${({ theme }) => theme.background};
@@ -73,17 +81,17 @@ const IdInput = styled.input`
   }
 `;
 
-const StyledDiv = styled.div`
+const StyledDiv = styled.label<{ width?: string }>`
   display: flex;
   position: relative;
-  width: 100%;
+  width: ${({ width }) => width || "100%"};
   margin: auto;
   span {
     position: absolute;
     top: 50%;
     left: 3%;
     /* z-index:  */
-    color: blue;
+    color: ${({ theme }) => theme.font.regular};
     transition: all 0.2s ease;
   }
 `;

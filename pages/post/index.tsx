@@ -1,13 +1,12 @@
 import styled from '@emotion/styled';
-import { Inputs } from '@components/Inputs';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useState } from 'react';
-import Swal from 'sweetalert2';
 
-interface FormProps {
-  test?: string;
-  test2?: string;
-}
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { ChangeEvent, ChangeEventHandler, useState } from 'react';
+import Swal from 'sweetalert2';
+import { postType } from '@utils/type';
+import Image from 'next/image';
+import PostItemList from './postItemList';
+import { S3Client, AbortMultipartUploadCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 export default function PostItem() {
   const {
     register,
@@ -15,18 +14,66 @@ export default function PostItem() {
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormProps>();
+  } = useForm<postType>();
+  const client = new S3Client({
+    region: 'ap-northeast-2',
+    credentials: {
+      accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID!,
+      secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY!,
+    },
+  });
+  const bucketParams = {
+    Bucket: 'real-estate-han',
+    // Specify the name of the new object. For example, 'index.html'.
+    // To create a directory for the object, use '/'. For example, 'myApp/package.json'.
+    Key: 'test01',
+    // Content of the new object.
+    Body: 'Hello World!',
+  };
+  const run = async () => {
+    try {
+      const data = await client.send(new PutObjectCommand(bucketParams));
+      console.log('Successfully uploaded object: ' + bucketParams.Bucket + '/' + bucketParams.Key);
+      return data; // For unit tests.
+    } catch (err) {
+      console.log('Error', err);
+    }
+  };
+  const [textBox, setTextBox] = useState<number>();
+  const [titleImg, setTitleImg] = useState<string>();
+  const [detailImg, setDetailImg] = useState<string[]>();
 
-  const [textBox, setTextBox] = useState<string>('');
-  const onSubmit: SubmitHandler<FormProps> = (data) => {
-    Swal.fire({
-      title: 'Error!',
-      text: 'Do you want to continue',
-      icon: 'error',
-      confirmButtonText: 'Cool',
-    });
+  const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    let theFile;
+    if (event.target.id === 'itemTitleImg') {
+      const reader = new FileReader();
+      theFile = files && files[0];
+      theFile && reader.readAsDataURL(theFile);
+      reader.onload = () => {
+        setTitleImg(reader.result as string);
+      };
+    } else {
+      let fileUrl: string[] = [];
+
+      theFile = files!;
+      for (let i = 0; i < theFile.length; i++) {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          fileUrl.push(reader.result as string);
+          setDetailImg([...fileUrl]);
+        };
+
+        reader.readAsDataURL(theFile[i]);
+      }
+    }
+  };
+
+  const onSubmit: SubmitHandler<postType> = (data) => {
     console.log('data', data);
-    data.test2 && setTextBox(data?.test2);
+    run();
+    data.itemUniqueId && setTextBox(data?.itemUniqueId);
   };
 
   return (
@@ -34,11 +81,23 @@ export default function PostItem() {
       <h3>상품추가 페이지</h3>
       <></>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <section>이미지 인풋자리</section>
         <section>
-          <Inputs type="text" text="test" {...register('test', { required: '필수입력사항입니다.' })}></Inputs>
-          <span>{errors?.test?.message}</span>
-          <textarea {...register('test2', { required: true })}></textarea>
+          {titleImg && <Image src={titleImg} alt="title_img" width="40" height={40}></Image>}
+          <label>
+            <span>타이틀 이미지</span>
+            <input onChange={onFileChange} id="itemTitleImg" hidden type={'file'} />
+          </label>
+          {detailImg?.map((img, idx) => {
+            return <Image key={idx} src={img} alt="titleImg" width="40" height={40}></Image>;
+          })}
+
+          <label>
+            <span>디테일 이미지</span>
+            <input hidden type={'file'} multiple onChange={onFileChange} />
+          </label>
+        </section>
+        <section>
+          <PostItemList register={register} errors={errors} />
         </section>
         <input type="submit"></input>
       </form>
@@ -56,6 +115,7 @@ const Wrap = styled.div`
   justify-content: center;
   align-items: center;
   border: 1px solid red;
+
   form {
     width: 90%;
   }
