@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-
+    "types": ["kakao.maps.d.ts"],
     "baseUrl": ".",
     "paths": {
       "@components/*": ["components/*"],

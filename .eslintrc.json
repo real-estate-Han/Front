@@ -22,7 +22,7 @@
     "plugin:prettier/recommended",
     "plugin:testing-library/react"
   ],
-  "plugins": ["react", "react-hooks"],
+  "plugins": ["react", "react-hooks", "@emotion"],
   "rules": {
     "comma-dangle": "off", // trailing comma 생략 가능
     "consistent-return": "off", // 함수에 return문 생략 가능

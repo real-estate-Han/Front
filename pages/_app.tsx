@@ -5,7 +5,11 @@ import type { AppProps } from 'next/app';
 import { GlobalStyles } from '@styles/global';
 import { Global } from '@emotion/react';
 import { Layout } from '@components/Layout';
-
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={Themes['dark']}>
