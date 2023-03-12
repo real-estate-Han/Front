@@ -13,7 +13,7 @@ const client = new S3Client({
   },
 });
 
-export const S3UpLoadFile = async (titleFile?: File, detailFile?: File[]) => {
+export const S3UpLoadFile = async (titleFile?: File) => {
   try {
     const bucketParams = {
       Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME!,
@@ -36,13 +36,38 @@ export const S3UpLoadFile = async (titleFile?: File, detailFile?: File[]) => {
     console.log("Error", err);
   }
 };
-export const S3DeleteFile = async (titleFile?: File, detailFile?: File[]) => {
+export const S3UpLoadFiles = async (detailFile?: File[]) => {
   try {
+    let S3FileURLs: string[] = [];
+    detailFile?.forEach(async file => {
+      const url = await S3UpLoadFile(file);
+      S3FileURLs.push(url!);
+    });
+
+    return S3FileURLs;
+  } catch (err) {
+    console.log("Error", err);
+  }
+};
+
+export const S3DeleteFile = async (fileurl?: string) => {
+  try {
+    const fileName = fileurl?.split("/").pop();
     const bucketParams = {
       Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME!,
-      Key: titleFile?.name,
+      Key: fileName,
     };
     const data = await client.send(new DeleteObjectCommand(bucketParams));
+  } catch (err) {
+    console.log("Error", err);
+  }
+};
+
+export const S3DeleteFiles = async (detailFile?: File[]) => {
+  try {
+    detailFile?.forEach(async file => {
+      S3DeleteFile(file.name);
+    });
   } catch (err) {
     console.log("Error", err);
   }

@@ -7,10 +7,9 @@ import { postType } from "@utils/type";
 import Image from "next/image";
 import PostItemList from "./postItemList";
 
-import { S3UpLoadFile, S3DeleteFile } from "./S3util";
+import { S3UpLoadFile, S3DeleteFile, S3UpLoadFiles } from "./S3util";
 
 export default function PostItem() {
-  const [textBox, setTextBox] = useState<number>();
   const [titleImg, setTitleImg] = useState<string>();
   const [detailImg, setDetailImg] = useState<string[]>();
   const [titleFile, setTitleFile] = useState<File>();
@@ -38,8 +37,8 @@ export default function PostItem() {
     } else {
       let fileUrl: string[] = [];
       theFile = files!;
+      setDetailFile(Array.from(theFile));
       for (let i = 0; i < theFile.length; i++) {
-        setDetailFile([...detailFile, theFile[i]]);
         const reader = new FileReader();
 
         reader.onload = () => {
@@ -53,8 +52,11 @@ export default function PostItem() {
   };
 
   const onSubmit: SubmitHandler<postType> = async data => {
-    const url = titleFile && (await S3UpLoadFile(titleFile));
-    console.log("url", url);
+    const urls = detailFile && (await S3UpLoadFiles(detailFile));
+    console.log(urls);
+    // S3DeleteFile(
+    //   "https://real-estate-han.s3.ap-northeast-2.amazonaws.com/bird1.png"
+    // );
   };
 
   return (
@@ -102,8 +104,6 @@ export default function PostItem() {
         </section>
         <input type="submit"></input>
       </form>
-      <p>{textBox}</p>
-      <div></div>
     </Wrap>
   );
 }
