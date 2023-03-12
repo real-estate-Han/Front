@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.287.0",
+    "@aws-sdk/s3-request-presigner": "^3.289.0",
     "@emotion/babel-plugin": "^11.10.6",
     "@emotion/jest": "^11.10.5",
     "@emotion/react": "^11.10.5",
