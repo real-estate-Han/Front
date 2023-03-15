@@ -20,9 +20,9 @@ export default function PostItemList({ register, errors }: InputProps) {
       <Inputs
         type="text"
         text="주소"
-        {...register("itemAdress", { required: "필수입력사항입니다." })}
+        {...register("itemAddress", { required: "필수입력사항입니다." })}
       />
-      <span>{errors?.itemAdress?.message}</span>
+      <span>{errors?.itemAddress?.message}</span>
       <Inputs type="text" text="매물종류" {...register("itemType")} />
       <span>{errors?.itemType?.message}</span>
       <Inputs type="text" text="매물상태" {...register("itemStatus")} />

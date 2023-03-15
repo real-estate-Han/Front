@@ -1,6 +1,6 @@
 export interface postType {
   itemUniqueId: number;
-  itemAdress?: string;
+  itemAddress?: string;
   itemType?: string;
   itemDeposit?: number;
   itemMonthly?: number;
@@ -61,3 +61,7 @@ export interface postType {
 // 용도지역 : string}
 
 // }
+export type GeoLocation = {
+  lat: number;
+  lng: number;
+};
