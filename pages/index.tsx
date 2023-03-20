@@ -1,19 +1,23 @@
 import styled from "@emotion/styled";
 import useStore from "@zustand/store";
 import { Map, MapTypeControl, ZoomControl } from "react-kakao-maps-sdk";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-
+import { GET_CLUSTER_DATA } from "@utils/apollo/gqls";
 import Modal from "@components/Modal";
-const srcURL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=services,clusterer&autoload=false`;
-import { postShorten } from "@components/PostItem";
+
+import { useQuery } from "@apollo/client";
 
 export default function Home() {
+  const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA, {
+    ssr: true,
+  });
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const { modalState, changeModalState } = useStore(state => state);
   const KakaoMap = dynamic(() => import("@components/KakaoMap/clusterMap"), {
     ssr: false,
   });
+  console.log(clusterData);
   return (
     <div>
       {modalState ? (

@@ -14,14 +14,11 @@ import dynamic from "next/dynamic";
 import { GeoLocation } from "@utils/type";
 
 interface KakaoMapProps {
-  getByAddress: (address: string) => void;
-  getByGeoCoder: (lng: number, lat: number) => void;
+  kakaoAddress: string | undefined;
+  position: { lng: number; lat: number };
 }
 
-export default function PostMain({
-  getByAddress,
-  getByGeoCoder,
-}: KakaoMapProps) {
+export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
   const [titleImg, setTitleImg] = useState<string>();
   const [detailImg, setDetailImg] = useState<string[]>();
   const [titleFile, setTitleFile] = useState<File>();

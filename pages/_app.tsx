@@ -4,13 +4,9 @@ import type { AppProps } from "next/app";
 import { GlobalStyles } from "@styles/global";
 import { Global } from "@emotion/react";
 import { Layout } from "@components/Layout";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-
+import { ApolloProvider } from "@apollo/client";
+import { client } from "@utils/apollo/apolloclient";
 export default function App({ Component, pageProps }: AppProps) {
-  const client = new ApolloClient({
-    uri: "",
-    cache: new InMemoryCache(),
-  });
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={Themes["dark"]}>

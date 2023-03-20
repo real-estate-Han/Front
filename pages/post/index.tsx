@@ -10,14 +10,15 @@ export default function PostItem() {
     lat: 0,
     lng: 0,
   });
-  const [kakaoAddress, setKakaoAddress] = useState<string>();
+  const [kakaoAddress, setKakaoAddress] = useState<string>("");
 
   const getByGeoCoder = (lng: number, lat: number) => {
     if (!map) return;
     var geocoder = new kakao.maps.services.Geocoder();
     geocoder.coord2Address(lng, lat, function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
-        setKakaoAddress(result[0]?.road_address?.address_name);
+        setKakaoAddress(result[0]?.road_address?.address_name as string);
+        console.log(kakaoAddress, position);
       }
     });
   };
@@ -69,7 +70,7 @@ export default function PostItem() {
         ></input>
         <button onClick={getByAddress.bind(null, kakaoAddress)}>검색</button>
       </label>
-      <PostMain getByGeoCoder={getByGeoCoder} getByAddress={getByAddress} />
+      <PostMain position={position} kakaoAddress={kakaoAddress} />
     </Wrap>
   );
 }
