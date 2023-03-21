@@ -1,5 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
-import { postType } from '../type';
+import { gql, useQuery } from "@apollo/client";
+import { postType } from "../type";
 
 // export const GET_POSTS = gql`
 //     query GetPosts {

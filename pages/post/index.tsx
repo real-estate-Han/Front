@@ -1,16 +1,16 @@
-import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
-import dynamic from 'next/dynamic';
-import { GeoLocation } from '@utils/type';
-import PostMain from './main';
+import styled from "@emotion/styled";
+import { useEffect, useState } from "react";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+import dynamic from "next/dynamic";
+import { GeoLocation } from "@utils/type";
+import PostMain from "./main";
 export default function PostItem() {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [position, setPosition] = useState<GeoLocation>({
     lat: 0,
     lng: 0,
   });
-  const [kakaoAddress, setKakaoAddress] = useState<string>('');
+  const [kakaoAddress, setKakaoAddress] = useState<string>("");
 
   const getByGeoCoder = (lng: number, lat: number) => {
     if (!map) return;
@@ -42,14 +42,14 @@ export default function PostItem() {
     getByGeoCoder(position?.lng, position?.lat);
   }, [position]);
 
-  const KakaoMapUtil = dynamic(() => import('@components/KakaomapUtil'), {
+  const KakaoMapUtil = dynamic(() => import("@components/KakaomapUtil"), {
     ssr: false,
   });
   return (
     <Wrap>
       <Kakomap
         center={{ lat: 37.76005219169334, lng: 126.77987452889714 }}
-        level={4}
+        level={6}
         isPanto={true}
         onClick={(_t, mouseEvent) =>
           setPosition({
@@ -64,7 +64,7 @@ export default function PostItem() {
       </Kakomap>
       <label>
         <input
-          onChange={(e) => {
+          onChange={e => {
             setKakaoAddress(e.target.value);
           }}
         ></input>

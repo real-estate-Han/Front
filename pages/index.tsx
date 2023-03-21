@@ -1,34 +1,50 @@
-import styled from '@emotion/styled';
-import useStore from '@zustand/store';
-import { Map, MarkerClusterer, MapMarker } from 'react-kakao-maps-sdk';
-import { use, useEffect, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
-import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
-import Modal from '@components/Modal';
+import styled from "@emotion/styled";
+import useStore from "@zustand/store";
+import { Map, MarkerClusterer, MapMarker } from "react-kakao-maps-sdk";
+import { use, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { GET_CLUSTER_DATA } from "@utils/apollo/gqls";
+import Modal from "@components/Modal";
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client";
 
 export default function Home() {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA, {
     ssr: true,
   });
+
   const [map, setMap] = useState<kakao.maps.Map>();
-  const { modalState, changeModalState } = useStore((state) => state);
-  const KakaoMapUtil = dynamic(() => import('@components/KakaomapUtil'), {
+  const [mapState, setMapState] = useState<any>();
+  const { modalState, changeModalState } = useStore(state => state);
+  const KakaoMapUtil = dynamic(() => import("@components/KakaomapUtil"), {
     ssr: false,
   });
   const getTexts = (size: number) => {
     // 한 클러스터 객체가 포함하는 마커의 개수에 따라 다른 텍스트 값을 표시합니다
-    if (size < 10) {
-      return '삐약';
-    } else if (size < 30) {
-      return '꼬꼬';
-    } else if (size < 50) {
-      return '꼬끼오';
+    if (size < 2) {
+      return "삐약";
+    } else if (size < 5) {
+      return "꼬꼬";
+    } else if (size < 10) {
+      return "꼬끼오";
     } else {
-      return '치멘';
+      return "치멘";
     }
   };
+  const mapRef = useRef<kakao.maps.Map>(null);
+  const [mapInfo, setMapInfo] = useState();
+  const bounds = async () => {
+    if (!map && !mapState) return;
+    const bounds = new kakao.maps.LatLngBounds(mapState?.sw, mapState?.ne!);
+    console.log(bounds);
+    // clusterData?.allpost?.posts.forEach((p: any) => {
+    //   const contain = bounds.contain(new kakao.maps.LatLng(p.lat, p.lng));
+    //   console.log(bounds);
+    // });
+  };
+  useEffect(() => {
+    bounds();
+  }, [mapState]);
   return (
     <div>
       {modalState ? (
@@ -47,13 +63,63 @@ export default function Home() {
               level={9}
               isPanto={true}
               onCreate={setMap}
+              ref={mapRef}
+              onBoundsChanged={map =>
+                setMapState({
+                  sw: map.getBounds().getSouthWest(),
+                  ne: map.getBounds().getNorthEast(),
+                })
+              }
             >
               <MarkerClusterer
                 averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-                minLevel={10} // 클러스터 할 최소 지도 레벨
+                minLevel={5} // 클러스터 할 최소 지도 레벨
                 disableClickZoom={true} // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
                 calculator={[1, 5, 10]} // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
                 texts={getTexts} // 클러스터의 크기에 따라 표시할 텍스트를 설정한다
+                styles={[
+                  {
+                    // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+                    width: "30px",
+                    height: "30px",
+                    background: "rgba(51, 204, 255, .8)",
+                    borderRadius: "15px",
+                    color: "#000",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    lineHeight: "31px",
+                  },
+                  {
+                    width: "40px",
+                    height: "40px",
+                    background: "rgba(255, 153, 0, .8)",
+                    borderRadius: "20px",
+                    color: "#000",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    lineHeight: "41px",
+                  },
+                  {
+                    width: "50px",
+                    height: "50px",
+                    background: "rgba(255, 51, 204, .8)",
+                    borderRadius: "25px",
+                    color: "#000",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    lineHeight: "51px",
+                  },
+                  {
+                    width: "60px",
+                    height: "60px",
+                    background: "rgba(255, 80, 80, .8)",
+                    borderRadius: "30px",
+                    color: "#000",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    lineHeight: "61px",
+                  },
+                ]}
               >
                 {clusterData?.allpost?.posts.map((pos: any) => (
                   <MapMarker

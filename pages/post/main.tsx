@@ -1,13 +1,13 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { ChangeEvent, useState } from 'react';
-import Swal from 'sweetalert2';
-import { postType } from '@utils/type';
-import Image from 'next/image';
-import PostItemList from './postItemList';
-import { useMutation } from '@apollo/client';
-import { Creat_POST } from '@utils/apollo/gqls';
+import { SubmitHandler, useForm } from "react-hook-form";
+import { ChangeEvent, useState } from "react";
+import Swal from "sweetalert2";
+import { postType } from "@utils/type";
+import Image from "next/image";
+import PostItemList from "./postItemList";
+import { useMutation } from "@apollo/client";
+import { Creat_POST } from "@utils/apollo/gqls";
 interface KakaoMapProps {
   kakaoAddress: string | undefined;
   position: { lng: number; lat: number };
@@ -29,7 +29,7 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
   const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     let theFile;
-    if (event.target.id === 'itemTitleImg') {
+    if (event.target.id === "itemTitleImg") {
       const reader = new FileReader();
       theFile = files && files[0];
       theFile && setTitleFile(theFile);
@@ -54,18 +54,18 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
     }
   };
   const [CreatPost, { data, loading, error }] = useMutation(Creat_POST);
-  const onSubmit: SubmitHandler<postType> = async (data) => {
+  const onSubmit: SubmitHandler<postType> = async data => {
     // const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
     // const detailS3URL = detailFile && (await S3UpLoadFiles(detailFile));
 
-    const PostInputData = { ...data, itemAddress: kakaoAddress };
+    const PostInputData = {
+      ...data,
+      itemAddress: kakaoAddress,
+    };
     const Geo = position;
+
+    CreatPost({ variables: { postInput: PostInputData, geo: Geo } });
     console.log(data);
-    // CreatPost({ variables: { postInput: PostInputData, geo: Geo } });
-    // console.log(data);
-    // S3DeleteFile(
-    //   "https://real-estate-han.s3.ap-northeast-2.amazonaws.com/bird1.png"
-    // );
   };
 
   // console.log(kakaoAddress);
@@ -75,18 +75,38 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <section>
-          {titleImg && <Image src={titleImg} alt="title_img" width="40" height={40}></Image>}
+          {titleImg && (
+            <Image
+              src={titleImg}
+              alt="title_img"
+              width="40"
+              height={40}
+            ></Image>
+          )}
           <label>
             <span>타이틀 이미지</span>
-            <input onChange={onFileChange} id="itemTitleImg" hidden type={'file'} />
+            <input
+              onChange={onFileChange}
+              id="itemTitleImg"
+              hidden
+              type={"file"}
+            />
           </label>
           {detailImg?.map((img, idx) => {
-            return <Image key={idx} src={img} alt="titleImg" width="40" height={40}></Image>;
+            return (
+              <Image
+                key={idx}
+                src={img}
+                alt="titleImg"
+                width="40"
+                height={40}
+              ></Image>
+            );
           })}
 
           <label>
             <span>디테일 이미지</span>
-            <input hidden type={'file'} multiple onChange={onFileChange} />
+            <input hidden type={"file"} multiple onChange={onFileChange} />
           </label>
         </section>
         <section>

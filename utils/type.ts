@@ -1,10 +1,10 @@
 export interface postType {
-  itemUniqueId: number;
+  itemUniqueID: number;
   itemAddress?: string;
   itemType?: string;
   itemDeposit?: number;
   itemMonthly?: number;
-  itemAll?: number;
+  itemJense?: number;
   itemSale?: number;
   itemManagement?: number;
   itemAreaLand?: number;
