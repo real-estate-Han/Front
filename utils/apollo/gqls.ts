@@ -1,5 +1,5 @@
-import { gql, useQuery } from "@apollo/client";
-import { postType } from "../type";
+import { gql, useQuery } from '@apollo/client';
+import { postType } from '../type';
 
 // export const GET_POSTS = gql`
 //     query GetPosts {
@@ -34,14 +34,19 @@ export const GET_CLUSTER_DATA = gql`
 //         }
 //     `;
 
-// export const CreatePostGQL = (data: postType) => {
-//   const Creat_POST = gql`
-//     mutation CreatePost($postInput: postInput) {
-//       createPost(postInput: $postInput)
-//     }
-//   `;
-//   return Creat_POST;
-// };
+export const Creat_POST = gql`
+  mutation Mutation($postInput: PostInputData, $geo: Geo) {
+    createPost(postInput: $postInput, geo: $geo) {
+      _id
+      itemAddress
+      itemUniqueID
+      itemGeoLocation {
+        lat
+        lng
+      }
+    }
+  }
+`;
 
 // export const UPDATE_POST = gql`
 //     mutation UpdatePost($id: ID!, $title: String!, $body: String!) {
