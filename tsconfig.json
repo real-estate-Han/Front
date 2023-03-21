@@ -14,13 +14,14 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "types": ["kakao.maps.d.ts"],
+    "types": ["kakao.maps.d.ts", "next", "next/types/global", "jest"],
     "baseUrl": ".",
     "paths": {
       "@components/*": ["components/*"],
       "@styles/*": ["styles/*"],
       "@pages/*": ["pages/*"],
       "@hooks/*": ["hooks/*"],
+      "@utils/*": ["utils/*"],
       "@zustand/*": ["zustand/*"]
     }
   },

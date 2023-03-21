@@ -1,53 +1,79 @@
-import styled from '@emotion/styled';
-import { Inputs } from '@components/Inputs';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useState } from 'react';
-import Swal from 'sweetalert2';
-
-interface FormProps {
-  test?: string;
-  test2?: string;
-}
+import styled from "@emotion/styled";
+import { useEffect, useState } from "react";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+import dynamic from "next/dynamic";
+import { GeoLocation } from "@utils/type";
+import PostMain from "./main";
 export default function PostItem() {
-  const {
-    register,
+  const [map, setMap] = useState<kakao.maps.Map>();
+  const [position, setPosition] = useState<GeoLocation>({
+    lat: 0,
+    lng: 0,
+  });
+  const [kakaoAddress, setKakaoAddress] = useState<string>("");
 
-    setError,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormProps>();
-
-  const [textBox, setTextBox] = useState<string>('');
-  const onSubmit: SubmitHandler<FormProps> = (data) => {
-    Swal.fire({
-      title: 'Error!',
-      text: 'Do you want to continue',
-      icon: 'error',
-      confirmButtonText: 'Cool',
+  const getByGeoCoder = (lng: number, lat: number) => {
+    if (!map) return;
+    var geocoder = new kakao.maps.services.Geocoder();
+    geocoder.coord2Address(lng, lat, function (result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        setKakaoAddress(result[0]?.road_address?.address_name as string);
+        console.log(kakaoAddress, position);
+      }
     });
-    console.log('data', data);
-    data.test2 && setTextBox(data?.test2);
   };
 
+  const getByAddress = (address: string | undefined) => {
+    if (!map) return;
+    var geocoder = new kakao.maps.services.Geocoder();
+    address &&
+      geocoder.addressSearch(address, function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          console.log(result[0].x, result[0].y);
+          setPosition({
+            lat: parseFloat(result[0].y),
+            lng: parseFloat(result[0].x),
+          });
+        }
+      });
+  };
+
+  useEffect(() => {
+    getByGeoCoder(position?.lng, position?.lat);
+  }, [position]);
+
+  const KakaoMapUtil = dynamic(() => import("@components/KakaomapUtil"), {
+    ssr: false,
+  });
   return (
     <Wrap>
-      <h3>상품추가 페이지</h3>
-      <></>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <section>이미지 인풋자리</section>
-        <section>
-          <Inputs type="text" text="test" {...register('test', { required: '필수입력사항입니다.' })}></Inputs>
-          <span>{errors?.test?.message}</span>
-          <textarea {...register('test2', { required: true })}></textarea>
-        </section>
-        <input type="submit"></input>
-      </form>
-      <p>{textBox}</p>
-      <div></div>
+      <Kakomap
+        center={{ lat: 37.76005219169334, lng: 126.77987452889714 }}
+        level={4}
+        isPanto={true}
+        onClick={(_t, mouseEvent) =>
+          setPosition({
+            lat: mouseEvent.latLng.getLat(),
+            lng: mouseEvent.latLng.getLng(),
+          })
+        }
+        onCreate={setMap}
+      >
+        {position && <MapMarker position={position} />}
+        <KakaoMapUtil />
+      </Kakomap>
+      <label>
+        <input
+          onChange={e => {
+            setKakaoAddress(e.target.value);
+          }}
+        ></input>
+        <button onClick={getByAddress.bind(null, kakaoAddress)}>검색</button>
+      </label>
+      <PostMain position={position} kakaoAddress={kakaoAddress} />
     </Wrap>
   );
 }
-
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -56,6 +82,7 @@ const Wrap = styled.div`
   justify-content: center;
   align-items: center;
   border: 1px solid red;
+
   form {
     width: 90%;
   }
@@ -65,5 +92,15 @@ const Wrap = styled.div`
   section:nth-of-type(2) {
     border: 1px solid green;
     width: 100%;
+  }
+`;
+const Kakomap = styled(Map)`
+  width: 500px;
+  height: 400px;
+  border: 1px solid black;
+  transition: 0.5s;
+  @media (min-width: 1200px) {
+    width: 600px;
+    height: 600px;
   }
 `;
