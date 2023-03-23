@@ -1,23 +1,27 @@
-import { Input } from '@components/Input';
-import { Logo } from '@components/Logo';
-import styled from '@emotion/styled';
-import Link from 'next/link';
+import { Input } from "@components/Input";
+import { Logo } from "@components/Logo";
+import styled from "@emotion/styled";
+import useStore from "@zustand/store";
+import Link from "next/link";
 
 type childeren = { children: React.ReactNode };
 
 export const Layout = ({ children }: childeren) => {
+  const { modalState, changeModalState } = useStore((state) => state);
   return (
     <Wrapper>
       <Header>
         <StyledLogo size={2}>한세일부동산</StyledLogo>
         <div className="loginButton">
-          <button>로그인</button>
+          <button onClick={changeModalState}>로그인</button>
           <button>메뉴</button>
         </div>
       </Header>
 
       <Content>{children}</Content>
-      <Footer>© {new Date().getFullYear()} NickOvchinnikov. All rights reserved.</Footer>
+      <Footer>
+        © {new Date().getFullYear()} NickOvchinnikov. All rights reserved.
+      </Footer>
     </Wrapper>
   );
 };
