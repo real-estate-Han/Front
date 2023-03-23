@@ -5,8 +5,10 @@ import { GlobalStyles } from "@styles/global";
 import { Global } from "@emotion/react";
 import { Layout } from "@components/Layout";
 import { ApolloProvider } from "@apollo/client";
-import { client } from "@utils/apollo/apolloclient";
+import { useApollo } from "@utils/apollo/apolloclient";
 export default function App({ Component, pageProps }: AppProps) {
+  console.log(pageProps);
+  const client = useApollo(pageProps.initialApolloState);
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={Themes["dark"]}>

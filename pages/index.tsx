@@ -1,21 +1,34 @@
-import styled from '@emotion/styled';
-import useStore from '@zustand/store';
-import { Map, MarkerClusterer, MapMarker } from 'react-kakao-maps-sdk';
-import { use, useEffect, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
-import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
-import Modal from '@components/Modal';
-import { debounce, throttle } from '@utils/Throttle';
-import { useQuery } from '@apollo/client';
-import KakaoMapUtil from '@components/KakaomapUtil';
-export default function Home() {
-  const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA, {
-    ssr: true,
+import styled from "@emotion/styled";
+import useStore from "@zustand/store";
+import { Map, MarkerClusterer, MapMarker } from "react-kakao-maps-sdk";
+import { use, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { GET_CLUSTER_DATA } from "@utils/apollo/gqls";
+import Modal from "@components/Modal";
+import PostItem from "@components/PostItem";
+import { useQuery } from "@apollo/client";
+import KakaoMapUtil from "@components/KakaomapUtil";
+import { postType } from "@utils/type";
+import { initializeApollo } from "@utils/apollo/apolloclient";
+export async function getStaticProps() {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query({
+    query: GET_CLUSTER_DATA,
   });
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+    },
+  };
+}
+export default function Home() {
+  const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
 
   const [map, setMap] = useState<kakao.maps.Map>();
   const [mapState, setMapState] = useState<any>();
-  const { modalState, changeModalState } = useStore((state) => state);
+  const { modalState, changeModalState } = useStore(state => state);
 
   const KakaoMapUtils = () => {
     if (!map) return null;
@@ -24,27 +37,33 @@ export default function Home() {
   const getTexts = (size: number) => {
     // 한 클러스터 객체가 포함하는 마커의 개수에 따라 다른 텍스트 값을 표시합니다
     if (size < 2) {
-      return '삐약';
+      return "삐약";
     } else if (size < 5) {
-      return '꼬꼬';
+      return "꼬꼬";
     } else if (size < 10) {
-      return '꼬끼오';
+      return "꼬끼오";
     } else {
-      return '치멘';
+      return "치멘";
     }
   };
   const mapRef = useRef<kakao.maps.Map>(null);
-  const [mapInfo, setMapInfo] = useState();
+  const [selectedData, setSelectedData] = useState<postType[]>();
 
   const bounds = () => {
     if (!map && !mapState) return;
     const bounds = new kakao.maps.LatLngBounds(mapState?.sw, mapState?.ne!);
     const filterdata = clusterData?.allpost?.posts.filter((p: any) => {
-      const contain = bounds.contain(new kakao.maps.LatLng(p.itemGeoLocation.lat, p.itemGeoLocation.lng));
+      const contain = bounds.contain(
+        new kakao.maps.LatLng(p.itemGeoLocation.lat, p.itemGeoLocation.lng)
+      );
       return contain;
     });
-    console.log(filterdata);
+    setSelectedData(filterdata);
+    // console.log(filterdata);
   };
+  useEffect(() => {
+    setSelectedData(clusterData?.allpost?.posts);
+  }, []);
 
   useEffect(() => {
     const debounce = setTimeout(() => {
@@ -71,7 +90,7 @@ export default function Home() {
               isPanto={true}
               onCreate={setMap}
               ref={mapRef}
-              onBoundsChanged={(map) =>
+              onBoundsChanged={map =>
                 setMapState({
                   sw: map.getBounds().getSouthWest(),
                   ne: map.getBounds().getNorthEast(),
@@ -87,44 +106,44 @@ export default function Home() {
                 styles={[
                   {
                     // calculator 각 사이 값 마다 적용될 스타일을 지정한다
-                    width: '30px',
-                    height: '30px',
-                    background: 'rgba(51, 204, 255, .8)',
-                    borderRadius: '15px',
-                    color: '#000',
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    lineHeight: '31px',
+                    width: "30px",
+                    height: "30px",
+                    background: "rgba(51, 204, 255, .8)",
+                    borderRadius: "15px",
+                    color: "#000",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    lineHeight: "31px",
                   },
                   {
-                    width: '40px',
-                    height: '40px',
-                    background: 'rgba(255, 153, 0, .8)',
-                    borderRadius: '20px',
-                    color: '#000',
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    lineHeight: '41px',
+                    width: "40px",
+                    height: "40px",
+                    background: "rgba(255, 153, 0, .8)",
+                    borderRadius: "20px",
+                    color: "#000",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    lineHeight: "41px",
                   },
                   {
-                    width: '50px',
-                    height: '50px',
-                    background: 'rgba(255, 51, 204, .8)',
-                    borderRadius: '25px',
-                    color: '#000',
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    lineHeight: '51px',
+                    width: "50px",
+                    height: "50px",
+                    background: "rgba(255, 51, 204, .8)",
+                    borderRadius: "25px",
+                    color: "#000",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    lineHeight: "51px",
                   },
                   {
-                    width: '60px',
-                    height: '60px',
-                    background: 'rgba(255, 80, 80, .8)',
-                    borderRadius: '30px',
-                    color: '#000',
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    lineHeight: '61px',
+                    width: "60px",
+                    height: "60px",
+                    background: "rgba(255, 80, 80, .8)",
+                    borderRadius: "30px",
+                    color: "#000",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    lineHeight: "61px",
                   },
                 ]}
               >
@@ -142,7 +161,11 @@ export default function Home() {
             </Kakomap>
           </>
 
-          <PostList>asd</PostList>
+          <PostList>
+            {selectedData?.map(p => {
+              return <PostItem key={p.itemUniqueID} postData={p} />;
+            })}
+          </PostList>
         </MapPostList>
         <section>
           <h1 onClick={changeModalState}>카테고리</h1>
@@ -183,7 +206,7 @@ const Warp = styled.div`
 `;
 const MapPostList = styled.div`
   display: flex;
-  width: 90%;
+  width: 100%;
   height: 60%;
   margin: 0 auto;
   gap: 1rem;
@@ -208,6 +231,7 @@ const Kakomap = styled(Map)`
   }
 `;
 const PostList = styled.div`
+  display: flex;
   background-color: red;
   width: 500px;
   height: 400px;

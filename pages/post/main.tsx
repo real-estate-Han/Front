@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ChangeEvent, useState } from "react";
 import Swal from "sweetalert2";
-import { postType } from "@utils/type";
+import { postInputType, postType } from "@utils/type";
 import Image from "next/image";
 import PostItemList from "./postItemList";
 import { useMutation } from "@apollo/client";
@@ -54,7 +54,7 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
     }
   };
   const [CreatPost, { data, loading, error }] = useMutation(Creat_POST);
-  const onSubmit: SubmitHandler<postType> = async data => {
+  const onSubmit: SubmitHandler<postInputType> = async data => {
     // const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
     // const detailS3URL = detailFile && (await S3UpLoadFiles(detailFile));
 

@@ -18,7 +18,6 @@ export default function PostItem() {
     geocoder.coord2Address(lng, lat, function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
         setKakaoAddress(result[0]?.road_address?.address_name as string);
-        console.log(kakaoAddress, position);
       }
     });
   };
@@ -29,7 +28,6 @@ export default function PostItem() {
     address &&
       geocoder.addressSearch(address, function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
-          console.log(result[0].x, result[0].y);
           setPosition({
             lat: parseFloat(result[0].y),
             lng: parseFloat(result[0].x),
