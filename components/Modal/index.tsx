@@ -4,24 +4,25 @@ import styled from '@emotion/styled';
 interface ModalProps {
   children: React.ReactNode;
   closeModal: () => void;
+  modalState: boolean;
 }
-const Modal = (props: ModalProps) => {
- 
 
-  function closeModal() {}
+const Modal = (props: ModalProps) => {
   // 모달창이 나왔을때 백그라운드 클릭이 안되게 하고 스크롤도 고정하는 방법
   useEffect(() => {
-    document.body.style.cssText = `
-      position: fixed; 
-      top: -${window.scrollY}px;
-      overflow-y: scroll;
-      width: 100%;`;
+    const html = document.documentElement;
+    if (props.modalState) {
+      html.style.overflowY = 'hidden';
+      html.style.overflowX = 'hidden';
+    } else {
+      html.style.overflowY = 'auto';
+      html.style.overflowX = 'auto';
+    }
     return () => {
-      const scrollY = document.body.style.top;
-      document.body.style.cssText = '';
-      window.scrollTo(0, parseInt(scrollY) * -1);
+      html.style.overflowY = 'auto';
+      html.style.overflowX = 'auto';
     };
-  }, []);
+  }, [props.modalState]);
 
   return (
     <ModalStyled onClick={props.closeModal}>
@@ -47,6 +48,10 @@ const ModalStyled = styled.div`
   align-items: center;
 
   .modalBody {
+    max-width: 500px;
+    width: 70%;
+    height: 80%;
+    max-height: 500px;
     position: absolute;
     color: black;
     padding: 30px 30px 30px 30px;

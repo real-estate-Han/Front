@@ -1,15 +1,15 @@
-import styled from "@emotion/styled";
-import useStore from "@zustand/store";
-import { Map, MarkerClusterer, MapMarker } from "react-kakao-maps-sdk";
-import { use, useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
-import { GET_CLUSTER_DATA } from "@utils/apollo/gqls";
-import Modal from "@components/Modal";
-import PostItem from "@components/PostItem";
-import { useQuery } from "@apollo/client";
-import KakaoMapUtil from "@components/KakaomapUtil";
-import { postType } from "@utils/type";
-import { initializeApollo } from "@utils/apollo/apolloclient";
+import styled from '@emotion/styled';
+import useStore from '@zustand/store';
+import { Map, MarkerClusterer, MapMarker } from 'react-kakao-maps-sdk';
+import { use, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
+import Modal from '@components/Modal';
+import PostItem from '@components/PostItem';
+import { useQuery } from '@apollo/client';
+import KakaoMapUtil from '@components/KakaomapUtil';
+import { postType } from '@utils/type';
+import { initializeApollo } from '@utils/apollo/apolloclient';
 export async function getStaticProps() {
   const apolloClient = initializeApollo();
 
@@ -28,7 +28,6 @@ export default function Home() {
 
   const [map, setMap] = useState<kakao.maps.Map>();
   const [mapState, setMapState] = useState<any>();
-  const { modalState, changeModalState } = useStore(state => state);
 
   const KakaoMapUtils = () => {
     if (!map) return null;
@@ -37,13 +36,13 @@ export default function Home() {
   const getTexts = (size: number) => {
     // 한 클러스터 객체가 포함하는 마커의 개수에 따라 다른 텍스트 값을 표시합니다
     if (size < 2) {
-      return "삐약";
+      return '삐약';
     } else if (size < 5) {
-      return "꼬꼬";
+      return '꼬꼬';
     } else if (size < 10) {
-      return "꼬끼오";
+      return '꼬끼오';
     } else {
-      return "치멘";
+      return '치멘';
     }
   };
   const mapRef = useRef<kakao.maps.Map>(null);
@@ -53,9 +52,7 @@ export default function Home() {
     if (!map && !mapState) return;
     const bounds = new kakao.maps.LatLngBounds(mapState?.sw, mapState?.ne!);
     const filterdata = clusterData?.allpost?.posts.filter((p: any) => {
-      const contain = bounds.contain(
-        new kakao.maps.LatLng(p.itemGeoLocation.lat, p.itemGeoLocation.lng)
-      );
+      const contain = bounds.contain(new kakao.maps.LatLng(p.itemGeoLocation.lat, p.itemGeoLocation.lng));
       return contain;
     });
     setSelectedData(filterdata);
@@ -72,110 +69,100 @@ export default function Home() {
     return () => clearTimeout(debounce);
   }, [mapState]);
   return (
-    <div>
-      {modalState ? (
-        <Modal closeModal={changeModalState}>
-          <></>
-        </Modal>
-      ) : (
-        <></>
-      )}
-
-      <Warp>
-        <MapPostList>
-          <>
-            <Kakomap
-              center={{ lat: 37.76005219169334, lng: 126.77987452889714 }}
-              level={9}
-              isPanto={true}
-              onCreate={setMap}
-              ref={mapRef}
-              onBoundsChanged={map =>
-                setMapState({
-                  sw: map.getBounds().getSouthWest(),
-                  ne: map.getBounds().getNorthEast(),
-                })
-              }
+    <Warp>
+      <MapPostList>
+        <>
+          <Kakomap
+            center={{ lat: 37.76005219169334, lng: 126.77987452889714 }}
+            level={9}
+            isPanto={true}
+            onCreate={setMap}
+            ref={mapRef}
+            onBoundsChanged={(map) =>
+              setMapState({
+                sw: map.getBounds().getSouthWest(),
+                ne: map.getBounds().getNorthEast(),
+              })
+            }
+          >
+            <MarkerClusterer
+              averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+              minLevel={5} // 클러스터 할 최소 지도 레벨
+              disableClickZoom={true} // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+              calculator={[1, 5, 10]} // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
+              texts={getTexts} // 클러스터의 크기에 따라 표시할 텍스트를 설정한다
+              styles={[
+                {
+                  // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+                  width: '30px',
+                  height: '30px',
+                  background: 'rgba(51, 204, 255, .8)',
+                  borderRadius: '15px',
+                  color: '#000',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  lineHeight: '31px',
+                },
+                {
+                  width: '40px',
+                  height: '40px',
+                  background: 'rgba(255, 153, 0, .8)',
+                  borderRadius: '20px',
+                  color: '#000',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  lineHeight: '41px',
+                },
+                {
+                  width: '50px',
+                  height: '50px',
+                  background: 'rgba(255, 51, 204, .8)',
+                  borderRadius: '25px',
+                  color: '#000',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  lineHeight: '51px',
+                },
+                {
+                  width: '60px',
+                  height: '60px',
+                  background: 'rgba(255, 80, 80, .8)',
+                  borderRadius: '30px',
+                  color: '#000',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  lineHeight: '61px',
+                },
+              ]}
             >
-              <MarkerClusterer
-                averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-                minLevel={5} // 클러스터 할 최소 지도 레벨
-                disableClickZoom={true} // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
-                calculator={[1, 5, 10]} // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
-                texts={getTexts} // 클러스터의 크기에 따라 표시할 텍스트를 설정한다
-                styles={[
-                  {
-                    // calculator 각 사이 값 마다 적용될 스타일을 지정한다
-                    width: "30px",
-                    height: "30px",
-                    background: "rgba(51, 204, 255, .8)",
-                    borderRadius: "15px",
-                    color: "#000",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                    lineHeight: "31px",
-                  },
-                  {
-                    width: "40px",
-                    height: "40px",
-                    background: "rgba(255, 153, 0, .8)",
-                    borderRadius: "20px",
-                    color: "#000",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                    lineHeight: "41px",
-                  },
-                  {
-                    width: "50px",
-                    height: "50px",
-                    background: "rgba(255, 51, 204, .8)",
-                    borderRadius: "25px",
-                    color: "#000",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                    lineHeight: "51px",
-                  },
-                  {
-                    width: "60px",
-                    height: "60px",
-                    background: "rgba(255, 80, 80, .8)",
-                    borderRadius: "30px",
-                    color: "#000",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                    lineHeight: "61px",
-                  },
-                ]}
-              >
-                {clusterData?.allpost?.posts.map((pos: any) => (
-                  <MapMarker
-                    key={`${pos.itemGeoLocation.lat}-${pos.itemGeoLocation.lng}`}
-                    position={{
-                      lat: pos.itemGeoLocation.lat,
-                      lng: pos.itemGeoLocation.lng,
-                    }}
-                  />
-                ))}
-              </MarkerClusterer>
-              <KakaoMapUtils />
-            </Kakomap>
-          </>
+              {clusterData?.allpost?.posts.map((pos: any) => (
+                <MapMarker
+                  key={`${pos.itemGeoLocation.lat}-${pos.itemGeoLocation.lng}`}
+                  position={{
+                    lat: pos.itemGeoLocation.lat,
+                    lng: pos.itemGeoLocation.lng,
+                  }}
+                />
+              ))}
+            </MarkerClusterer>
+            <KakaoMapUtils />
+          </Kakomap>
+        </>
 
-          <PostList>
-            {selectedData?.map(p => {
-              return <PostItem key={p.itemUniqueID} postData={p} />;
-            })}
-          </PostList>
-        </MapPostList>
-        <section>
-          <h1 onClick={changeModalState}>카테고리</h1>
-          <nav>매물 이모티콘 모음 자리</nav>
-        </section>
-        <section>
-          <article>매물별 아이템 리스트자리</article>
-        </section>
-      </Warp>
-    </div>
+        <PostList>
+          {selectedData?.map((p) => {
+            return <PostItem key={p.itemUniqueID} postData={p} />;
+          })}
+        </PostList>
+      </MapPostList>
+      <section>
+        <h1>카테고리</h1>
+        <nav>매물 이모티콘 모음 자리</nav>
+      </section>
+      <section>
+        <article>매물별 아이템 리스트자리</article>
+      </section>
+    </Warp>
   );
 }
 

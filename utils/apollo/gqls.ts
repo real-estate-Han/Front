@@ -1,13 +1,14 @@
-import { gql, useQuery } from "@apollo/client";
-import { postType } from "../type";
+import { gql, useQuery } from '@apollo/client';
+import { postType } from '../type';
 
-// export const GET_POSTS = gql`
-//     query GetPosts {
-//         posts {
-
-//         }
-//     }
-// `;
+export const GET_USER = gql`
+  query Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      userId
+    }
+  }
+`;
 
 export const GET_CLUSTER_DATA = gql`
   query GetClusterData {
