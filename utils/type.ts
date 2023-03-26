@@ -26,7 +26,7 @@ export interface postInputType {
 }
 
 export interface postType extends postInputType {
-  itemID?: string;
+  _id?: string;
   creator?: User;
   createdAt?: string;
   updatedAt?: string;

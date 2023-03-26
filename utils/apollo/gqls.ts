@@ -1,5 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
-import { postType } from '../type';
+import { gql, useQuery } from "@apollo/client";
+import { postType } from "../type";
 
 export const GET_USER = gql`
   query Login($email: String!, $password: String!) {
@@ -17,6 +17,7 @@ export const GET_CLUSTER_DATA = gql`
         _id
         itemAddress
         itemUniqueID
+        itemTitleimg
         itemGeoLocation {
           lat
           lng
@@ -27,13 +28,38 @@ export const GET_CLUSTER_DATA = gql`
   }
 `;
 
-// export const GET_POST = gql`
-//     query GetPost($id: ID!) {
-//         post(id: $id) {
-
-//             }
-//         }
-//     `;
+export const GET_DETAIL_POST = gql`
+  query Post($postId: ID!) {
+    post(id: $postId) {
+      _id
+      itemUniqueID
+      itemAddress
+      itemType
+      itemDeposit
+      itemMonthly
+      itemJense
+      itemSale
+      itemManagement
+      itemAreaLand
+      itemAreaBuilding
+      itemFloor
+      itemPurpose
+      itemRooms
+      itemStatus
+      itemField
+      itemMovein
+      itemApproval
+      itemSubway
+      itemTitleimg
+      itemDetailimg
+      itemTag
+      itemElectricity
+      itemOption
+      createdAt
+      updatedAt
+    }
+  }
+`;
 
 export const Creat_POST = gql`
   mutation Mutation($postInput: PostInputData, $geo: Geo) {
@@ -48,37 +74,3 @@ export const Creat_POST = gql`
     }
   }
 `;
-
-// export const UPDATE_POST = gql`
-//     mutation UpdatePost($id: ID!, $title: String!, $body: String!) {
-//         updatePost(id: $id, title: $title, body: $body) {
-
-//         }
-//     }
-// `;
-
-// export const DELETE_POST = gql`
-//     mutation DeletePost($id: ID!) {
-//         deletePost(id: $id) {
-
-//         }
-//     }
-// `;
-
-// export const CREATE_USER = gql`
-//   mutation CreateUser($name: String!, $email: String!, $password: String!) {
-//     createUser(name: $name, email: $email, password: $password) {
-
-//     }
-//   }
-// `;
-
-// export const GET_USER = gql`
-//   query Login($email: String!, $password: String!) {
-//     login(email: $email, password: $password) {
-//       id
-//       name
-//       email
-//     }
-//   }
-// `;

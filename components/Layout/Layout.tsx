@@ -1,14 +1,21 @@
-import { Logo } from '@components/Logo';
-import Modal from '@components/Modal';
-import styled from '@emotion/styled';
-import LoginContent from '@components/Modal/LoginContent';
-import useStore from '@zustand/store';
+import { Logo } from "@components/Logo";
+import Modal from "@components/Modal";
+import styled from "@emotion/styled";
+import LoginContent from "@components/Modal/LoginContent";
+import useStore from "@zustand/store";
+import SignupContent from "@components/Modal/SignupContent";
+import DetailContent from "@components/Modal/DetailContent";
 type childeren = { children: React.ReactNode };
 
 export const Layout = ({ children }: childeren) => {
-  const { loginState, signupState, changeSignUpState, switchLoginSignUp, changeLoginState } = useStore(
-    (state) => state
-  );
+  const {
+    loginState,
+    signupState,
+    detailState,
+    changeDetailState,
+    changeSignUpState,
+    changeLoginState,
+  } = useStore(state => state);
   return (
     <Wrapper>
       <>
@@ -19,7 +26,16 @@ export const Layout = ({ children }: childeren) => {
         ) : null}
         {signupState ? (
           <Modal modalState={signupState} closeModal={changeSignUpState}>
-            <></>
+            <SignupContent />
+          </Modal>
+        ) : null}
+        {detailState ? (
+          <Modal
+            WideModal
+            modalState={detailState}
+            closeModal={changeDetailState}
+          >
+            <DetailContent />
           </Modal>
         ) : null}
       </>
@@ -27,11 +43,12 @@ export const Layout = ({ children }: childeren) => {
         <StyledLogo size={2}>한세일부동산</StyledLogo>
         <div className="loginButton">
           <button onClick={changeLoginState}>로그인</button>
-          <button>메뉴</button>
         </div>
       </Header>
       <Content>{children}</Content>
-      <Footer>© {new Date().getFullYear()} NickOvchinnikov. All rights reserved.</Footer>
+      <Footer>
+        © {new Date().getFullYear()} NickOvchinnikov. All rights reserved.
+      </Footer>
     </Wrapper>
   );
 };

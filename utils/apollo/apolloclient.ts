@@ -12,7 +12,10 @@ import { useMemo } from "react";
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const httpLink = createHttpLink({
-  uri: "https://port-0-back-6g2llfc38w4i.sel3.cloudtype.app/graphql",
+  uri:
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_API_URL
+      : "http://localhost:8080/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -22,7 +25,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: token ? token : "",
     },
   };
 });

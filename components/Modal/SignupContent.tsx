@@ -2,43 +2,49 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Inputs } from "@components/Inputs";
 import { useForm } from "react-hook-form";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { GET_USER } from "@utils/apollo/gqls";
 import Swal from "sweetalert2";
 import useStore from "@zustand/store";
 export interface LoginContentType {
   email: string;
   password: string;
+  name: string;
+  passwordconfirm: string;
 }
 
-const LoginContent = () => {
+const SignupContent = () => {
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
   } = useForm<LoginContentType>();
-  const closeLogin = useStore(state => state.changeLoginState);
+  const CREATE_USER = gql`
+    mutation Mutation($userInput: UserInputData) {
+      createUser(userInput: $userInput) {
+        email
+      }
+    }
+  `;
   const switchLogin = useStore(state => state.switchLoginSignUp);
-  const [LoginQuery, { data: loginData, error, loading }] =
-    useLazyQuery(GET_USER);
-  const LoginAPI = async (data: LoginContentType) => {
-    await LoginQuery({
+  const [SignupMutate, { data: signupdata, error }] = useMutation(CREATE_USER);
+  const SignupAPI = async (data: LoginContentType) => {
+    await SignupMutate({
       variables: {
         email: data.email,
         password: data.password,
+        name: data.name,
       },
     });
-    if (loginData) {
-      console.log(loginData);
-      localStorage.setItem("token", loginData.login.token);
+    if (signupdata) {
       await Swal.fire({
         icon: "success",
-        title: "로그인 성공",
+        title: "회원가입 성공",
         showConfirmButton: false,
         timer: 1500,
       });
-      closeLogin();
+      switchLogin();
     }
     if (error) {
       console.log(error.message);
@@ -48,18 +54,24 @@ const LoginContent = () => {
   return (
     <div>
       <h1>로그인</h1>
-      <form onSubmit={handleSubmit(LoginAPI)}>
+      <form onSubmit={handleSubmit(SignupAPI)}>
         <Inputs text="이메일" {...register("email")} />
         <span>{errors.email?.message}</span>
+        <Inputs text="이름" type="password" {...register("name")} />
+        <span>{errors.password?.message}</span>
         <Inputs text="비밀번호" type="password" {...register("password")} />
         <span>{errors.password?.message}</span>
-        <button type="submit" disabled={loading}>
-          로그인
-        </button>
+        <Inputs
+          text="비밀번호"
+          type="password"
+          {...register("passwordconfirm")}
+        />
+        <span>{errors.password?.message}</span>
+        <button type="submit">회원가입</button>
       </form>
-      <p onClick={switchLogin}>회원가입</p>
+      <p onClick={switchLogin}>로그인 하러가기</p>
     </div>
   );
 };
 
-export default LoginContent;
+export default SignupContent;

@@ -20,6 +20,7 @@ export default function PostItem() {
         setKakaoAddress(result[0]?.road_address?.address_name as string);
       }
     });
+    console.log(kakaoAddress, position);
   };
 
   const getByAddress = (address: string | undefined) => {
@@ -46,7 +47,7 @@ export default function PostItem() {
   return (
     <Wrap>
       <Kakomap
-        center={{ lat: 37.76005219169334, lng: 126.77987452889714 }}
+        center={{ lat: 37.854572222429134, lng: 126.78755348011892 }}
         level={6}
         isPanto={true}
         onClick={(_t, mouseEvent) =>
@@ -93,7 +94,7 @@ const Wrap = styled.div`
   }
 `;
 const Kakomap = styled(Map)`
-  width: 500px;
+  width: 400px;
   height: 400px;
   border: 1px solid black;
   transition: 0.5s;

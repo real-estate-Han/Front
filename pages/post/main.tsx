@@ -8,6 +8,9 @@ import Image from "next/image";
 import PostItemList from "./postItemList";
 import { useMutation } from "@apollo/client";
 import { Creat_POST } from "@utils/apollo/gqls";
+import imageCompression from "browser-image-compression";
+import { S3UpLoadFile, S3UpLoadFiles } from "./S3util";
+
 interface KakaoMapProps {
   kakaoAddress: string | undefined;
   position: { lng: number; lat: number };
@@ -26,22 +29,36 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
     formState: { errors },
   } = useForm<postType>();
 
-  const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
+    const option = {
+      maxSizeMB: 2,
+      maxWidthOrHeight: 500,
+      useWebWorker: true,
+    };
     let theFile;
     if (event.target.id === "itemTitleImg") {
       const reader = new FileReader();
       theFile = files && files[0];
-      theFile && setTitleFile(theFile);
-      theFile && reader.readAsDataURL(theFile);
-      reader.onload = () => {
-        setTitleImg(reader.result as string);
-      };
+      if (theFile) {
+        const compressedFile = await imageCompression(theFile, option);
+
+        theFile && setTitleFile(compressedFile);
+        theFile && reader.readAsDataURL(theFile);
+        reader.onload = () => {
+          setTitleImg(reader.result as string);
+        };
+      }
     } else {
       let fileUrl: string[] = [];
       theFile = files!;
-      setDetailFile(Array.from(theFile));
+      let fileArr = [];
+
       for (let i = 0; i < theFile.length; i++) {
+        const compressedFile = await imageCompression(theFile[i], option);
+        fileArr.push(compressedFile);
+        console.log(theFile[i]);
+        console.log(compressedFile);
         const reader = new FileReader();
 
         reader.onload = () => {
@@ -51,24 +68,38 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
 
         reader.readAsDataURL(theFile[i]);
       }
+      setDetailFile(fileArr);
     }
   };
   const [CreatPost, { data, loading, error }] = useMutation(Creat_POST);
   const onSubmit: SubmitHandler<postInputType> = async data => {
-    // const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
-    // const detailS3URL = detailFile && (await S3UpLoadFiles(detailFile));
+    const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
+    const detailS3URL = detailFile && (await S3UpLoadFiles(detailFile));
+    console.log(titleS3URL);
+    console.log(detailS3URL);
 
     const PostInputData = {
       ...data,
       itemAddress: kakaoAddress,
+      itemTitleimg: titleS3URL,
+      itemDetailimg: detailS3URL,
     };
     const Geo = position;
-
     CreatPost({ variables: { postInput: PostInputData, geo: Geo } });
-    console.log(data);
+    error &&
+      Swal.fire({
+        title: error.message,
+        icon: "error",
+        confirmButtonText: "확인",
+      });
+    !error &&
+      Swal.fire({
+        title: "매물이 등록되었습니다.",
+        icon: "success",
+        confirmButtonText: "확인",
+      });
   };
 
-  // console.log(kakaoAddress);
   return (
     <>
       <h3>상품추가 페이지</h3>
@@ -76,12 +107,13 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <section>
           {titleImg && (
-            <Image
-              src={titleImg}
-              alt="title_img"
-              width="40"
-              height={40}
-            ></Image>
+            // <Image
+            //   src={titleImg}
+            //   alt="title_img"
+            //   width={1200}
+            //   height={600}
+            // ></Image>
+            <img src={titleImg}></img>
           )}
           <label>
             <span>타이틀 이미지</span>
