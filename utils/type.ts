@@ -20,6 +20,17 @@ export interface postInputType {
   itemSubway?: string;
   itemTitleimg: string;
   itemDetailimg?: [string];
+  itemHeating?: string;
+  itemParking?: string;
+  itemBalcony?: string;
+  itemElevator?: string;
+  itemDirection?: string;
+  itemSupplyArea?: string;
+  itemExclusiveArea?: string;
+  itemTruck?: string;
+  itemLandCategory?: string;
+  itemTotalAreaLand?: number;
+  itemFloorHeight?: number;
   itemTag?: [string];
   itemElectricity?: number;
   itemOption?: [string];

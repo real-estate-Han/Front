@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import dynamic from "next/dynamic";
 import { GeoLocation } from "@utils/type";
 import PostMain from "./main";
+import Swal from "sweetalert2";
 export default function PostItem() {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [position, setPosition] = useState<GeoLocation>({
@@ -11,7 +12,11 @@ export default function PostItem() {
     lng: 0,
   });
   const [kakaoAddress, setKakaoAddress] = useState<string>("");
-
+  const [defaltPosition, setDefaltPosition] = useState<GeoLocation>({
+    lat: 37.854572222429134,
+    lng: 126.78755348011892,
+  });
+  const [mapLevel, setMapLevel] = useState(10);
   const getByGeoCoder = (lng: number, lat: number) => {
     if (!map) return;
     var geocoder = new kakao.maps.services.Geocoder();
@@ -22,7 +27,7 @@ export default function PostItem() {
     });
     console.log(kakaoAddress, position);
   };
-
+  const kakaomapref = useRef<kakao.maps.Map>();
   const getByAddress = (address: string | undefined) => {
     if (!map) return;
     var geocoder = new kakao.maps.services.Geocoder();
@@ -33,8 +38,29 @@ export default function PostItem() {
             lat: parseFloat(result[0].y),
             lng: parseFloat(result[0].x),
           });
+          setDefaltPosition({
+            lat: parseFloat(result[0].y),
+            lng: parseFloat(result[0].x),
+          });
+          setMapLevel(3);
         }
       });
+  };
+
+  const findGeoLocation = () => {
+    Swal.fire({
+      title: "도로명 주소를 입력해 주세요",
+      input: "text",
+      inputAttributes: {
+        autocapitalize: "off",
+      },
+      showCancelButton: true,
+      confirmButtonText: "검색",
+      showLoaderOnConfirm: true,
+      preConfirm: address => {
+        return getByAddress(address);
+      },
+    });
   };
 
   useEffect(() => {
@@ -47,8 +73,8 @@ export default function PostItem() {
   return (
     <Wrap>
       <Kakomap
-        center={{ lat: 37.854572222429134, lng: 126.78755348011892 }}
-        level={6}
+        center={defaltPosition}
+        level={mapLevel}
         isPanto={true}
         onClick={(_t, mouseEvent) =>
           setPosition({
@@ -58,16 +84,17 @@ export default function PostItem() {
         }
         onCreate={setMap}
       >
-        {position && <MapMarker position={position} />}
+        {position && (
+          <MapMarker position={position}>
+            <div className="AddressInfo">
+              <span>{kakaoAddress}</span>
+            </div>
+          </MapMarker>
+        )}
         <KakaoMapUtil />
       </Kakomap>
       <label>
-        <input
-          onChange={e => {
-            setKakaoAddress(e.target.value);
-          }}
-        ></input>
-        <button onClick={getByAddress.bind(null, kakaoAddress)}>검색</button>
+        <button onClick={findGeoLocation}>도로명 주소 검색</button>
       </label>
       <PostMain position={position} kakaoAddress={kakaoAddress} />
     </Wrap>
@@ -91,6 +118,20 @@ const Wrap = styled.div`
   section:nth-of-type(2) {
     border: 1px solid green;
     width: 100%;
+  }
+  .AddressInfo {
+    display: flex;
+    width: 150px;
+    height: 30px;
+    position: relative;
+    left: -8px;
+    top: -13px;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 5px;
+    background-color: aqua;
+    font-size: 11px;
+    font-weight: 700;
   }
 `;
 const Kakomap = styled(Map)`

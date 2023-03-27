@@ -28,7 +28,7 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<postType>();
-
+  const [tabIndex, setTabIndex] = useState("monthly/House");
   const onFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     const option = {
@@ -73,55 +73,62 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
   };
   const [CreatPost, { data, loading, error }] = useMutation(Creat_POST);
   const onSubmit: SubmitHandler<postInputType> = async data => {
-    const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
-    const detailS3URL = detailFile && (await S3UpLoadFiles(detailFile));
-    console.log(titleS3URL);
-    console.log(detailS3URL);
+    console.log(data.itemType);
+    // const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
+    // const detailS3URL = detailFile && (await S3UpLoadFiles(detailFile));
 
-    const PostInputData = {
-      ...data,
-      itemAddress: kakaoAddress,
-      itemTitleimg: titleS3URL,
-      itemDetailimg: detailS3URL,
-    };
-    const Geo = position;
-    CreatPost({ variables: { postInput: PostInputData, geo: Geo } });
-    error &&
-      Swal.fire({
-        title: error.message,
-        icon: "error",
-        confirmButtonText: "확인",
-      });
-    !error &&
-      Swal.fire({
-        title: "매물이 등록되었습니다.",
-        icon: "success",
-        confirmButtonText: "확인",
-      });
+    // const PostInputData = {
+    //   ...data,
+    //   itemAddress: kakaoAddress,
+    //   itemTitleimg: titleS3URL,
+    //   itemDetailimg: detailS3URL,
+    // };
+    // const Geo = position;
+    // CreatPost({ variables: { postInput: PostInputData, geo: Geo } });
+    // error &&
+    //   Swal.fire({
+    //     title: error.message,
+    //     icon: "error",
+    //     confirmButtonText: "확인",
+    //   });
+    // !error &&
+    //   Swal.fire({
+    //     title: "매물이 등록되었습니다.",
+    //     icon: "success",
+    //     confirmButtonText: "확인",
+    //   });
   };
+  // const newTabArr = new Map([
+  //   ["house", <PostItemList register={register} errors={errors} />],
+  //   ["factory", <div />],
+  // ]);
 
   return (
     <>
-      <h3>상품추가 페이지</h3>
-
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <section>
-          {titleImg && (
-            // <Image
-            //   src={titleImg}
-            //   alt="title_img"
-            //   width={1200}
-            //   height={600}
-            // ></Image>
-            <img src={titleImg}></img>
-          )}
-          <label>
-            <span>타이틀 이미지</span>
+      <ImageContainer>
+        <div className="tilteImgBox">
+          <label htmlFor="itemTitleImg">
+            <p>메인 사진 고르기</p>
             <input
               onChange={onFileChange}
               id="itemTitleImg"
               hidden
               type={"file"}
+            />
+          </label>
+          {titleImg ? (
+            <Image src={titleImg} alt="title_img" width={150} height={120} />
+          ) : null}
+        </div>
+        <div className="detailImgBox">
+          <label htmlFor="detailImg">
+            <p>상세 사진 고르기</p>
+            <input
+              hidden
+              id="detailImg"
+              type={"file"}
+              multiple
+              onChange={onFileChange}
             />
           </label>
           {detailImg?.map((img, idx) => {
@@ -130,19 +137,39 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
                 key={idx}
                 src={img}
                 alt="titleImg"
-                width="40"
-                height={40}
-              ></Image>
+                width={150}
+                height={120}
+              />
             );
           })}
-
-          <label>
-            <span>디테일 이미지</span>
-            <input hidden type={"file"} multiple onChange={onFileChange} />
-          </label>
-        </section>
+        </div>
+      </ImageContainer>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <>
+          <span>매물 종류 : </span>
+          <select
+            {...register("itemType")}
+            onChange={e => {
+              setTabIndex(e.currentTarget.value);
+            }}
+          >
+            <option value="monthly/House">집/월세 </option>
+            <option value="jense/House">집/전세</option>
+            <option value="sale/House">집/주택</option>
+            <option value="monthly/Mart">상가/기타</option>
+            <option value="sale/Factory">공장-창고/매매</option>
+            <option value="monthly/Factory">공장-창고/임대</option>
+            <option value="sale/Land">토지/매대</option>
+            <option value="monthly/Land">토지/임대</option>
+          </select>
+        </>
         <section>
-          <PostItemList register={register} errors={errors} />
+          {/* {newTabArr.get(tabIndex)} */}
+          <PostItemList
+            tabIndex={tabIndex}
+            register={register}
+            errors={errors}
+          />
         </section>
         <input type="submit"></input>
       </form>
@@ -150,23 +177,27 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
   );
 }
 
-const Wrap = styled.div`
+const ImageContainer = styled.section`
   display: flex;
+  width: 90%;
+
   flex-direction: column;
-  width: 100%;
-  height: 100%;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
-
-  form {
-    width: 90%;
-  }
-  section:nth-of-type(1) {
-    border: 1px solid blue;
-  }
-  section:nth-of-type(2) {
-    border: 1px solid green;
+  position: relative;
+  .tilteImgBox {
     width: 100%;
+    border: 1px solid #000;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .detailImgBox {
+    border: 1px solid #000;
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: auto;
   }
 `;
