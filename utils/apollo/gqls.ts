@@ -1,5 +1,5 @@
-import { gql, useQuery } from "@apollo/client";
-import { postType } from "../type";
+import { gql, useQuery } from '@apollo/client';
+import { postType } from '../type';
 
 export const GET_USER = gql`
   query Login($email: String!, $password: String!) {
@@ -72,5 +72,11 @@ export const Creat_POST = gql`
         lng
       }
     }
+  }
+`;
+
+export const DELETE_POST = gql`
+  mutation Mutation($deletePostId: ID!) {
+    deletePost(id: $deletePostId)
   }
 `;
