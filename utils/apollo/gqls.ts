@@ -1,5 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
-import { postType } from '../type';
+import { gql, useQuery } from "@apollo/client";
+import { postType } from "../type";
 
 export const GET_USER = gql`
   query Login($email: String!, $password: String!) {
@@ -54,7 +54,7 @@ export const GET_DETAIL_POST = gql`
       itemDetailimg
       itemTag
       itemElectricity
-      itemOption
+      # itemOption
       createdAt
       updatedAt
     }

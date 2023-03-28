@@ -25,7 +25,6 @@ export default function PostItem() {
         setKakaoAddress(result[0]?.road_address?.address_name as string);
       }
     });
-    console.log(kakaoAddress, position);
   };
   const kakaomapref = useRef<kakao.maps.Map>();
   const getByAddress = (address: string | undefined) => {

@@ -6,6 +6,8 @@ interface State {
   signupState: boolean;
   detailState: boolean;
   detailID: string;
+  detailType: string;
+  setDetailType: (type: string) => void;
   setDetailID: (id: string) => void;
   changeDetailState: () => void;
   changeLoginState: () => void;
@@ -18,6 +20,8 @@ const useStore = create<State>(set => ({
   signupState: false,
   detailState: false,
   detailID: "",
+  detailType: "",
+  setDetailType: (type: string) => set(state => ({ detailType: type })),
   setDetailID: (id: string) => set(state => ({ detailID: id })),
   changeDetailState: () => set(state => ({ detailState: !state.detailState })),
   changeLoginState: () => set(state => ({ loginState: !state.loginState })),

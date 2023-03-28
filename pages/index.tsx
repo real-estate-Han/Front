@@ -31,9 +31,8 @@ interface makerType {
 }
 export default function Home() {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
-  const { detailState, changeDetailState, setDetailID } = useStore(
-    state => state
-  );
+  const { detailState, changeDetailState, setDetailID, setDetailType } =
+    useStore(state => state);
   const [map, setMap] = useState<kakao.maps.Map>();
   const [mapState, setMapState] = useState<any>();
 
@@ -85,6 +84,7 @@ export default function Home() {
         onClick={() => {
           changeDetailState();
           setDetailID(content._id!);
+          setDetailType(content.itemType!);
         }}
         onMouseOver={() => setIsVisible(true)}
         onMouseOut={() => setIsVisible(false)}

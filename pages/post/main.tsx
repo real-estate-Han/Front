@@ -9,7 +9,7 @@ import PostItemList from "./postItemList";
 import { useMutation } from "@apollo/client";
 import { Creat_POST } from "@utils/apollo/gqls";
 import imageCompression from "browser-image-compression";
-import { S3UpLoadFile, S3UpLoadFiles } from "./S3util";
+import { S3UpLoadFile } from "./S3util";
 
 interface KakaoMapProps {
   kakaoAddress: string | undefined;
@@ -33,7 +33,7 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
     const files = event.target.files;
     const option = {
       maxSizeMB: 2,
-      maxWidthOrHeight: 500,
+      maxWidthOrHeight: 700,
       useWebWorker: true,
     };
     let theFile;
@@ -57,8 +57,7 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
       for (let i = 0; i < theFile.length; i++) {
         const compressedFile = await imageCompression(theFile[i], option);
         fileArr.push(compressedFile);
-        console.log(theFile[i]);
-        console.log(compressedFile);
+
         const reader = new FileReader();
 
         reader.onload = () => {
@@ -73,30 +72,36 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
   };
   const [CreatPost, { data, loading, error }] = useMutation(Creat_POST);
   const onSubmit: SubmitHandler<postInputType> = async data => {
-    console.log(data.itemType);
-    // const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
-    // const detailS3URL = detailFile && (await S3UpLoadFiles(detailFile));
+    const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
+    let detailS3URL: string[] = [];
+    if (detailFile) {
+      for (let i = 0; i < detailFile.length; i++) {
+        const url = await S3UpLoadFile(detailFile[i]);
+        detailS3URL.push(url!);
+      }
+    }
 
-    // const PostInputData = {
-    //   ...data,
-    //   itemAddress: kakaoAddress,
-    //   itemTitleimg: titleS3URL,
-    //   itemDetailimg: detailS3URL,
-    // };
-    // const Geo = position;
-    // CreatPost({ variables: { postInput: PostInputData, geo: Geo } });
-    // error &&
-    //   Swal.fire({
-    //     title: error.message,
-    //     icon: "error",
-    //     confirmButtonText: "확인",
-    //   });
-    // !error &&
-    //   Swal.fire({
-    //     title: "매물이 등록되었습니다.",
-    //     icon: "success",
-    //     confirmButtonText: "확인",
-    //   });
+    const PostInputData = {
+      ...data,
+      itemAddress: kakaoAddress,
+      itemTitleimg: titleS3URL,
+      itemDetailimg: detailS3URL,
+    };
+
+    const Geo = position;
+    CreatPost({ variables: { postInput: PostInputData, geo: Geo } });
+    error &&
+      Swal.fire({
+        title: error.message,
+        icon: "error",
+        confirmButtonText: "확인",
+      });
+    !error &&
+      Swal.fire({
+        title: "매물이 등록되었습니다.",
+        icon: "success",
+        confirmButtonText: "확인",
+      });
   };
   // const newTabArr = new Map([
   //   ["house", <PostItemList register={register} errors={errors} />],
@@ -155,7 +160,7 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
           >
             <option value="monthly/House">집/월세 </option>
             <option value="jense/House">집/전세</option>
-            <option value="sale/House">집/주택</option>
+            <option value="sale/House">집/매매</option>
             <option value="monthly/Mart">상가/기타</option>
             <option value="sale/Factory">공장-창고/매매</option>
             <option value="monthly/Factory">공장-창고/임대</option>

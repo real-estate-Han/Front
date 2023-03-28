@@ -57,6 +57,7 @@ const ModalStyled = styled.div<{
     max-width: ${props => (props.WideModal ? "1000px" : "500px")};
     width: 70%;
     height: 80%;
+    overflow-y: auto;
     max-height: ${props => (props.WideModal ? "800px" : "500px")};
     position: absolute;
     color: black;

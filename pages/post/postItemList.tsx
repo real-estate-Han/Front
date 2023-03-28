@@ -16,7 +16,6 @@ export default function PostItemList({
 }: InputProps) {
   const sellType = tabIndex.split("/")[0];
   const postType = tabIndex.split("/")[1];
-  console.log(sellType);
 
   return (
     <>
@@ -85,19 +84,20 @@ export default function PostItemList({
       {(postType === "House" || postType === "Mart") && (
         <>
           <Inputs
-            type="number"
+            type="float"
             text="공급면적"
             {...register("itemSupplyArea", { valueAsNumber: true })}
           />
           <span>{errors?.itemSupplyArea?.message}</span>
 
           <Inputs
-            type="number"
+            type="float"
             text="전용면적"
             {...register("itemExclusiveArea", { valueAsNumber: true })}
           />
           <span>{errors?.itemExclusiveArea?.message}</span>
-
+          <Inputs type="string" text="방/화장실" {...register("itemRooms")} />
+          <span>{errors?.itemRooms?.message}</span>
           <Inputs
             type="string"
             text="엘리베이터여부"
