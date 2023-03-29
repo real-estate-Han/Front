@@ -24,9 +24,12 @@ module.exports = {
     // https://jestjs.io/docs/webpack#handling-static-assets
     '^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|svg)$/i': `<rootDir>/__mocks__/fileMock.js`,
 
-    // Handle module aliases  tsconfig랑 중복되면 tsconfig 우선으로 함
-    // '^@/components/(.*)$': '<rootDir>/components/$1',
-    // '^@/pages/(.*)$': '<rootDir>/pages/$1',
+    '^@components/(.*)$': '<rootDir>/components/$1',
+    '^@styles/(.*)$': '<rootDir>/styles/$1',
+    '^@hooks/(.*)$': '<rootDir>/hooks/$1',
+    '^@utils/(.*)$': '<rootDir>/utils/$1',
+    '^@zustand/(.*)$': '<rootDir>/zustand/$1',
+    '^@pages/(.*)$': '<rootDir>/pages/$1',
   },
   // Add more setup options before each test is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
@@ -37,6 +40,11 @@ module.exports = {
     // https://jestjs.io/docs/configuration#transform-objectstring-pathtotransformer--pathtotransformer-object
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
   },
-  transformIgnorePatterns: ['/node_modules/', '^.+\\.module\\.(css|sass|scss)$'],
-  snapshotSerializers: ['@emotion/jest/serializer' /* if needed other snapshotSerializers should go here */],
+  transformIgnorePatterns: [
+    '/node_modules/',
+    '^.+\\.module\\.(css|sass|scss)$',
+  ],
+  snapshotSerializers: [
+    '@emotion/jest/serializer' /* if needed other snapshotSerializers should go here */,
+  ],
 };
