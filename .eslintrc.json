@@ -16,7 +16,6 @@
   "extends": [
     "airbnb",
     "plugin:import/recommended",
-    "plugin:@typescript-eslint/recommended",
     "plugin:storybook/recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
