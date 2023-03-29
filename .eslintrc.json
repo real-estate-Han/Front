@@ -11,7 +11,7 @@
     "plugin:import/recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
-    "plugin:testing-library/react"
+   
   ],
   "plugins": ["react", "react-hooks", "@emotion"],
   "rules": {
