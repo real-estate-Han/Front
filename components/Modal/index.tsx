@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 
+
+
 interface ModalProps {
   children: React.ReactNode;
   closeModal: () => void;
@@ -9,6 +11,7 @@ interface ModalProps {
 
   disableScroll?: boolean;
 }
+
 
 const Modal = (props: ModalProps) => {
   // 모달창이 나왔을때 백그라운드 클릭이 안되게 하고 스크롤도 고정하는 방법
@@ -31,6 +34,7 @@ const Modal = (props: ModalProps) => {
   return (
     <ModalStyled WideModal={props?.WideModal} onClick={props.closeModal}>
       <div className="modalBody" onClick={e => e.stopPropagation()}>
+
         {props.children}
       </div>
     </ModalStyled>

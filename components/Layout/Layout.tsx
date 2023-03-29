@@ -1,3 +1,4 @@
+
 import { Logo } from "@components/Logo";
 import Modal from "@components/Modal";
 import styled from "@emotion/styled";
@@ -16,6 +17,7 @@ export const Layout = ({ children }: childeren) => {
     changeSignUpState,
     changeLoginState,
   } = useStore(state => state);
+
   return (
     <Wrapper>
       <>
@@ -42,7 +44,9 @@ export const Layout = ({ children }: childeren) => {
       <Header>
         <StyledLogo size={2}>한세일부동산</StyledLogo>
         <div className="loginButton">
+
           <button onClick={changeLoginState}>로그인</button>
+
         </div>
       </Header>
       <Content>{children}</Content>
