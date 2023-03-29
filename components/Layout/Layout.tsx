@@ -1,23 +1,58 @@
-import { Input } from '@components/Input';
-import { Logo } from '@components/Logo';
-import styled from '@emotion/styled';
-import Link from 'next/link';
 
+import { Logo } from "@components/Logo";
+import Modal from "@components/Modal";
+import styled from "@emotion/styled";
+import LoginContent from "@components/Modal/LoginContent";
+import useStore from "@zustand/store";
+import SignupContent from "@components/Modal/SignupContent";
+import DetailContent from "@components/Modal/DetailContent";
 type childeren = { children: React.ReactNode };
 
 export const Layout = ({ children }: childeren) => {
+  const {
+    loginState,
+    signupState,
+    detailState,
+    changeDetailState,
+    changeSignUpState,
+    changeLoginState,
+  } = useStore(state => state);
+
   return (
     <Wrapper>
+      <>
+        {loginState ? (
+          <Modal modalState={loginState} closeModal={changeLoginState}>
+            <LoginContent></LoginContent>
+          </Modal>
+        ) : null}
+        {signupState ? (
+          <Modal modalState={signupState} closeModal={changeSignUpState}>
+            <SignupContent />
+          </Modal>
+        ) : null}
+        {detailState ? (
+          <Modal
+            WideModal
+            modalState={detailState}
+            closeModal={changeDetailState}
+          >
+            <DetailContent />
+          </Modal>
+        ) : null}
+      </>
       <Header>
         <StyledLogo size={2}>한세일부동산</StyledLogo>
         <div className="loginButton">
-          <button>로그인</button>
-          <button>메뉴</button>
+
+          <button onClick={changeLoginState}>로그인</button>
+
         </div>
       </Header>
-
       <Content>{children}</Content>
-      <Footer>© {new Date().getFullYear()} NickOvchinnikov. All rights reserved.</Footer>
+      <Footer>
+        © {new Date().getFullYear()} NickOvchinnikov. All rights reserved.
+      </Footer>
     </Wrapper>
   );
 };
@@ -70,11 +105,6 @@ export const Header = styled.div`
     gap: 5vmin;
     margin-right: 5vmin;
   }
-`;
-
-export const SearchInput = styled(Input)`
-  width: 100%;
-  height: 10vmin;
 `;
 
 export const Footer = styled.footer`
