@@ -1,67 +1,56 @@
-export interface postType {
-  itemUniqueId: number;
-  itemAddress?: string;
-  itemType?: string;
+export interface postInputType {
+  itemUniqueID: number;
+  itemAddress: string;
+  itemGeoLocation: GeoLocation;
+  itemType: string;
   itemDeposit?: number;
   itemMonthly?: number;
-  itemAll?: number;
+  itemJense?: number;
   itemSale?: number;
   itemManagement?: number;
   itemAreaLand?: number;
   itemAreaBuilding?: number;
-  itemFloor?: string;
+  itemFloor?: number;
   itemPurpose?: string;
+  itemRooms?: string;
   itemStatus?: string;
-  itemField?: number;
-  itemTheme?: string;
+  itemField?: string;
   itemMovein?: string;
-  itemApproval?: number;
+  itemApproval?: string;
   itemSubway?: string;
-  itemDescription?: string;
-  itemTitleimg?: string;
-  itemDetailimg?: string[];
-  itemManager?: { item_manager_id: number; item_manager_ref: string };
-  itemLocation?: { item_location_x: number; item_location_y: number };
-  itemTag?: string[];
-  itemOption?: string;
+  itemTitleimg: string;
+  itemDetailimg?: [string];
+  itemHeating?: string;
+  itemParking?: string;
+  itemBalcony?: string;
+  itemElevator?: string;
+  itemDirection?: string;
+  itemSupplyArea?: string;
+  itemExclusiveArea?: string;
+  itemTruck?: string;
+  itemLandCategory?: string;
+  itemTotalAreaLand?: number;
+  itemFloorHeight?: number;
+  itemTag?: [string];
   itemElectricity?: number;
-  itemCreatedAt?: string;
-  itemUpdatedAt?: string;
+  itemOption?: [string];
 }
 
-// 매물번호 : number
-// 주소: string
-// 매물종류 : string
-// 보증금? : number
-// 월세? : number
-// 전세? :number
-// 매매? : number
-// 관리비 number
-// 면적정보 :{대지 : number, 건축 : number}
-// 층정보 : string
-// 주용도 : string
-// 매물상태 : string
-// 필지수 : number
-// 테마 : string
-// 입주가능일 : string
-// 사용승인일 : number
-// 인근지하철 : string
-// 상세설명 :string
-// titleImg : string
-// detailImg : string[]
-// 담당자 : object_id, user ref
-// 위치주소 : {x:number,y:number}
-// 태그 : string[]
-// 옵션? : string
-// 전력?: number
-// 만든날짜
-// 수정날짜
+export interface postType extends postInputType {
+  _id?: string;
+  creator?: User;
+  createdAt?: string;
+  updatedAt?: string;
+}
 
-// 토지합계면적 : number
-// 용도지역 : string}
-
-// }
 export type GeoLocation = {
   lat: number;
   lng: number;
+};
+
+export type User = {
+  _id?: string;
+  name?: string;
+  email?: string;
+  password?: string;
 };

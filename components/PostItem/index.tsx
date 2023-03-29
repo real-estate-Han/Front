@@ -1,39 +1,71 @@
 import React from 'react';
-
-export interface postShorten {
-  itemId: string;
-  itemNumber: number;
-  itemTitle: string;
-  itemTitleImage: string;
-  itemDeposit: number;
-  itemMonthly: string;
-  itemAll: number;
-  itemSale: number;
+import { postType } from '@utils/type';
+import styled from '@emotion/styled';
+import Image from 'next/image';
+interface PostItemProps {
+  postData: postType;
+  widthPercent: number;
 }
-// item_unique_id: number;
-//   item_adress?: string;
-//   item_type?: string;
-//   item_deposit?: number;
-//   item_monthly?: number;
-//   item_all?: number;
-//   item_sale?: number;
-//   item_management?: number;
-//   item_area: { item_area_land: number; item_area_building: number };
-//   item_floor: string;
-//   item_purpose: string;
-//   item_status: string;
-//   item_field: number;
-//   item_theme: string;
-//   item_movein: string;
-//   item_approval: number;
-//   item_subway: string;
-//   item_description: string;
-// item_titleimg?: string;
-// item_detailimg?: string[];
-//   item_manager: { item_manager_id: number; item_manager_ref: string };
-//   item_location: { item_location_x: number; item_location_y: number };
-//   item_tag: string[];
-//   item_option?: string;
-//   item_electricity?: number;
-//   item_createdAt: string;
-//   item_updatedAt: string;
+const PostItem = ({ postData, widthPercent }: PostItemProps) => {
+  return (
+    <Wrapper widthPercent={widthPercent}>
+      <>
+        <Image src={postData?.itemTitleimg || './next.svg'} alt="titleImage" width={120} height={120}></Image>
+      </>
+      <PostInfo>
+        <p>매물번호{postData.itemUniqueID}</p>
+        <div className="ItemPrice">
+          {postData.itemDeposit && (
+            <p>
+              <span>보</span>
+              {postData.itemDeposit}
+            </p>
+          )}
+          {postData.itemMonthly && (
+            <p>
+              <span>월</span>
+              {postData.itemMonthly}
+            </p>
+          )}
+          {postData.itemJense && (
+            <p>
+              <span>전</span>
+              {postData.itemJense}
+            </p>
+          )}
+          {postData.itemSale && (
+            <p>
+              <span>매</span>
+              {postData.itemSale}
+            </p>
+          )}
+        </div>
+        {postData.itemAddress}
+      </PostInfo>
+    </Wrapper>
+  );
+};
+export default PostItem;
+
+const Wrapper = styled.div<{ widthPercent: number }>`
+  float: left;
+  display: flex;
+  width: ${(props) => props.widthPercent + '%'};
+  min-width: 180px;
+  max-height: 120px;
+  height: 100%;
+  background-color: antiquewhite;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+`;
+const PostInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  font-size: 1.2vmin;
+  .ItemPrice {
+    display: flex;
+  }
+`;

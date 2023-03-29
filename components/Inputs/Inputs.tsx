@@ -2,7 +2,7 @@ import React, { ForwardedRef, forwardRef } from "react";
 import styled from "@emotion/styled";
 
 interface InputProps {
-  type: string;
+  type?: string;
   width?: string;
   defaultValue?: string;
   disabled?: boolean;
