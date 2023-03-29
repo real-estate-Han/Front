@@ -1,15 +1,15 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
-import { SubmitHandler, useForm } from "react-hook-form";
-import { ChangeEvent, useState } from "react";
-import Swal from "sweetalert2";
-import { postInputType, postType } from "@utils/type";
-import Image from "next/image";
-import PostItemList from "./postItemList";
-import { useMutation } from "@apollo/client";
-import { Creat_POST } from "@utils/apollo/gqls";
-import imageCompression from "browser-image-compression";
-import { S3UpLoadFile } from "./S3util";
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { ChangeEvent, useState } from 'react';
+import Swal from 'sweetalert2';
+import { postInputType, postType } from '@utils/type';
+import Image from 'next/image';
+import { PostItemList } from '../../components/PostItem/postItemList';
+import { useMutation } from '@apollo/client';
+import { Creat_POST } from '@utils/apollo/gqls';
+import imageCompression from 'browser-image-compression';
+import { S3UpLoadFile } from '../../utils/S3util';
 
 interface KakaoMapProps {
   kakaoAddress: string | undefined;
@@ -28,7 +28,7 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<postType>();
-  const [tabIndex, setTabIndex] = useState("monthly/House");
+  const [tabIndex, setTabIndex] = useState('monthly/House');
   const onFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     const option = {
@@ -37,7 +37,7 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
       useWebWorker: true,
     };
     let theFile;
-    if (event.target.id === "itemTitleImg") {
+    if (event.target.id === 'itemTitleImg') {
       const reader = new FileReader();
       theFile = files && files[0];
       if (theFile) {
@@ -71,7 +71,7 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
     }
   };
   const [CreatPost, { data, loading, error }] = useMutation(Creat_POST);
-  const onSubmit: SubmitHandler<postInputType> = async data => {
+  const onSubmit: SubmitHandler<postInputType> = async (data) => {
     const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
     let detailS3URL: string[] = [];
     if (detailFile) {
@@ -93,14 +93,14 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
     error &&
       Swal.fire({
         title: error.message,
-        icon: "error",
-        confirmButtonText: "확인",
+        icon: 'error',
+        confirmButtonText: '확인',
       });
     !error &&
       Swal.fire({
-        title: "매물이 등록되었습니다.",
-        icon: "success",
-        confirmButtonText: "확인",
+        title: '매물이 등록되었습니다.',
+        icon: 'success',
+        confirmButtonText: '확인',
       });
   };
   // const newTabArr = new Map([
@@ -114,38 +114,17 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
         <div className="tilteImgBox">
           <label htmlFor="itemTitleImg">
             <p>메인 사진 고르기</p>
-            <input
-              onChange={onFileChange}
-              id="itemTitleImg"
-              hidden
-              type={"file"}
-            />
+            <input onChange={onFileChange} id="itemTitleImg" hidden type={'file'} />
           </label>
-          {titleImg ? (
-            <Image src={titleImg} alt="title_img" width={150} height={120} />
-          ) : null}
+          {titleImg ? <Image src={titleImg} alt="title_img" width={150} height={120} /> : null}
         </div>
         <div className="detailImgBox">
           <label htmlFor="detailImg">
             <p>상세 사진 고르기</p>
-            <input
-              hidden
-              id="detailImg"
-              type={"file"}
-              multiple
-              onChange={onFileChange}
-            />
+            <input hidden id="detailImg" type={'file'} multiple onChange={onFileChange} />
           </label>
           {detailImg?.map((img, idx) => {
-            return (
-              <Image
-                key={idx}
-                src={img}
-                alt="titleImg"
-                width={150}
-                height={120}
-              />
-            );
+            return <Image key={idx} src={img} alt="titleImg" width={150} height={120} />;
           })}
         </div>
       </ImageContainer>
@@ -153,8 +132,8 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
         <>
           <span>매물 종류 : </span>
           <select
-            {...register("itemType")}
-            onChange={e => {
+            {...register('itemType')}
+            onChange={(e) => {
               setTabIndex(e.currentTarget.value);
             }}
           >
@@ -170,11 +149,7 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
         </>
         <section>
           {/* {newTabArr.get(tabIndex)} */}
-          <PostItemList
-            tabIndex={tabIndex}
-            register={register}
-            errors={errors}
-          />
+          <PostItemList tabIndex={tabIndex} register={register} errors={errors} />
         </section>
         <input type="submit"></input>
       </form>

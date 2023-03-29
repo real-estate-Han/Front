@@ -18,12 +18,15 @@ const LoginContent = () => {
     setError,
     formState: { errors },
   } = useForm<LoginContentType>();
-  const closeLogin = useStore((state) => state.changeLoginState);
-  const switchLogin = useStore((state) => state.switchLoginSignUp);
-  const [LoginQuery, { data: loginData, error, loading }] = useLazyQuery(GET_USER, {
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'no-cache',
-  });
+  const closeLogin = useStore(state => state.changeLoginState);
+  const switchLogin = useStore(state => state.switchLoginSignUp);
+  const [LoginQuery, { data: loginData, error, loading }] = useLazyQuery(
+    GET_USER,
+    {
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'no-cache',
+    },
+  );
   const LoginAPI = async (data: LoginContentType) => {
     console.log(data);
     await LoginQuery({
@@ -32,7 +35,7 @@ const LoginContent = () => {
         password: data.password,
       },
       fetchPolicy: 'network-only',
-    }).then(async (res) => {
+    }).then(async res => {
       res.error &&
         Swal.fire({
           icon: 'error',

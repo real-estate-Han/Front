@@ -2,15 +2,21 @@ import React from 'react';
 import { postType } from '@utils/type';
 import styled from '@emotion/styled';
 import Image from 'next/image';
+
 interface PostItemProps {
   postData: postType;
   widthPercent: number;
 }
-const PostItem = ({ postData, widthPercent }: PostItemProps) => {
+function PostItem({ postData, widthPercent }: PostItemProps) {
   return (
     <Wrapper widthPercent={widthPercent}>
       <>
-        <Image src={postData?.itemTitleimg || './next.svg'} alt="titleImage" width={120} height={120}></Image>
+        <Image
+          src={postData?.itemTitleimg || './next.svg'}
+          alt="titleImage"
+          width={120}
+          height={120}
+        />
       </>
       <PostInfo>
         <p>매물번호{postData.itemUniqueID}</p>
@@ -44,13 +50,13 @@ const PostItem = ({ postData, widthPercent }: PostItemProps) => {
       </PostInfo>
     </Wrapper>
   );
-};
+}
 export default PostItem;
 
 const Wrapper = styled.div<{ widthPercent: number }>`
   float: left;
   display: flex;
-  width: ${(props) => props.widthPercent + '%'};
+  width: ${props => props.widthPercent + '%'};
   min-width: 180px;
   max-height: 120px;
   height: 100%;

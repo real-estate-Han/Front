@@ -8,9 +8,14 @@ import DetailContent from '@components/Modal/DetailContent';
 type childeren = { children: React.ReactNode };
 
 export const Layout = ({ children }: childeren) => {
-  const { loginState, signupState, detailState, changeDetailState, changeSignUpState, changeLoginState } = useStore(
-    (state) => state
-  );
+  const {
+    loginState,
+    signupState,
+    detailState,
+    changeDetailState,
+    changeSignUpState,
+    changeLoginState,
+  } = useStore(state => state);
   return (
     <Wrapper>
       <>
@@ -25,7 +30,11 @@ export const Layout = ({ children }: childeren) => {
           </Modal>
         ) : null}
         {detailState ? (
-          <Modal WideModal modalState={detailState} closeModal={changeDetailState}>
+          <Modal
+            WideModal
+            modalState={detailState}
+            closeModal={changeDetailState}
+          >
             <DetailContent />
           </Modal>
         ) : null}
@@ -37,7 +46,9 @@ export const Layout = ({ children }: childeren) => {
         </div>
       </Header>
       <Content>{children}</Content>
-      <Footer>© {new Date().getFullYear()} NickOvchinnikov. All rights reserved.</Footer>
+      <Footer>
+        © {new Date().getFullYear()} NickOvchinnikov. All rights reserved.
+      </Footer>
     </Wrapper>
   );
 };

@@ -30,7 +30,7 @@ const Modal = (props: ModalProps) => {
 
   return (
     <ModalStyled WideModal={props?.WideModal} onClick={props.closeModal}>
-      <div className="modalBody" onClick={(e) => e.stopPropagation()}>
+      <div className="modalBody" onClick={e => e.stopPropagation()}>
         {props.children}
       </div>
     </ModalStyled>
@@ -54,11 +54,11 @@ const ModalStyled = styled.div<{
   align-items: center;
 
   .modalBody {
-    max-width: ${(props) => (props.WideModal ? '1000px' : '500px')};
+    max-width: ${props => (props.WideModal ? '1000px' : '500px')};
     width: 70%;
     height: 80%;
     overflow-y: auto;
-    max-height: ${(props) => (props.WideModal ? '800px' : '500px')};
+    max-height: ${props => (props.WideModal ? '800px' : '500px')};
     position: absolute;
     color: black;
     padding: 30px 30px 30px 30px;

@@ -1,14 +1,14 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { Inputs } from "@components/Inputs";
-import { useForm } from "react-hook-form";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { DELETE_POST, GET_DETAIL_POST } from "@utils/apollo/gqls";
-import Swal from "sweetalert2";
-import useStore from "@zustand/store";
-import Image from "next/image";
-import { S3DeleteFile, S3DeleteFiles } from "@pages/post/S3util";
-import { GET_CLUSTER_DATA } from "@utils/apollo/gqls";
+import React from 'react';
+import styled from '@emotion/styled';
+import { Inputs } from '@components/Inputs';
+import { useForm } from 'react-hook-form';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { DELETE_POST, GET_DETAIL_POST } from '@utils/apollo/gqls';
+import Swal from 'sweetalert2';
+import useStore from '@zustand/store';
+import Image from 'next/image';
+import { S3DeleteFile, S3DeleteFiles } from '@utils/S3util';
+import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 export interface LoginContentType {
   email: string;
   password: string;
@@ -16,8 +16,8 @@ export interface LoginContentType {
 
 const DetailContent = () => {
   const { detailID, detailType, changeDetailState } = useStore(state => state);
-  const itemDetailsellType = detailType && detailType.split("/")[0];
-  const itemDetailType = detailType && detailType.split("/")[1];
+  const itemDetailsellType = detailType && detailType.split('/')[0];
+  const itemDetailType = detailType && detailType.split('/')[1];
   const {
     data: DetailData,
     loading,
@@ -33,14 +33,14 @@ const DetailContent = () => {
     // console.log(mutateErr);
     if (!mutateErr) {
       Swal.fire({
-        title: "정말 삭제하시겠습니까?",
-        text: "삭제된 데이터는 복구되지 않습니다.",
-        icon: "warning",
+        title: '정말 삭제하시겠습니까?',
+        text: '삭제된 데이터는 복구되지 않습니다.',
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "삭제",
-        cancelButtonText: "취소",
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '삭제',
+        cancelButtonText: '취소',
       }).then(async result => {
         if (result.isConfirmed) {
           await S3DeleteFile(DetailData.post.itemTitleimg);
@@ -49,19 +49,19 @@ const DetailContent = () => {
             variables: { deletePostId: detailID },
             refetchQueries: [{ query: GET_CLUSTER_DATA }],
           });
-          Swal.fire("삭제되었습니다.", "", "success");
+          Swal.fire('삭제되었습니다.', '', 'success');
           changeDetailState();
         }
       });
     } else {
-      Swal.fire(mutateErr.message, "", "error");
+      Swal.fire(mutateErr.message, '', 'error');
     }
   };
   return (
     <div>
       <button onClick={DeletePost}>삭제하기</button>
       <Image
-        src={DetailData?.post.itemTitleimg || "./next.svg"}
+        src={DetailData?.post.itemTitleimg || './next.svg'}
         alt="titleImage"
         width={500}
         height={500}
@@ -74,20 +74,20 @@ const DetailContent = () => {
             <th>매물 주소</th>
             <td>{DetailData?.post.itemAddress}</td>
           </tr>
-          {itemDetailsellType == "jense" && (
+          {itemDetailsellType == 'jense' && (
             <>
               <th>전세</th>
               <td>{DetailData?.post.itemJense}</td>
             </>
           )}
-          {itemDetailsellType == "sale" && (
+          {itemDetailsellType == 'sale' && (
             <>
               <th>매매가</th>
               <td>{DetailData?.post.itemSale}</td>
             </>
           )}
           <tr>
-            {itemDetailsellType == "monthly" && (
+            {itemDetailsellType == 'monthly' && (
               <>
                 <th>월세</th>
                 <td>{DetailData?.post.itemMonthly}</td>
@@ -96,7 +96,7 @@ const DetailContent = () => {
               </>
             )}
           </tr>
-          {itemDetailType !== "land" && (
+          {itemDetailType !== 'land' && (
             <>
               <tr>
                 <th>관리비</th>
@@ -106,7 +106,7 @@ const DetailContent = () => {
               </tr>
             </>
           )}
-          {(itemDetailType === "House" || itemDetailType === "Mart") && (
+          {(itemDetailType === 'House' || itemDetailType === 'Mart') && (
             <>
               <tr>
                 <th>공급면적</th>
@@ -134,7 +134,7 @@ const DetailContent = () => {
               </tr>
             </>
           )}
-          {(itemDetailType === "Factory" || itemDetailType === "Mart") && (
+          {(itemDetailType === 'Factory' || itemDetailType === 'Mart') && (
             <>
               <tr>
                 <th>대지면적</th>
@@ -156,7 +156,7 @@ const DetailContent = () => {
             <th>사용 승인일</th>
             <td>{DetailData?.post.itemApproval}</td>
           </tr>
-          {itemDetailType === "Land" && (
+          {itemDetailType === 'Land' && (
             <>
               <tr>
                 <th>토지합계면적</th>
@@ -181,7 +181,7 @@ const DetailContent = () => {
       {DetailData?.post.itemDetailimg.map((pic: string, index: number) => {
         return (
           <Image
-            src={pic || "./next.svg"}
+            src={pic || './next.svg'}
             alt="titleImage"
             width={500}
             height={500}

@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { Inputs } from "@components/Inputs";
-import { useForm } from "react-hook-form";
-import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { GET_USER } from "@utils/apollo/gqls";
-import Swal from "sweetalert2";
-import useStore from "@zustand/store";
+import React from 'react';
+import styled from '@emotion/styled';
+import { Inputs } from '@components/Inputs';
+import { useForm } from 'react-hook-form';
+import { gql, useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { GET_USER } from '@utils/apollo/gqls';
+import Swal from 'sweetalert2';
+import useStore from '@zustand/store';
 export interface LoginContentType {
   email: string;
   password: string;
@@ -39,8 +39,8 @@ const SignupContent = () => {
     });
     if (signupdata) {
       await Swal.fire({
-        icon: "success",
-        title: "회원가입 성공",
+        icon: 'success',
+        title: '회원가입 성공',
         showConfirmButton: false,
         timer: 1500,
       });
@@ -55,16 +55,16 @@ const SignupContent = () => {
     <div>
       <h1>로그인</h1>
       <form onSubmit={handleSubmit(SignupAPI)}>
-        <Inputs text="이메일" {...register("email")} />
+        <Inputs text="이메일" {...register('email')} />
         <span>{errors.email?.message}</span>
-        <Inputs text="이름" type="password" {...register("name")} />
+        <Inputs text="이름" type="password" {...register('name')} />
         <span>{errors.password?.message}</span>
-        <Inputs text="비밀번호" type="password" {...register("password")} />
+        <Inputs text="비밀번호" type="password" {...register('password')} />
         <span>{errors.password?.message}</span>
         <Inputs
           text="비밀번호"
           type="password"
-          {...register("passwordconfirm")}
+          {...register('passwordconfirm')}
         />
         <span>{errors.password?.message}</span>
         <button type="submit">회원가입</button>
