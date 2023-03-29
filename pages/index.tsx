@@ -1,16 +1,18 @@
-import styled from "@emotion/styled";
-import useStore from "@zustand/store";
-import { Map, MarkerClusterer, MapMarker, useMap } from "react-kakao-maps-sdk";
-import { use, useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
-import { GET_CLUSTER_DATA } from "@utils/apollo/gqls";
-import Modal from "@components/Modal";
-import PostItem from "@components/PostItem";
-import { useQuery } from "@apollo/client";
-import KakaoMapUtil from "@components/KakaomapUtil";
-import { postType } from "@utils/type";
-import { initializeApollo } from "@utils/apollo/apolloclient";
-import Image from "next/image";
+import styled from '@emotion/styled';
+import useStore from '@zustand/store';
+import { Map, MarkerClusterer, MapMarker, useMap } from 'react-kakao-maps-sdk';
+import { use, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
+import Modal from '@components/Modal';
+import PostItem from '@components/PostItem';
+import { useQuery } from '@apollo/client';
+import KakaoMapUtil from '@components/KakaomapUtil';
+import { postType } from '@utils/type';
+import { initializeApollo } from '@utils/apollo/apolloclient';
+import Image from 'next/image';
+
+//apollo client SSR
 export async function getStaticProps() {
   const apolloClient = initializeApollo();
 
@@ -29,6 +31,7 @@ interface makerType {
   position: { lat: number; lng: number };
   content: postType;
 }
+
 export default function Home() {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
   const { detailState, changeDetailState, setDetailID, setDetailType } =
@@ -36,6 +39,7 @@ export default function Home() {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [mapState, setMapState] = useState<any>();
 
+  // 카카오맵 그려진 후 map 데이터 받아와서 있으면 유틸 렌더링 하기
   const KakaoMapUtils = () => {
     if (!map) return null;
     return <KakaoMapUtil></KakaoMapUtil>;
@@ -44,22 +48,27 @@ export default function Home() {
   const mapRef = useRef<kakao.maps.Map>(null);
   const [selectedData, setSelectedData] = useState<postType[]>();
 
+  //현재 지도에 보여지는 맵의 경계값을 받아와서 해당 경계값에 포함되는 데이터만 필터링
   const bounds = () => {
     if (!map && !mapState) return;
     const bounds = new kakao.maps.LatLngBounds(mapState?.sw, mapState?.ne!);
     const filterdata = clusterData?.allpost?.posts.filter((p: any) => {
       const contain = bounds.contain(
-        new kakao.maps.LatLng(p.itemGeoLocation.lat, p.itemGeoLocation.lng)
+        new kakao.maps.LatLng(p.itemGeoLocation.lat, p.itemGeoLocation.lng),
       );
 
       return contain;
     });
     setSelectedData(filterdata);
   };
+
+  //맨처음 경계값에 대한 자료가 안들어가 있어 초기값을 설정해줌
+  // map이 아직 그려지지 않아서 경계값을 받아올 수 없음 그래서 처음에는 ssr로 데이터 받아와야함
   useEffect(() => {
     setSelectedData(clusterData?.allpost?.posts);
   }, []);
 
+  //지도가 움직일때마다 경계값을 받아와서 필터링
   useEffect(() => {
     const debounce = setTimeout(() => {
       return bounds();
@@ -72,7 +81,7 @@ export default function Home() {
     // 현재 지도 레벨에서 1레벨 확대한 레벨
     const level = mapr && mapr.getLevel() - 1;
 
-    // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대합니다
+    // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대
     mapr && mapr.setLevel(level!, { anchor: cluster.getCenter() });
   };
 
@@ -85,8 +94,8 @@ export default function Home() {
           changeDetailState();
           setDetailID(content._id!);
           setDetailType(content.itemType!);
-        }}
-        onMouseOver={() => setIsVisible(true)}
+        }} // 마커를 클릭했을 때 실행할 함수
+        onMouseOver={() => setIsVisible(true)} // 마커에 마우스를 올렸을 때 간단히 매물 보여주기
         onMouseOut={() => setIsVisible(false)}
       >
         {isVisible && (

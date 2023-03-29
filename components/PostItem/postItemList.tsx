@@ -10,6 +10,7 @@ interface InputProps {
 }
 
 export function PostItemList({ register, errors, tabIndex }: InputProps) {
+  //매물 타입에따른 인풋창 변화
   const sellType = tabIndex.split('/')[0];
   const postType1 = tabIndex.split('/')[1];
 

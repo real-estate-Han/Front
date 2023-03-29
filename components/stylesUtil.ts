@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 
-// https://github.com/styled-components/styled-components/issues/397
-
+// 그림자 생성 편하게 만들기 위한 함수
 export const boxShadow = (
   shadowColor1: string,
   shadowColor2: string,

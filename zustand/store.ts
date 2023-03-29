@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 interface State {
   loginState: boolean;
@@ -15,12 +15,13 @@ interface State {
   switchLoginSignUp: () => void;
 }
 
+//모달창 상태 관리 및 매물 상태관리
 const useStore = create<State>(set => ({
   loginState: false,
   signupState: false,
   detailState: false,
-  detailID: "",
-  detailType: "",
+  detailID: '',
+  detailType: '',
   setDetailType: (type: string) => set(state => ({ detailType: type })),
   setDetailID: (id: string) => set(state => ({ detailID: id })),
   changeDetailState: () => set(state => ({ detailState: !state.detailState })),
