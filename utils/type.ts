@@ -14,7 +14,7 @@ export interface postInputType {
   itemPurpose?: string;
   itemRooms?: string;
   itemStatus?: string;
-  itemField?: string;
+  itemLandNumber?: string;
   itemMovein?: string;
   itemApproval?: string;
   itemSubway?: string;
@@ -33,7 +33,7 @@ export interface postInputType {
   itemFloorHeight?: number;
   itemTag?: [string];
   itemElectricity?: number;
-  itemOption?: [string];
+  itemOption?: string;
 }
 
 export interface postType extends postInputType {

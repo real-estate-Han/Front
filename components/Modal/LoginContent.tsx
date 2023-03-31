@@ -28,7 +28,6 @@ const LoginContent = () => {
     },
   );
   const LoginAPI = async (data: LoginContentType) => {
-    console.log(data);
     await LoginQuery({
       variables: {
         email: data.email,

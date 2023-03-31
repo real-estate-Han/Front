@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { Inputs } from '@components/Inputs';
 import { useForm } from 'react-hook-form';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { DELETE_POST, GET_DETAIL_POST } from '@utils/apollo/gqls';
+import { DELETE_POST, GET_DETAIL_POST, GET_USER } from '@utils/apollo/gqls';
 import Swal from 'sweetalert2';
 import useStore from '@zustand/store';
 import Image from 'next/image';
@@ -18,6 +18,7 @@ const DetailContent = () => {
   const { detailID, detailType, changeDetailState } = useStore(state => state);
   const itemDetailsellType = detailType && detailType.split('/')[0];
   const itemDetailType = detailType && detailType.split('/')[1];
+
   const {
     data: DetailData,
     loading,
@@ -26,8 +27,9 @@ const DetailContent = () => {
     variables: {
       postId: detailID,
     },
+    fetchPolicy: 'network-only',
   });
-  console.log(DetailData);
+
   const [deleteMutate, { error: mutateErr }] = useMutation(DELETE_POST);
   const DeletePost = () => {
     // console.log(mutateErr);
@@ -43,11 +45,12 @@ const DetailContent = () => {
         cancelButtonText: '취소',
       }).then(async result => {
         if (result.isConfirmed) {
-          await S3DeleteFile(DetailData.post.itemTitleimg);
-          await S3DeleteFiles(DetailData.post.itemDetailimg);
           await deleteMutate({
             variables: { deletePostId: detailID },
             refetchQueries: [{ query: GET_CLUSTER_DATA }],
+          }).then(async () => {
+            await S3DeleteFile(DetailData.post.itemTitleimg);
+            await S3DeleteFiles(DetailData.post.itemDetailimg);
           });
           Swal.fire('삭제되었습니다.', '', 'success');
           changeDetailState();
@@ -57,15 +60,11 @@ const DetailContent = () => {
       Swal.fire(mutateErr.message, '', 'error');
     }
   };
+  console.log(DetailData?.post);
   return (
     <div>
-      <button onClick={DeletePost}>삭제하기</button>
-      <Image
-        src={DetailData?.post.itemTitleimg || './next.svg'}
-        alt="titleImage"
-        width={500}
-        height={500}
-      ></Image>
+      {/* <button onClick={DeletePost}>삭제하기</button> */}
+      <Image src={DetailData?.post.itemTitleimg || './next.svg'} alt="titleImage" width={500} height={500}></Image>
       <p>매물번호{DetailData?.post.itemUniqueID}</p>
       <div className="ItemPrice"></div>
       <PostTable>
@@ -179,14 +178,7 @@ const DetailContent = () => {
         </tbody>
       </PostTable>
       {DetailData?.post.itemDetailimg.map((pic: string, index: number) => {
-        return (
-          <Image
-            src={pic || './next.svg'}
-            alt="titleImage"
-            width={500}
-            height={500}
-          ></Image>
-        );
+        return <Image key={index} src={pic || './next.svg'} alt="titleImage" width={500} height={500}></Image>;
       })}
     </div>
   );
