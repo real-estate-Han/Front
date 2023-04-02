@@ -171,8 +171,8 @@ export function PostItemList({ register, errors, tabIndex }: InputProps) {
           <Inputs type="text" text="지목" {...register('itemLandCategory')} />
           <span>{errors?.itemLandCategory?.message}</span>
 
-          <Inputs type="text" text="필지수" {...register('itemField')} />
-          <span>{errors?.itemField?.message}</span>
+          <Inputs type="text" text="필지수" {...register('itemLandNumber')} />
+          <span>{errors?.itemLandNumber?.message}</span>
         </>
       )}
 
