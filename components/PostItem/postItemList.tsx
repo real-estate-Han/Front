@@ -27,79 +27,43 @@ export function PostItemList({ register, errors, tabIndex }: InputProps) {
       <span>{errors?.itemUniqueID?.message}</span>
       {sellType === 'monthly' && (
         <>
-          <Inputs
-            type="number"
-            text="매물월세"
-            {...register('itemMonthly', { valueAsNumber: true })}
-          />
+          <Inputs type="number" text="매물월세" {...register('itemMonthly', { valueAsNumber: true })} />
           <span>{errors?.itemMonthly?.message}</span>
 
-          <Inputs
-            type="number"
-            text="매물보증금"
-            {...register('itemDeposit', { valueAsNumber: true })}
-          />
+          <Inputs type="number" text="매물보증금" {...register('itemDeposit', { valueAsNumber: true })} />
           <span>{errors?.itemDeposit?.message}</span>
         </>
       )}
       {sellType === 'jense' && (
         <>
-          <Inputs
-            type="number"
-            text="매물전세보증금"
-            {...register('itemJense', { valueAsNumber: true })}
-          />
+          <Inputs type="number" text="매물전세보증금" {...register('itemJense', { valueAsNumber: true })} />
           <span>{errors?.itemJense?.message}</span>
         </>
       )}
       {postType1 !== 'Land' && (
         <>
-          <Inputs
-            type="number"
-            text="매물관리비"
-            {...register('itemManagement', { valueAsNumber: true })}
-          />
+          <Inputs type="number" text="매물관리비" {...register('itemManagement', { valueAsNumber: true })} />
           <span>{errors?.itemManagement?.message}</span>
-          <Inputs
-            type="number"
-            text="매물층수"
-            {...register('itemFloor', { valueAsNumber: true })}
-          />
+          <Inputs type="number" text="매물층수" {...register('itemFloor', { valueAsNumber: true })} />
           <span>{errors?.itemFloor?.message}</span>
         </>
       )}
       {sellType === 'sale' && (
         <>
-          <Inputs
-            type="number"
-            text="매물매매가"
-            {...register('itemSale', { valueAsNumber: true })}
-          />
+          <Inputs type="number" text="매물매매가" {...register('itemSale', { valueAsNumber: true })} />
           <span>{errors?.itemSale?.message}</span>
         </>
       )}
       {(postType1 === 'House' || postType1 === 'Mart') && (
         <>
-          <Inputs
-            type="float"
-            text="공급면적"
-            {...register('itemSupplyArea', { valueAsNumber: true })}
-          />
+          <Inputs type="float" text="공급면적" {...register('itemSupplyArea', { valueAsNumber: true })} />
           <span>{errors?.itemSupplyArea?.message}</span>
 
-          <Inputs
-            type="float"
-            text="전용면적"
-            {...register('itemExclusiveArea', { valueAsNumber: true })}
-          />
+          <Inputs type="float" text="전용면적" {...register('itemExclusiveArea', { valueAsNumber: true })} />
           <span>{errors?.itemExclusiveArea?.message}</span>
           <Inputs type="string" text="방/화장실" {...register('itemRooms')} />
           <span>{errors?.itemRooms?.message}</span>
-          <Inputs
-            type="string"
-            text="엘리베이터여부"
-            {...register('itemElevator')}
-          />
+          <Inputs type="string" text="엘리베이터여부" {...register('itemElevator')} />
           <span>{errors?.itemElevator?.message}</span>
 
           <Inputs type="string" text="난방방식" {...register('itemHeating')} />
@@ -108,46 +72,26 @@ export function PostItemList({ register, errors, tabIndex }: InputProps) {
           <Inputs type="string" text="주차" {...register('itemParking')} />
           <span>{errors?.itemParking?.message}</span>
 
-          <Inputs
-            type="string"
-            text="발코니/배란다"
-            {...register('itemBalcony')}
-          />
+          <Inputs type="string" text="발코니/배란다" {...register('itemBalcony')} />
           <span>{errors?.itemBalcony?.message}</span>
 
           <Inputs type="string" text="방향" {...register('itemDirection')} />
           <span>{errors?.itemDirection?.message}</span>
 
-          <Inputs
-            type="date"
-            text="매물입주가능날짜"
-            {...register('itemMovein')}
-          />
+          <Inputs type="date" text="매물입주가능날짜" {...register('itemMovein')} />
           <span>{errors?.itemMovein?.message}</span>
         </>
       )}
 
       {(postType1 === 'Factory' || postType1 === 'Mart') && (
         <>
-          <Inputs
-            type="number"
-            text="대지면적"
-            {...register('itemAreaLand', { valueAsNumber: true })}
-          />
+          <Inputs type="number" text="대지면적" {...register('itemAreaLand', { valueAsNumber: true })} />
           <span>{errors?.itemAreaLand?.message}</span>
 
-          <Inputs
-            type="number"
-            text="건축면적"
-            {...register('itemAreaBuilding', { valueAsNumber: true })}
-          />
+          <Inputs type="number" text="건축면적" {...register('itemAreaBuilding', { valueAsNumber: true })} />
           <span>{errors?.itemAreaBuilding?.message}</span>
 
-          <Inputs
-            type="number"
-            text="층고"
-            {...(register('itemFloorHeight'), { valueAsNumber: true })}
-          />
+          <Inputs type="number" text="층고" {...(register('itemFloorHeight'), { valueAsNumber: true })} />
           <span>{errors?.itemFloorHeight?.message}</span>
 
           <Inputs type="text" text="화물차량 진입" {...register('itemTruck')} />
@@ -161,11 +105,7 @@ export function PostItemList({ register, errors, tabIndex }: InputProps) {
       <span>{errors?.itemApproval?.message}</span>
       {postType1 === 'Land' && (
         <>
-          <Inputs
-            type="number"
-            text="토지합계면적"
-            {...(register('itemTotalAreaLand'), { valueAsNumber: true })}
-          />
+          <Inputs type="number" text="토지합계면적" {...(register('itemTotalAreaLand'), { valueAsNumber: true })} />
           <span>{errors?.itemTotalAreaLand?.message}</span>
 
           <Inputs type="text" text="지목" {...register('itemLandCategory')} />
@@ -176,18 +116,10 @@ export function PostItemList({ register, errors, tabIndex }: InputProps) {
         </>
       )}
 
-      <Inputs
-        type="text"
-        text="매물 가까운 지하철"
-        {...register('itemSubway')}
-      />
+      <Inputs type="text" text="매물 가까운 지하철" {...register('itemSubway')} />
       <span>{errors?.itemSubway?.message}</span>
 
-      <Inputs
-        type="text"
-        text="매물 옵션/추가 설명"
-        {...register('itemOption')}
-      />
+      <Inputs type="text" text="매물 옵션/추가 설명" {...register('itemOption')} />
       <span>{errors?.itemOption?.message}</span>
     </>
   );

@@ -1,17 +1,17 @@
-import styled from "@emotion/styled";
-import { useEffect, useRef, useState } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
-import dynamic from "next/dynamic";
-import { GeoLocation } from "@utils/type";
-import PostMain from "./main";
-import Swal from "sweetalert2";
+import styled from '@emotion/styled';
+import { useEffect, useRef, useState } from 'react';
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import dynamic from 'next/dynamic';
+import { GeoLocation } from '@utils/type';
+import PostMain from './main';
+import Swal from 'sweetalert2';
 export default function PostItem() {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [position, setPosition] = useState<GeoLocation>({
     lat: 0,
     lng: 0,
   });
-  const [kakaoAddress, setKakaoAddress] = useState<string>("");
+  const [kakaoAddress, setKakaoAddress] = useState<string>('');
   const [defaltPosition, setDefaltPosition] = useState<GeoLocation>({
     lat: 37.854572222429134,
     lng: 126.78755348011892,
@@ -48,13 +48,13 @@ export default function PostItem() {
 
   const findGeoLocation = () => {
     Swal.fire({
-      title: "도로명 주소를 입력해 주세요",
-      input: "text",
+      title: '도로명 주소를 입력해 주세요',
+      input: 'text',
       inputAttributes: {
-        autocapitalize: "off",
+        autocapitalize: 'off',
       },
       showCancelButton: true,
-      confirmButtonText: "검색",
+      confirmButtonText: '검색',
       showLoaderOnConfirm: true,
       preConfirm: address => {
         return getByAddress(address);
@@ -66,7 +66,7 @@ export default function PostItem() {
     getByGeoCoder(position?.lng, position?.lat);
   }, [position]);
 
-  const KakaoMapUtil = dynamic(() => import("@components/KakaomapUtil"), {
+  const KakaoMapUtil = dynamic(() => import('@components/kakaoMapUtils'), {
     ssr: false,
   });
   return (

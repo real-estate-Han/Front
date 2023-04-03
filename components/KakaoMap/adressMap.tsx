@@ -1,29 +1,14 @@
-import styled from "@emotion/styled";
-import {
-  Map,
-  MapMarker,
-  MapTypeControl,
-  ZoomControl,
-} from "react-kakao-maps-sdk";
+import styled from '@emotion/styled';
+import { Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
 
-import KakaomapUtil from "@components/KakaomapUtil";
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { GeoLocation } from "@utils/type";
+import KakaomapUtil from '@components/kakaoMapUtils';
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
+import { GeoLocation } from '@utils/type';
 interface KakaoMapProps {
   setKakaoAddress: Dispatch<SetStateAction<string | undefined>>;
   setKakaoGeo: Dispatch<SetStateAction<GeoLocation>>;
 }
-export default function AdressMap({
-  setKakaoAddress,
-  setKakaoGeo,
-}: KakaoMapProps) {
+export default function AdressMap({ setKakaoAddress, setKakaoGeo }: KakaoMapProps) {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [position, setPosition] = useState<GeoLocation>({
     lat: 0,

@@ -2,6 +2,7 @@ import React from 'react';
 import { postType } from '@utils/type';
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import { boxShadow } from '@components/stylesUtil';
 
 interface PostItemProps {
   postData: postType;
@@ -11,12 +12,7 @@ function PostItem({ postData, widthPercent }: PostItemProps) {
   return (
     <Wrapper widthPercent={widthPercent}>
       <>
-        <Image
-          src={postData?.itemTitleimg || './next.svg'}
-          alt="titleImage"
-          width={120}
-          height={120}
-        />
+        <Image src={postData?.itemTitleimg || './next.svg'} alt="titleImage" width={120} height={120} />
       </>
       <PostInfo>
         <p>매물번호{postData.itemUniqueID}</p>
@@ -57,6 +53,8 @@ const Wrapper = styled.div<{ widthPercent: number }>`
   float: left;
   display: flex;
   width: ${props => props.widthPercent + '%'};
+  border: 1px solid black;
+  ${({ theme }) => boxShadow(theme.components.shadow1, theme.components.shadow2)}
   min-width: 180px;
   max-height: 120px;
   height: 100%;

@@ -7,7 +7,7 @@ import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import Modal from '@components/Modal';
 import PostItem from '@components/PostItem';
 import { useQuery } from '@apollo/client';
-import KakaoMapUtil from '@components/KakaomapUtil';
+import KakaoMapUtil from '@components/kakaoMapUtils';
 import { postType } from '@utils/type';
 import { initializeApollo } from '@utils/apollo/apolloclient';
 import Image from 'next/image';
@@ -34,8 +34,7 @@ interface makerType {
 
 export default function Home() {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
-  const { detailState, changeDetailState, setDetailID, setDetailType } =
-    useStore(state => state);
+  const { detailState, changeDetailState, setDetailID, setDetailType } = useStore(state => state);
   const [map, setMap] = useState<kakao.maps.Map>();
   const [mapState, setMapState] = useState<any>();
 
@@ -53,9 +52,7 @@ export default function Home() {
     if (!map && !mapState) return;
     const bounds = new kakao.maps.LatLngBounds(mapState?.sw, mapState?.ne!);
     const filterdata = clusterData?.allpost?.posts.filter((p: any) => {
-      const contain = bounds.contain(
-        new kakao.maps.LatLng(p.itemGeoLocation.lat, p.itemGeoLocation.lng),
-      );
+      const contain = bounds.contain(new kakao.maps.LatLng(p.itemGeoLocation.lat, p.itemGeoLocation.lng));
 
       return contain;
     });
@@ -98,14 +95,16 @@ export default function Home() {
         onMouseOver={() => setIsVisible(true)} // 마커에 마우스를 올렸을 때 간단히 매물 보여주기
         onMouseOut={() => setIsVisible(false)}
       >
-        {isVisible && (
-          <PostItem widthPercent={100} postData={content}></PostItem>
-        )}
+        {isVisible && <PostItem widthPercent={100} postData={content}></PostItem>}
       </MapMarker>
     );
   };
   return (
     <Warp>
+      <section>
+        <h1>카테고리</h1>
+        <nav>매물 이모티콘 모음 자리</nav>
+      </section>
       <MapPostList>
         <>
           <Kakomap
@@ -145,19 +144,10 @@ export default function Home() {
 
         <PostList>
           {selectedData?.map(p => {
-            return (
-              <PostItem widthPercent={50} key={p.itemUniqueID} postData={p} />
-            );
+            return <PostItem widthPercent={50} key={p.itemUniqueID} postData={p} />;
           })}
         </PostList>
       </MapPostList>
-      <section>
-        <h1>카테고리</h1>
-        <nav>매물 이모티콘 모음 자리</nav>
-      </section>
-      <section>
-        <article>매물별 아이템 리스트자리</article>
-      </section>
     </Warp>
   );
 }
@@ -171,7 +161,7 @@ const Warp = styled.div`
   align-items: center;
 
   & section:nth-of-type(1) {
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -179,7 +169,7 @@ const Warp = styled.div`
     width: 100%;
   }
   & section:nth-of-type(2) {
-    border: 1px solid green;
+    /* border: 1px solid green; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -197,7 +187,7 @@ const MapPostList = styled.div`
   align-items: center;
 
   transition: 0.5s;
-  @media (max-width: 700px) {
+  @media (max-width: 800px) {
     display: flex;
     flex-direction: column;
   }
@@ -207,13 +197,16 @@ const Kakomap = styled(Map)`
   height: 400px;
   border: 1px solid black;
   transition: 0.5s;
+  padding: 5px;
   @media (min-width: 1200px) {
     width: 600px;
     height: 600px;
   }
 `;
 const PostList = styled.div`
-  background-color: red;
+  /* background-color: red; */
+  border: 1px solid black;
+  padding: 5px;
   width: 50%;
   min-width: 500px;
   min-height: 400px;
@@ -221,5 +214,8 @@ const PostList = styled.div`
   @media (min-width: 1200px) {
     min-width: 600px;
     min-height: 600px;
+  }
+  @media (max-width: 600px) {
+    display: none;
   }
 `;

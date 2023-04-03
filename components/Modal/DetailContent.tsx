@@ -9,6 +9,7 @@ import useStore from '@zustand/store';
 import Image from 'next/image';
 import { S3DeleteFile, S3DeleteFiles } from '@utils/S3util';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
+import { css } from '@emotion/react';
 export interface LoginContentType {
   email: string;
   password: string;
@@ -63,8 +64,16 @@ const DetailContent = () => {
   console.log(DetailData?.post);
   return (
     <div>
+      <button onClick={changeDetailState}> 창 닫기</button>
       {/* <button onClick={DeletePost}>삭제하기</button> */}
-      <Image src={DetailData?.post.itemTitleimg || './next.svg'} alt="titleImage" width={500} height={500}></Image>
+      <ImageBox>
+        <Image
+          src={DetailData?.post.itemTitleimg || './next.svg'}
+          alt="titleImage"
+          style={{ objectFit: 'contain' }}
+          fill
+        ></Image>
+      </ImageBox>
       <p>매물번호{DetailData?.post.itemUniqueID}</p>
       <div className="ItemPrice"></div>
       <PostTable>
@@ -178,7 +187,11 @@ const DetailContent = () => {
         </tbody>
       </PostTable>
       {DetailData?.post.itemDetailimg.map((pic: string, index: number) => {
-        return <Image key={index} src={pic || './next.svg'} alt="titleImage" width={500} height={500}></Image>;
+        return (
+          <ImageBox>
+            <Image key={index} src={pic || './next.svg'} alt="titleImage" fill />
+          </ImageBox>
+        );
       })}
     </div>
   );
@@ -213,5 +226,25 @@ const PostTable = styled.table`
       border-left: 1px solid #e9ecef;
       text-align: center;
     }
+  }
+`;
+
+const ImageBox = styled.div`
+  width: 80%;
+  height: 70vh;
+  max-height: 500px;
+  margin: 0 auto;
+  /* border: 1px solid black; */
+  position: relative;
+  @media (min-width: 400px) {
+    max-height: 200px;
+  }
+  @media (min-width: 600px) {
+    height: 50vh;
+    max-height: 400px;
+  }
+  @media (min-width: 900px) {
+    height: 70vh;
+    max-height: 500px;
   }
 `;

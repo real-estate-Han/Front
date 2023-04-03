@@ -6,11 +6,15 @@ import useStore from '@zustand/store';
 import SignupContent from '@components/Modal/SignupContent';
 import DetailContent from '@components/Modal/DetailContent';
 type childeren = { children: React.ReactNode };
+import { useRouter } from 'next/router';
+import FooterContent from '@components/Footer/content';
 
 export const Layout = ({ children }: childeren) => {
   const { loginState, signupState, detailState, changeDetailState, changeSignUpState, changeLoginState } = useStore(
     state => state,
   );
+  const param = useRouter();
+
   return (
     <Wrapper>
       <>
@@ -32,10 +36,14 @@ export const Layout = ({ children }: childeren) => {
       </>
       <Header>
         <StyledLogo size={2}>한세일부동산</StyledLogo>
-        <div className="loginButton">{/* <button onClick={changeLoginState}>로그인</button> */}</div>
+        <div className="loginButton">
+          {param.pathname !== '/' ? <button onClick={changeLoginState}>로그인</button> : null}
+        </div>
       </Header>
       <Content>{children}</Content>
-      <Footer>© {new Date().getFullYear()} NickOvchinnikov. All rights reserved.</Footer>
+      <Footer>
+        <FooterContent />
+      </Footer>
     </Wrapper>
   );
 };
@@ -60,7 +68,7 @@ export const Content = styled.main`
   grid-area: content;
   min-height: 84vh;
   margin-top: 1rem;
-  border: 1px solid ${({ theme }) => theme.font.regular};
+  /* border: 1px solid ${({ theme }) => theme.font.regular}; */
 `;
 
 export const StyledLogo = styled(Logo)`
@@ -69,7 +77,7 @@ export const StyledLogo = styled(Logo)`
   justify-content: flex-start;
 
   background-color: ${({ theme }) => theme.components.primary};
-  border: 1px solid ${({ theme }) => theme.font.regular};
+  /* border: 1px solid ${({ theme }) => theme.font.regular}; */
 `;
 
 export const Header = styled.div`
@@ -91,10 +99,14 @@ export const Header = styled.div`
 `;
 
 export const Footer = styled.footer`
-  grid-area: footer;
   display: flex;
+  width: 100vw;
+  background-color: ${({ theme }) => theme.components.shadow1};
+  color: ${({ theme }) => theme.font.button};
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  height: 5rem;
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;

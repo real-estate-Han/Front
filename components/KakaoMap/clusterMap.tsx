@@ -1,13 +1,8 @@
-import styled from "@emotion/styled";
-import {
-  Map,
-  MapMarker,
-  MapTypeControl,
-  ZoomControl,
-} from "react-kakao-maps-sdk";
+import styled from '@emotion/styled';
+import { Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
 
-import KakaomapUtil from "@components/KakaomapUtil";
-import { useCallback, useEffect, useRef, useState } from "react";
+import KakaomapUtil from '@components/kakaoMapUtils';
+import { useCallback, useEffect, useRef, useState } from 'react';
 interface KakaoMapProps {}
 export default function ClusterMap({}: KakaoMapProps) {
   const [info, setInfo] = useState<{
@@ -42,7 +37,7 @@ export default function ClusterMap({}: KakaoMapProps) {
     if (!map) return;
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch("파주아울렛 ", (data, status, _pagination) => {
+    ps.keywordSearch('파주아울렛 ', (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다
@@ -92,8 +87,7 @@ export default function ClusterMap({}: KakaoMapProps) {
               key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
               position={marker.position}
               onClick={() => {
-                setInfo(marker),
-                  getGeoCoder(marker.position.lat, marker.position.lng);
+                setInfo(marker), getGeoCoder(marker.position.lat, marker.position.lng);
               }}
               title={marker.content}
             ></MapMarker>
