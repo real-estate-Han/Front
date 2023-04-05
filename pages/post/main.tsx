@@ -5,7 +5,7 @@ import { ChangeEvent, useState } from 'react';
 import Swal from 'sweetalert2';
 import { postInputType, postType } from '@utils/type';
 import Image from 'next/image';
-import { PostItemList } from '../../components/PostItem/postItemList';
+import { PostItemList } from '@components/Inputs/postItemList';
 import { useMutation } from '@apollo/client';
 import { Creat_POST } from '@utils/apollo/gqls';
 import imageCompression from 'browser-image-compression';
@@ -110,38 +110,17 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
         <div className="tilteImgBox">
           <label htmlFor="itemTitleImg">
             <p>메인 사진 고르기</p>
-            <input
-              onChange={onFileChange}
-              id="itemTitleImg"
-              hidden
-              type={'file'}
-            />
+            <input onChange={onFileChange} id="itemTitleImg" hidden type={'file'} />
           </label>
-          {titleImg ? (
-            <Image src={titleImg} alt="title_img" width={150} height={120} />
-          ) : null}
+          {titleImg ? <Image src={titleImg} alt="title_img" width={150} height={120} /> : null}
         </div>
         <div className="detailImgBox">
           <label htmlFor="detailImg">
             <p>상세 사진 고르기</p>
-            <input
-              hidden
-              id="detailImg"
-              type={'file'}
-              multiple
-              onChange={onFileChange}
-            />
+            <input hidden id="detailImg" type={'file'} multiple onChange={onFileChange} />
           </label>
           {detailImg?.map((img, idx) => {
-            return (
-              <Image
-                key={idx}
-                src={img}
-                alt="titleImg"
-                width={150}
-                height={120}
-              />
-            );
+            return <Image key={idx} src={img} alt="titleImg" width={150} height={120} />;
           })}
         </div>
       </ImageContainer>
@@ -165,11 +144,7 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
           </select>
         </>
         <section>
-          <PostItemList
-            tabIndex={tabIndex}
-            register={register}
-            errors={errors}
-          />
+          <PostItemList tabIndex={tabIndex} register={register} errors={errors} />
         </section>
         <input type="submit"></input>
       </form>

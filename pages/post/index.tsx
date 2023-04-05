@@ -100,13 +100,14 @@ export default function PostItem() {
   );
 }
 const Wrap = styled.div`
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 
   form {
     width: 90%;
@@ -119,7 +120,7 @@ const Wrap = styled.div`
     width: 100%;
   }
   .AddressInfo {
-    display: flex;
+    /* display: flex;
     width: 150px;
     height: 30px;
     position: relative;
@@ -130,7 +131,7 @@ const Wrap = styled.div`
     padding: 5px;
     background-color: aqua;
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 700; */
   }
 `;
 const Kakomap = styled(Map)`

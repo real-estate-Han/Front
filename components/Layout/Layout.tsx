@@ -50,24 +50,14 @@ export const Layout = ({ children }: childeren) => {
 
 const Wrapper = styled.div`
   gap: 0.1rem;
+  width: 100vw;
+  min-height: 100vh;
   color: ${({ theme }) => theme.font.regular};
   background-color: ${({ theme }) => theme.background};
-
-  /* @media (min-width: 500px) {
-    grid-template-columns: 1fr 3fr;
-  }
-  @media (min-width: 960px) {
-    grid-template-columns: 1fr 4fr 2fr;
-    grid-template-areas:
-      'header  header  search'
-      'content content content'
-      'footer  footer  footer';
-  } */
 `;
 export const Content = styled.main`
-  grid-area: content;
   min-height: 84vh;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   /* border: 1px solid ${({ theme }) => theme.font.regular}; */
 `;
 
@@ -83,6 +73,7 @@ export const StyledLogo = styled(Logo)`
 export const Header = styled.div`
   background-color: ${({ theme }) => theme.components.primary};
   grid-area: header;
+  /* border: 1px solid ${({ theme }) => theme.font.regular}; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;

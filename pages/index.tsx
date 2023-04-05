@@ -11,7 +11,8 @@ import KakaoMapUtil from '@components/kakaoMapUtils';
 import { postType } from '@utils/type';
 import { initializeApollo } from '@utils/apollo/apolloclient';
 import Image from 'next/image';
-
+import { FcHome } from 'react-icons/fc';
+import { TbBuildingFactory2 } from 'react-icons/tb';
 //apollo client SSR
 export async function getStaticProps() {
   const apolloClient = initializeApollo();
@@ -102,8 +103,10 @@ export default function Home() {
   return (
     <Warp>
       <section>
-        <h1>카테고리</h1>
-        <nav>매물 이모티콘 모음 자리</nav>
+        <nav>
+          <FcHome />
+          <TbBuildingFactory2 />
+        </nav>
       </section>
       <MapPostList>
         <>
@@ -162,6 +165,8 @@ const Warp = styled.div`
 
   & section:nth-of-type(1) {
     /* border: 1px solid blue; */
+    box-sizing: border-box;
+    padding: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -193,11 +198,18 @@ const MapPostList = styled.div`
   }
 `;
 const Kakomap = styled(Map)`
-  width: 500px;
-  height: 400px;
-  border: 1px solid black;
+  box-sizing: border-box;
+  /* border: 1px solid black; */
   transition: 0.5s;
-  padding: 5px;
+  /* padding: 5px; */
+  @media (max-width: 600px) {
+    width: 100%;
+    height: 60vh;
+  }
+  @media (min-width: 800px) {
+    width: 400px;
+    height: 400px;
+  }
   @media (min-width: 1200px) {
     width: 600px;
     height: 600px;
@@ -211,11 +223,15 @@ const PostList = styled.div`
   min-width: 500px;
   min-height: 400px;
   transition: 0.5s;
-  @media (min-width: 1200px) {
-    min-width: 600px;
-    min-height: 600px;
+  @media (min-width: 800px) {
+    min-width: 400px;
+    min-height: 400px;
   }
   @media (max-width: 600px) {
     display: none;
+  }
+  @media (min-width: 1200px) {
+    width: 600px;
+    height: 600px;
   }
 `;
