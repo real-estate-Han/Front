@@ -55,7 +55,7 @@ const ModalStyled = styled.div<{
 
   .modalBody {
     max-width: ${props => (props.WideModal ? '1000px' : '500px')};
-    width: 70%;
+    width: 80%;
     height: 80%;
     overflow-y: auto;
     max-height: ${props => (props.WideModal ? '800px' : '500px')};
@@ -67,5 +67,9 @@ const ModalStyled = styled.div<{
     background-color: rgb(255, 255, 255);
     border-radius: 20px;
     box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+    font-size: 12px;
+  }
+  .DetailContent {
+    width: 100%;
   }
 `;

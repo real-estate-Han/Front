@@ -63,25 +63,32 @@ const DetailContent = () => {
   };
   console.log(DetailData?.post);
   return (
-    <div>
+    <div className="DetailContent">
       <button onClick={changeDetailState}> 창 닫기</button>
       {/* <button onClick={DeletePost}>삭제하기</button> */}
       <ImageBox>
         <Image
           src={DetailData?.post.itemTitleimg || './next.svg'}
           alt="titleImage"
-          style={{ objectFit: 'contain' }}
+          // style={{ objectFit: 'contain' }}
           fill
         ></Image>
       </ImageBox>
-      <p>매물번호{DetailData?.post.itemUniqueID}</p>
-      <div className="ItemPrice"></div>
+
       <PostTable>
         <tbody>
+          <tr>
+            <th>매물번호</th>
+            <td>{DetailData?.post.itemUniqueID}</td>
+          </tr>
           <tr>
             <th>매물 주소</th>
             <td>{DetailData?.post.itemAddress}</td>
           </tr>
+        </tbody>
+      </PostTable>
+      <PostTable>
+        <tbody>
           {itemDetailsellType == 'jense' && (
             <>
               <th>전세</th>
@@ -176,6 +183,10 @@ const DetailContent = () => {
               </tr>
             </>
           )}
+        </tbody>
+      </PostTable>
+      <PostTable>
+        <tbody>
           <tr>
             <th>가까운 지하철</th>
             <td>{DetailData?.post.itemSubway}</td>
@@ -201,10 +212,12 @@ export default DetailContent;
 
 const PostTable = styled.table`
   width: 100%;
+
   border-collapse: collapse;
   empty-cells: show;
   border-spacing: 0;
   border: 1px solid #e9ecef;
+
   tbody {
     border: 1px solid #e9ecef;
     th {
@@ -230,11 +243,11 @@ const PostTable = styled.table`
 `;
 
 const ImageBox = styled.div`
-  width: 80%;
+  width: 100%;
   height: 70vh;
   max-height: 500px;
   margin: 0 auto;
-  /* border: 1px solid black; */
+  margin: 5px auto;
   position: relative;
   @media (min-width: 400px) {
     max-height: 200px;
