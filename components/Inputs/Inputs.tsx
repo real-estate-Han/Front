@@ -1,7 +1,8 @@
-import React, { ForwardedRef, forwardRef } from "react";
-import styled from "@emotion/styled";
+import React, { ForwardedRef, forwardRef } from 'react';
+import styled from '@emotion/styled';
 
 interface InputProps {
+  placeholder?: string;
   type?: string;
   width?: string;
   defaultValue?: string;
@@ -11,14 +12,14 @@ interface InputProps {
 
 export const Inputs = forwardRef(
   (
-    { type, defaultValue, disabled, text, ...rest }: InputProps,
-    ref: ForwardedRef<HTMLInputElement>
+    { type, width, placeholder, defaultValue, disabled, text, ...rest }: InputProps,
+    ref: ForwardedRef<HTMLInputElement>,
   ) => {
     return (
-      <StyledDiv>
+      <StyledDiv role="label" width={width}>
         <IdInput
           ref={ref}
-          placeholder="[ㅇㅁㅇ]b"
+          placeholder={placeholder || '[ㅇㅁㅇ]b'}
           type={type}
           defaultValue={defaultValue}
           disabled={disabled}
@@ -27,7 +28,7 @@ export const Inputs = forwardRef(
         <span>{text}</span>
       </StyledDiv>
     );
-  }
+  },
 );
 
 const IdInput = styled.input`
@@ -47,21 +48,17 @@ const IdInput = styled.input`
   &::placeholder {
     color: transparent;
   }
-  /* &:placeholder-shown {
-    + span {
-      display: none;
-    }
-  } */
+
   &:not(:placeholder-shown) {
     outline: none;
     + span {
-      font-family: "neodgm";
+      font-family: 'neodgm';
       position: absolute;
       top: 11%;
       left: 3%;
       pointer-events: none;
       font-size: 1rem;
-      background-color: ${({ theme }) => theme.background};
+      background-color: ${({ theme }) => theme?.background || 'white'};
     }
   }
   &:focus {
@@ -69,29 +66,28 @@ const IdInput = styled.input`
     border: 2px solid black; //#1d9bf0 파랑
 
     + span {
-      font-family: "neodgm";
+      font-family: 'neodgm';
       position: absolute;
       top: 11%;
       left: 3%;
-      color: ${({ theme }) => theme.font.regular};
+      color: ${({ theme }) => theme?.font?.regular || 'black'};
       pointer-events: none;
       font-size: 1rem;
-      background-color: ${({ theme }) => theme.background};
+      background-color: ${({ theme }) => theme?.background || 'white'};
     }
   }
 `;
 
-const StyledDiv = styled.label<{ width?: string }>`
+const StyledDiv = styled.label<{ width?: string | undefined }>`
   display: flex;
   position: relative;
-  width: ${({ width }) => width || "100%"};
+  width: ${({ width }) => width || '100%'};
   margin: auto;
   span {
     position: absolute;
     top: 50%;
     left: 3%;
-    /* z-index:  */
-    color: ${({ theme }) => theme.font.regular};
+    color: ${({ theme }) => theme?.font?.regular || 'black'};
     transition: all 0.2s ease;
   }
 `;

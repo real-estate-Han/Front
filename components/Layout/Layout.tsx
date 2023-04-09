@@ -5,7 +5,7 @@ import LoginContent from '@components/Modal/LoginContent';
 import useStore from '@zustand/store';
 import SignupContent from '@components/Modal/SignupContent';
 import DetailContent from '@components/Modal/DetailContent';
-type childeren = { children: React.ReactNode };
+type childeren = { children?: React.ReactNode };
 import { useRouter } from 'next/router';
 import FooterContent from '@components/Footer/content';
 

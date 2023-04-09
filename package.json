@@ -38,6 +38,7 @@
     "zustand": "^4.3.3"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.21.4",
     "@emotion/eslint-plugin": "^11.10.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

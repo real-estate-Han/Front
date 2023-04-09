@@ -9,11 +9,6 @@ import DetailContent from '@components/Modal/DetailContent';
 import { useRouter } from 'next/router';
 
 const FooterContent = () => {
-  const { loginState, signupState, detailState, changeDetailState, changeSignUpState, changeLoginState } = useStore(
-    state => state,
-  );
-  const param = useRouter();
-
   return (
     <Wrapper>
       <div>회사소개 | 의뢰하기 | 이용약관 | 개인정보처리방침</div>
@@ -23,7 +18,7 @@ const FooterContent = () => {
         <p>사업자등록번호 : 000 | 부동산등록번호 : 1111</p>
         <p>전화 : 031-954-1111 | 팩스 : 031-954-1110 | 이메일 : sale@naver.com</p>
       </div>
-      <div>대표전화 call center 031-954-1111</div>
+      <div>대표전화 call center 031-954-1110</div>
     </Wrapper>
   );
 };

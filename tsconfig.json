@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "types": ["kakao.maps.d.ts", "next", "next/types/global", "jest"],
+    "types": ["kakao.maps.d.ts", "next", "next/types/global", "jest", "@testing-library/jest-dom"],
     "baseUrl": ".",
     "paths": {
       "@components/*": ["components/*"],
