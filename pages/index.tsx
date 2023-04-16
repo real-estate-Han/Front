@@ -11,8 +11,10 @@ import KakaoMapUtil from '@components/kakaoMapUtils';
 import { postType } from '@utils/type';
 import { initializeApollo } from '@utils/apollo/apolloclient';
 import Image from 'next/image';
-import { FcHome } from 'react-icons/fc';
-import { TbBuildingFactory2 } from 'react-icons/tb';
+
+import { useMediaQuery } from 'react-responsive';
+import ClusterMap from '@components/KakaoMap/clusterMap';
+import MobileHomeContent from '@components/Mobile/MobileHomeContent';
 //apollo client SSR
 export async function getStaticProps() {
   const apolloClient = initializeApollo();
@@ -38,7 +40,8 @@ export default function Home() {
   const { detailState, changeDetailState, setDetailID, setDetailType } = useStore(state => state);
   const [map, setMap] = useState<kakao.maps.Map>();
   const [mapState, setMapState] = useState<any>();
-
+  //useMediaQuery
+  const isMobile: boolean = useMediaQuery({ query: '(max-width: 768px)' });
   // 카카오맵 그려진 후 map 데이터 받아와서 있으면 유틸 렌더링 하기
   const KakaoMapUtils = () => {
     if (!map) return null;
@@ -102,61 +105,16 @@ export default function Home() {
   };
   return (
     <Warp>
-      <section>
-        <nav>
-          <FcHome />
-          <TbBuildingFactory2 />
-        </nav>
-      </section>
-      <MapPostList>
-        <>
-          <Kakomap
-            center={{ lat: 37.854572222429134, lng: 126.78755348011892 }}
-            level={8}
-            isPanto={true}
-            onCreate={setMap}
-            ref={mapRef}
-            onBoundsChanged={map =>
-              setMapState({
-                sw: map.getBounds().getSouthWest(),
-                ne: map.getBounds().getNorthEast(),
-              })
-            }
-          >
-            <MarkerClusterer
-              averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-              minLevel={2} // 클러스터 할 최소 지도 레벨
-              disableClickZoom={true} // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
-              calculator={[4, 8, 16, 32]} // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
-              onClusterclick={onClusterclick}
-            >
-              {clusterData?.allpost?.posts.map((pos: any) => (
-                <MarkerContainer
-                  key={`${pos.itemGeoLocation.lat}-${pos.itemGeoLocation.lng}`}
-                  position={{
-                    lat: pos.itemGeoLocation.lat,
-                    lng: pos.itemGeoLocation.lng,
-                  }}
-                  content={pos}
-                />
-              ))}
-            </MarkerClusterer>
-            <KakaoMapUtils />
-          </Kakomap>
-        </>
+      {isMobile ? <MobileHomeContent /> : null}
 
-        <PostList>
-          {selectedData?.map(p => {
-            return <PostItem widthPercent={50} key={p.itemUniqueID} postData={p} />;
-          })}
-        </PostList>
-      </MapPostList>
+      {/* <ClusterMap /> */}
     </Warp>
   );
 }
 
 const Warp = styled.div`
   display: flex;
+  position: relative;
   flex-direction: column;
   width: 100%;
   height: 100%;
@@ -182,56 +140,56 @@ const Warp = styled.div`
     width: 100%;
   }
 `;
-const MapPostList = styled.div`
-  display: flex;
-  width: 100%;
-  height: 60%;
-  margin: 0 auto;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
+// const MapPostList = styled.div`
+//   display: flex;
+//   width: 100%;
+//   height: 60%;
+//   margin: 0 auto;
+//   gap: 1rem;
+//   justify-content: center;
+//   align-items: center;
 
-  transition: 0.5s;
-  @media (max-width: 800px) {
-    display: flex;
-    flex-direction: column;
-  }
-`;
-const Kakomap = styled(Map)`
-  box-sizing: border-box;
-  /* border: 1px solid black; */
-  transition: 0.5s;
-  /* padding: 5px; */
-  @media (max-width: 600px) {
-    width: 100%;
-    height: 60vh;
-  }
-  @media (min-width: 800px) {
-    width: 400px;
-    height: 400px;
-  }
-  @media (min-width: 1200px) {
-    width: 600px;
-    height: 600px;
-  }
-`;
-const PostList = styled.div`
-  /* background-color: red; */
-  border: 1px solid black;
-  padding: 5px;
-  width: 50%;
-  min-width: 500px;
-  min-height: 400px;
-  transition: 0.5s;
-  @media (min-width: 800px) {
-    min-width: 400px;
-    min-height: 400px;
-  }
-  @media (max-width: 600px) {
-    display: none;
-  }
-  @media (min-width: 1200px) {
-    width: 600px;
-    height: 600px;
-  }
-`;
+//   transition: 0.5s;
+//   @media (max-width: 800px) {
+//     display: flex;
+//     flex-direction: column;
+//   }
+// `;
+// const Kakomap = styled(Map)`
+//   box-sizing: border-box;
+//   /* border: 1px solid black; */
+//   transition: 0.5s;
+//   /* padding: 5px; */
+//   @media (max-width: 600px) {
+//     width: 100%;
+//     height: 60vh;
+//   }
+//   @media (min-width: 800px) {
+//     width: 400px;
+//     height: 400px;
+//   }
+//   @media (min-width: 1200px) {
+//     width: 600px;
+//     height: 600px;
+//   }
+// `;
+// const PostList = styled.div`
+//   /* background-color: red; */
+//   border: 1px solid black;
+//   padding: 5px;
+//   width: 50%;
+//   min-width: 500px;
+//   min-height: 400px;
+//   transition: 0.5s;
+//   @media (min-width: 800px) {
+//     min-width: 400px;
+//     min-height: 400px;
+//   }
+//   @media (max-width: 600px) {
+//     display: none;
+//   }
+//   @media (min-width: 1200px) {
+//     width: 600px;
+//     height: 600px;
+//   }
+// `;
