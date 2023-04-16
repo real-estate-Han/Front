@@ -8,13 +8,14 @@ import DetailContent from '@components/Modal/DetailContent';
 type childeren = { children?: React.ReactNode };
 import { useRouter } from 'next/router';
 import FooterContent from '@components/Footer/content';
-
+import MenuBar from '@components/MenuBar';
+import { useMediaQuery } from 'react-responsive';
 export const Layout = ({ children }: childeren) => {
   const { loginState, signupState, detailState, changeDetailState, changeSignUpState, changeLoginState } = useStore(
     state => state,
   );
   const param = useRouter();
-
+  const isMobile: boolean = useMediaQuery({ query: '(max-width:768px)' });
   return (
     <Wrapper>
       <>
@@ -34,22 +35,22 @@ export const Layout = ({ children }: childeren) => {
           </Modal>
         ) : null}
       </>
-      <Header>
-        <StyledLogo size={2}>한세일부동산</StyledLogo>
-        <div className="loginButton">
-          {param.pathname !== '/' ? <button onClick={changeLoginState}>로그인</button> : null}
-        </div>
-      </Header>
+      {/* <Header></Header> */}
       <Content>{children}</Content>
-      <Footer>
-        <FooterContent />
-      </Footer>
+      {isMobile ? (
+        <MenuBar></MenuBar>
+      ) : (
+        <Footer>
+          <FooterContent />
+        </Footer>
+      )}
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
   gap: 0.1rem;
+  position: relative;
   width: 100vw;
   min-height: 100vh;
   color: ${({ theme }) => theme.font.regular};
@@ -57,6 +58,10 @@ const Wrapper = styled.div`
 `;
 export const Content = styled.main`
   min-height: 84vh;
+  box-sizing: border-box;
+  padding-bottom: 84px;
+  overflow: auto;
+  padding: 0 20px;
   /* margin-top: 1rem; */
   /* border: 1px solid ${({ theme }) => theme.font.regular}; */
 `;
@@ -71,22 +76,9 @@ export const StyledLogo = styled(Logo)`
 `;
 
 export const Header = styled.div`
-  background-color: ${({ theme }) => theme.components.primary};
-  grid-area: header;
-  /* border: 1px solid ${({ theme }) => theme.font.regular}; */
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 5vmin;
   width: 100%;
-  align-items: center;
-  & .loginButton {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 5vmin;
-    margin-right: 5vmin;
-  }
+  height: 48px;
+  background-color: white;
 `;
 
 export const Footer = styled.footer`

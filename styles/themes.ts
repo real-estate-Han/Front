@@ -2,7 +2,7 @@ export type AppTheme = typeof dark;
 // 추후 다크모드를 위해 white theme도 추가할 예정
 const dark = {
   name: 'dark',
-  background: '#EEF1FF',
+  background: '#ffffff',
   components: {
     background: '#7a7880',
     shadow1: '#504e55',
