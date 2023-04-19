@@ -38,7 +38,9 @@ export const Layout = ({ children }: childeren) => {
       {/* <Header></Header> */}
       <Content>{children}</Content>
       {isMobile ? (
-        <MenuBar></MenuBar>
+        <Footer>
+          <MenuBar></MenuBar>
+        </Footer>
       ) : (
         <Footer>
           <FooterContent />
@@ -57,9 +59,9 @@ const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.background};
 `;
 export const Content = styled.main`
-  min-height: 84vh;
+  min-height: 82vh;
   box-sizing: border-box;
-  padding-bottom: 84px;
+  padding-bottom: 150px;
   overflow: auto;
   padding: 0 20px;
   /* margin-top: 1rem; */
@@ -89,7 +91,12 @@ export const Footer = styled.footer`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  @media (max-width: 600px) {
-    display: none;
+  @media (max-width: 768px) {
+    /* position: fixed;
+    bottom: 0;
+    left: 0; */
+    width: 100%;
+    height: 84px;
+    background: #ffffff;
   }
 `;
