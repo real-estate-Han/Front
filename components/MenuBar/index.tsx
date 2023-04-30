@@ -1,28 +1,34 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import react from 'react';
-
+import {
+  MdOutlineHome,
+  MdMoreHoriz,
+  MdOutlineMapsHomeWork,
+  MdOutlineLocationOn,
+  MdOutlineFavoriteBorder,
+} from 'react-icons/md';
 const MenuBar = () => {
   return (
     <MenuDiv>
       <div className="MenuButton">
-        <Image src="./icon/home.svg" width={28} height={28} alt="home" />
+        <MdOutlineHome size={28} />
         <span>홈</span>
       </div>
       <div className="MenuButton">
-        <Image src="/icon/favor.svg" width={28} height={28} alt="favor" />
+        <MdOutlineFavoriteBorder size={28} />
         <span>관심목록</span>
       </div>
       <div className="MenuButton">
-        <Image src="/icon/marker.svg" width={28} height={28} alt="marker" />
+        <MdOutlineLocationOn size={28} />
         <span>지도</span>
       </div>
       <div className="MenuButton">
-        <Image src="/icon/home_work.svg" width={28} height={28} alt="homework" />
+        <MdOutlineMapsHomeWork size={28} />
         <span>의뢰하기</span>
       </div>
       <div className="MenuButton">
-        <Image src="/icon/3dot.svg" width={28} height={28} alt="3dot" />
+        <MdMoreHoriz size={28} />
         <span>더보기</span>
       </div>
     </MenuDiv>
@@ -50,7 +56,7 @@ const MenuDiv = styled.div`
   height: 84px;
   background: #ffffff;
   color: rgba(0, 0, 0, 0.54);
-
+  box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
   .MenuButton {
     display: flex;
     flex-direction: column;

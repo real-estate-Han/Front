@@ -12,11 +12,22 @@ import imageCompression from 'browser-image-compression';
 import { S3UpLoadFile } from '../../utils/S3util';
 
 interface KakaoMapProps {
-  kakaoAddress: string | undefined;
+  kakaoLoadAddress?: string;
+  kakaoAddress?: string;
   position: { lng: number; lat: number };
+  region_1depth?: string;
+  region_2depth?: string;
+  region_3depth?: string;
 }
 
-export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
+export default function PostMain({
+  kakaoLoadAddress,
+  region_1depth,
+  region_2depth,
+  region_3depth,
+  kakaoAddress,
+  position,
+}: KakaoMapProps) {
   const [titleImg, setTitleImg] = useState<string>();
   const [detailImg, setDetailImg] = useState<string[]>();
   const [titleFile, setTitleFile] = useState<File>();
@@ -84,6 +95,10 @@ export default function PostMain({ kakaoAddress, position }: KakaoMapProps) {
     const PostInputData = {
       ...data,
       itemAddress: kakaoAddress,
+      kakaoLoadAddress: kakaoLoadAddress,
+      region_1depth: region_1depth,
+      region_2depth: region_2depth,
+      region_3depth: region_3depth,
       itemTitleimg: titleS3URL,
       itemDetailimg: detailS3URL,
     };
