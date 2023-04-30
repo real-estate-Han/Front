@@ -1,28 +1,34 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import react from 'react';
-
+import {
+  MdOutlineHome,
+  MdMoreHoriz,
+  MdOutlineMapsHomeWork,
+  MdOutlineLocationOn,
+  MdOutlineFavoriteBorder,
+} from 'react-icons/md';
 const MenuBar = () => {
   return (
     <MenuDiv>
       <div className="MenuButton">
-        <Image priority src="./icon/home.svg" width={28} height={28} alt="home" />
+        <MdOutlineHome size={28} />
         <span>홈</span>
       </div>
       <div className="MenuButton">
-        <Image priority src="/icon/favor.svg" width={28} height={28} alt="favor" />
+        <MdOutlineFavoriteBorder size={28} />
         <span>관심목록</span>
       </div>
       <div className="MenuButton">
-        <Image priority src="/icon/marker.svg" width={28} height={28} alt="marker" />
+        <MdOutlineLocationOn size={28} />
         <span>지도</span>
       </div>
       <div className="MenuButton">
-        <Image priority src="/icon/home_work.svg" width={28} height={28} alt="homework" />
+        <MdOutlineMapsHomeWork size={28} />
         <span>의뢰하기</span>
       </div>
       <div className="MenuButton">
-        <Image priority src="/icon/3dot.svg" width={28} height={28} alt="3dot" />
+        <MdMoreHoriz size={28} />
         <span>더보기</span>
       </div>
     </MenuDiv>

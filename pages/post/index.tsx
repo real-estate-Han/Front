@@ -11,7 +11,11 @@ export default function PostItem() {
     lat: 0,
     lng: 0,
   });
+  const [kakaoLoadAddress, setKakaoLoadAddress] = useState<string>('');
   const [kakaoAddress, setKakaoAddress] = useState<string>('');
+  const [region_1depth, setRegion_1depth] = useState<string>('');
+  const [region_2depth, setRegion_2depth] = useState<string>('');
+  const [region_3depth, setRegion_3depth] = useState<string>('');
   const [defaltPosition, setDefaltPosition] = useState<GeoLocation>({
     lat: 37.854572222429134,
     lng: 126.78755348011892,
@@ -22,7 +26,12 @@ export default function PostItem() {
     var geocoder = new kakao.maps.services.Geocoder();
     geocoder.coord2Address(lng, lat, function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
-        setKakaoAddress(result[0]?.road_address?.address_name as string);
+        console.log(result);
+        setKakaoLoadAddress(result[0]?.road_address?.address_name as string);
+        setKakaoAddress(result[0]?.address?.address_name as string);
+        setRegion_1depth(result[0]?.address?.region_1depth_name as string);
+        setRegion_2depth(result[0]?.address?.region_2depth_name as string);
+        setRegion_3depth(result[0]?.address?.region_3depth_name as string);
       }
     });
   };
@@ -86,7 +95,7 @@ export default function PostItem() {
         {position && (
           <MapMarker position={position}>
             <div className="AddressInfo">
-              <span>{kakaoAddress}</span>
+              <span>{kakaoLoadAddress}</span>
             </div>
           </MapMarker>
         )}
@@ -95,7 +104,14 @@ export default function PostItem() {
       <label>
         <button onClick={findGeoLocation}>도로명 주소 검색</button>
       </label>
-      <PostMain position={position} kakaoAddress={kakaoAddress} />
+      <PostMain
+        position={position}
+        region_1depth={region_1depth}
+        region_2depth={region_2depth}
+        region_3depth={region_3depth}
+        kakaoAddress={kakaoAddress}
+        kakaoLoadAddress={kakaoLoadAddress}
+      />
     </Wrap>
   );
 }

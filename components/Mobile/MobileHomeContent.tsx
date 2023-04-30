@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
+import { MdArrowForwardIos } from 'react-icons/md';
 import PostItem from '@components/PostItem';
 import { useQuery } from '@apollo/client';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
@@ -13,24 +14,33 @@ const MobileHomeContent = () => {
   const inputBoxRef = useRef<HTMLDivElement>(null);
   const inputBoxScroll = inputBoxRef.current?.scrollHeight;
 
-  const handleScroll = () => {
-    const scrollHeight = document.documentElement.scrollHeight;
-    const scrollTop = document.documentElement.scrollTop;
-    const clientHeight = document.documentElement.clientHeight;
-    console.log(scrollHeight, scrollTop, clientHeight);
-  };
+  // const handleScroll = () => {
+  //   const scrollHeight = document.documentElement.scrollHeight;
+  //   const scrollTop = document.documentElement.scrollTop;
+  //   const clientHeight = document.documentElement.clientHeight;
+  //   console.log(scrollHeight, scrollTop, clientHeight);
+  // };
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  });
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+  // });
 
   return (
     <Wrap>
-      <span>한세일 부동산</span>
-      <div className="branding">한세일 부동산의 브랜딩 문구</div>
+      <span className="titleLogo">한세일 부동산</span>
+      <BrandingBox>
+        <div>
+          고객 신뢰를 최우선시 하는
+          <br />
+          전문가가 당신을 도와드립니다.
+        </div>
+        <div className="rightarrow">
+          <MdArrowForwardIos size={20} />
+        </div>
+      </BrandingBox>
       <SearchBar ref={inputBoxRef}>
         <Image className="searchicon" src="/icon/search.svg" width={28} height={28} alt="search.svg"></Image>
         <input className="searchinput" placeholder="지역을 입력하세요" />
@@ -63,7 +73,7 @@ const Wrap = styled.div`
   height: 100%;
   background-color: #ffffff;
   /* border: 1px solid black; */
-  span {
+  .titleLogo {
     color: #0059f9;
     font-size: 20px;
     line-height: 24px;
@@ -72,22 +82,8 @@ const Wrap = styled.div`
     font-weight: 500;
     width: 100%;
     height: 24px;
-    margin-top: 46px;
+    margin-top: 41px;
     margin-bottom: 31px;
-  }
-
-  .branding {
-    width: 100%;
-    height: 80px;
-    font-family: 'Acumin Pro';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.38);
-    margin-bottom: 16px;
   }
 
   .filtertitle {
@@ -138,6 +134,29 @@ const Wrap = styled.div`
     float: left;
     width: 100%;
     padding-bottom: 31px;
+  }
+`;
+const BrandingBox = styled.div`
+  width: 100%;
+  height: 74px;
+  box-sizing: border-box;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #9faffd;
+  color: white;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  padding-left: 22px;
+  padding-right: 10px;
+  .rightarrow {
+    font-size: 20px;
   }
 `;
 const SearchBar = styled.div`
