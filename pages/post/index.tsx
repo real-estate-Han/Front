@@ -3,8 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import dynamic from 'next/dynamic';
 import { GeoLocation } from '@utils/type';
-import PostMain from './main';
+import PostMain from '../../components/Mobile/PostPage/main';
 import Swal from 'sweetalert2';
+import TopBar from '@components/TopBar';
 export default function PostItem() {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [position, setPosition] = useState<GeoLocation>({
@@ -80,6 +81,7 @@ export default function PostItem() {
   });
   return (
     <Wrap>
+      <TopBar></TopBar>
       <Kakomap
         center={defaltPosition}
         level={mapLevel}
@@ -102,7 +104,9 @@ export default function PostItem() {
         <KakaoMapUtil />
       </Kakomap>
       <label>
-        <button onClick={findGeoLocation}>도로명 주소 검색</button>
+        <button className="findaddress" onClick={findGeoLocation}>
+          주소 검색
+        </button>
       </label>
       <PostMain
         position={position}
@@ -135,26 +139,28 @@ const Wrap = styled.div`
     border: 1px solid green;
     width: 100%;
   }
-  .AddressInfo {
-    /* display: flex;
-    width: 150px;
-    height: 30px;
-    position: relative;
-    left: -8px;
-    top: -13px;
-    border: 2px solid black;
-    border-radius: 20px;
-    padding: 5px;
-    background-color: aqua;
-    font-size: 11px;
-    font-weight: 700; */
+  .findaddress {
+    width: 80vw;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    font-family: 'Pretendard';
+    font-style: normal;
+
+    border-radius: 4px;
+    color: white;
+    background-color: ${({ theme }) => theme.mainColor.blue500};
+    border: none;
+    margin: 15px 0;
+    padding: 12.5px 0;
   }
 `;
 const Kakomap = styled(Map)`
-  width: 400px;
+  width: 100vw;
   height: 400px;
-  border: 1px solid black;
+  border-radius: 4px;
   transition: 0.5s;
+
   @media (min-width: 1200px) {
     width: 600px;
     height: 600px;

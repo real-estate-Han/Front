@@ -14,7 +14,7 @@ import Image from 'next/image';
 
 import { useMediaQuery } from 'react-responsive';
 import ClusterMap from '@components/KakaoMap/clusterMap';
-import MobileHomeContent from '@components/Mobile/MobileHomeContent';
+import MobileHomeContent from '@components/Mobile/Home/MobileHomeContent';
 //apollo client SSR
 export async function getStaticProps() {
   const apolloClient = initializeApollo();

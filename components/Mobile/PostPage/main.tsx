@@ -9,7 +9,7 @@ import { PostItemList } from '@components/Inputs/postItemList';
 import { useMutation } from '@apollo/client';
 import { Creat_POST } from '@utils/apollo/gqls';
 import imageCompression from 'browser-image-compression';
-import { S3UpLoadFile } from '../../utils/S3util';
+import { S3UpLoadFile } from '../../../utils/S3util';
 
 interface KakaoMapProps {
   kakaoLoadAddress?: string;
