@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import react from 'react';
 import {
   MdOutlineHome,
@@ -9,17 +10,33 @@ import {
   MdOutlineFavoriteBorder,
 } from 'react-icons/md';
 const MenuBar = () => {
+  const router = useRouter();
   return (
     <MenuDiv>
-      <div className="MenuButton">
+      <div
+        className="MenuButton"
+        onClick={() => {
+          router.push('/');
+        }}
+      >
         <MdOutlineHome size={28} />
         <span>홈</span>
       </div>
-      <div className="MenuButton">
+      <div
+        className="MenuButton"
+        onClick={() => {
+          router.push('/heart');
+        }}
+      >
         <MdOutlineFavoriteBorder size={28} />
         <span>관심목록</span>
       </div>
-      <div className="MenuButton">
+      <div
+        className="MenuButton"
+        onClick={() => {
+          router.push('/main');
+        }}
+      >
         <MdOutlineLocationOn size={28} />
         <span>지도</span>
       </div>
@@ -39,6 +56,7 @@ export default MenuBar;
 
 const MenuDiv = styled.div`
   display: flex;
+  z-index: 3;
   justify-content: space-around;
   align-items: center;
   font-family: 'Pretendard';

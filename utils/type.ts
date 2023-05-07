@@ -3,6 +3,7 @@ export interface postInputType {
   itemAddress: string;
   itemGeoLocation: GeoLocation;
   itemType: string;
+  transactionType: string;
   itemDeposit?: number;
   itemMonthly?: number;
   itemJense?: number;
@@ -12,7 +13,8 @@ export interface postInputType {
   itemAreaBuilding?: number;
   itemFloor?: number;
   itemPurpose?: string;
-  itemRooms?: string;
+  itemRooms?: number;
+  itemBathroom?: number;
   itemStatus?: string;
   itemLandNumber?: string;
   itemMovein?: string;
@@ -31,6 +33,7 @@ export interface postInputType {
   itemLandCategory?: string;
   itemTotalAreaLand?: number;
   itemFloorHeight?: number;
+  itemLoan?: string;
   itemTag?: [string];
   itemElectricity?: number;
   itemOption?: string;

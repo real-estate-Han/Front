@@ -123,18 +123,14 @@ export default function ClusterMap() {
             <KakaoMapUtils />
           </Kakomap>
         </>
-
-        <PostList>
-          {selectedData?.map(p => {
-            return <PostItem widthPercent={50} key={p.itemUniqueID} postData={p} />;
-          })}
-        </PostList>
       </MapPostList>
     </>
   );
 }
 
 const MapPostList = styled.div`
+  box-sizing: border-box;
+  padding-top: 100px;
   display: flex;
   width: 100%;
   height: 60%;
@@ -144,17 +140,25 @@ const MapPostList = styled.div`
   align-items: center;
 
   transition: 0.5s;
-  @media (max-width: 800px) {
+  position: fixed;
+  top: 135px;
+  left: 0;
+  /* height: 528px; */
+  /* @media (max-width: 800px) {
     display: flex;
     flex-direction: column;
-  }
+  } */
 `;
 const Kakomap = styled(Map)`
   box-sizing: border-box;
-  /* border: 1px solid black; */
-  transition: 0.5s;
-  /* padding: 5px; */
-  @media (max-width: 600px) {
+  width: 100vw;
+  height: 70vh;
+  border-top: 2px solid #f5f5f5;
+`;
+/* border: 1px solid black; */
+/* transition: 0.5s; */
+/* padding: 5px; */
+/* @media (max-width: 600px) {
     width: 100%;
     height: 60vh;
   }
@@ -165,8 +169,8 @@ const Kakomap = styled(Map)`
   @media (min-width: 1200px) {
     width: 600px;
     height: 600px;
-  }
-`;
+  } */
+
 const PostList = styled.div`
   /* background-color: red; */
   border: 1px solid black;

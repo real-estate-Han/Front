@@ -7,11 +7,11 @@ import { boxShadow } from '@components/stylesUtil';
 interface PostItemProps {
   postData: postType;
   widthPercent: number;
+  wide?: boolean;
 }
-function PostItem({ postData, widthPercent }: PostItemProps) {
-  console.log(postData);
+function PostItems({ postData, widthPercent, wide }: PostItemProps) {
   return (
-    <Wrapper widthPercent={widthPercent}>
+    <Wrapper widthPercent={widthPercent} wide={wide}>
       <div className="titmeImg">
         <Image
           priority
@@ -25,29 +25,32 @@ function PostItem({ postData, widthPercent }: PostItemProps) {
           <Image priority src="/icon/favor.svg" width={28} height={28} alt="favor" />
         </div>
       </div>
-      <div className="itemType">월세 4000</div>
-      <div className="itemDetail">원룸</div>
-      <div className="itemDetail">2층, 33.05m2, 관리비 없음</div>
-      <div className="itemExtra">깨끗하고 조용해서 생활하기 편리</div>
+      <div className="detailbox">
+        <div className="itemType">월세 4000</div>
+        <div className="itemDetail">원룸</div>
+        <div className="itemDetail">2층, 33.05m2, 관리비 없음</div>
+        <div className="itemExtra">깨끗하고 조용해서 생활하기 편리</div>
+      </div>
     </Wrapper>
   );
 }
-export default PostItem;
+export default PostItems;
 
-const Wrapper = styled.div<{ widthPercent: number }>`
+const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
   /* float: left; */
   display: flex;
-  flex-direction: column;
+  flex-direction: ${({ wide }) => (wide ? 'row' : 'column')};
   align-items: flex-start;
   padding: 0px;
   gap: 4px;
-  width: 167px;
+  width: ${({ wide }) => (wide ? '350px' : '167px')};
   height: 281px;
   background: #ffffff;
   border-radius: 4px;
   font-family: 'Pretendard';
   font-style: normal;
   letter-spacing: -0.02em;
+
   .titmeImg {
     position: relative;
     .likeButton {
@@ -77,6 +80,13 @@ const Wrapper = styled.div<{ widthPercent: number }>`
     letter-spacing: -0.02em;
     color: #888888;
     /* overflow: hidden; */
+  }
+  .detailbox {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: ${({ wide }) => (wide ? '6px' : '8px')};
   }
 `;
 const PostInfo = styled.div`
