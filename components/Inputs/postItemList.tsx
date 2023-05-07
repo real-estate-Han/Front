@@ -1,18 +1,24 @@
 import { Inputs } from '@components/Inputs';
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { FieldErrors, UseFormGetValues, UseFormRegister } from 'react-hook-form';
 
 import { postType } from '@utils/type';
+import SelectedButton from '@components/Button/selectedButton';
+import Hr from '@components/Hr';
+import styled from '@emotion/styled';
 
 interface InputProps {
   register: UseFormRegister<postType>;
+  getValues: UseFormGetValues<postType>;
   errors: FieldErrors<postType>;
   tabIndex: string;
+  transactionType: string;
+  itemType: string;
 }
 
-export function PostItemList({ register, errors, tabIndex }: InputProps) {
+export function PostItemList({ register, errors, transactionType, itemType }: InputProps) {
   //매물 타입에따른 인풋창 변화
-  const sellType = tabIndex.split('/')[0];
-  const postType1 = tabIndex.split('/')[1];
+  const sellType = transactionType;
+  const postType1 = itemType;
 
   return (
     <>
@@ -40,11 +46,13 @@ export function PostItemList({ register, errors, tabIndex }: InputProps) {
           <span>{errors?.itemJense?.message}</span>
         </>
       )}
-      {postType1 !== 'Land' && (
+      {postType1 !== 'land' && (
         <>
           <Inputs type="number" text="매물관리비" {...register('itemManagement', { valueAsNumber: true })} />
           <span>{errors?.itemManagement?.message}</span>
+
           <Inputs type="number" text="매물층수" {...register('itemFloor', { valueAsNumber: true })} />
+          <DetailDescription>반지하 0, 옥탑방 99로 입력해주세요</DetailDescription>
           <span>{errors?.itemFloor?.message}</span>
         </>
       )}
@@ -54,14 +62,20 @@ export function PostItemList({ register, errors, tabIndex }: InputProps) {
           <span>{errors?.itemSale?.message}</span>
         </>
       )}
-      {(postType1 === 'House' || postType1 === 'Mart') && (
+      {(postType1 === 'house' ||
+        postType1 === 'shop' ||
+        postType1 == 'oneroom' ||
+        postType1 == 'tworoom' ||
+        postType1 == 'office') && (
         <>
           <Inputs type="float" text="공급면적" {...register('itemSupplyArea', { valueAsNumber: true })} />
           <span>{errors?.itemSupplyArea?.message}</span>
 
           <Inputs type="float" text="전용면적" {...register('itemExclusiveArea', { valueAsNumber: true })} />
           <span>{errors?.itemExclusiveArea?.message}</span>
-          <Inputs type="string" text="방/화장실" {...register('itemRooms')} />
+          <Inputs type="number" text="방 개수" {...register('itemRooms', { valueAsNumber: true })} />
+          <span>{errors?.itemRooms?.message}</span>
+          <Inputs type="number" text="화장실개수" {...register('itemBathroom', { valueAsNumber: true })} />
           <span>{errors?.itemRooms?.message}</span>
           <Inputs type="string" text="엘리베이터여부" {...register('itemElevator')} />
           <span>{errors?.itemElevator?.message}</span>
@@ -83,7 +97,7 @@ export function PostItemList({ register, errors, tabIndex }: InputProps) {
         </>
       )}
 
-      {(postType1 === 'Factory' || postType1 === 'Mart') && (
+      {(postType1 === 'factory' || postType1 === 'shop') && (
         <>
           <Inputs type="number" text="대지면적" {...register('itemAreaLand', { valueAsNumber: true })} />
           <span>{errors?.itemAreaLand?.message}</span>
@@ -103,7 +117,7 @@ export function PostItemList({ register, errors, tabIndex }: InputProps) {
 
       <Inputs type="date" text="사용승인일" {...register('itemApproval')} />
       <span>{errors?.itemApproval?.message}</span>
-      {postType1 === 'Land' && (
+      {postType1 === 'land' && (
         <>
           <Inputs type="number" text="토지합계면적" {...(register('itemTotalAreaLand'), { valueAsNumber: true })} />
           <span>{errors?.itemTotalAreaLand?.message}</span>
@@ -115,12 +129,22 @@ export function PostItemList({ register, errors, tabIndex }: InputProps) {
           <span>{errors?.itemLandNumber?.message}</span>
         </>
       )}
+      <Inputs type="text" text="융자 여부" {...register('itemLoan')} />
+      <span>{errors?.itemSubway?.message}</span>
 
       <Inputs type="text" text="매물 가까운 지하철" {...register('itemSubway')} />
       <span>{errors?.itemSubway?.message}</span>
 
       <Inputs type="text" text="매물 옵션/추가 설명" {...register('itemOption')} />
+      <DetailDescription>추가 옵션 설명마다 /를 붙여주세요</DetailDescription>
+      <br />
+      <DetailDescription>예) 주차가능/올수리/버스정류량</DetailDescription>
       <span>{errors?.itemOption?.message}</span>
     </>
   );
 }
+
+const DetailDescription = styled.span`
+  font-size: 14px;
+  margin-left: 10px;
+`;

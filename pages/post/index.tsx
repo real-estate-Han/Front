@@ -6,6 +6,7 @@ import { GeoLocation } from '@utils/type';
 import PostMain from '../../components/Mobile/PostPage/main';
 import Swal from 'sweetalert2';
 import TopBar from '@components/TopBar';
+import CommonButton from '@components/Button';
 export default function PostItem() {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [position, setPosition] = useState<GeoLocation>({
@@ -103,11 +104,11 @@ export default function PostItem() {
         )}
         <KakaoMapUtil />
       </Kakomap>
+
       <label>
-        <button className="findaddress" onClick={findGeoLocation}>
-          주소 검색
-        </button>
+        <CommonButton onClick={findGeoLocation}>주소 검색</CommonButton>
       </label>
+      <Hr />
       <PostMain
         position={position}
         region_1depth={region_1depth}
@@ -133,27 +134,20 @@ const Wrap = styled.div`
     width: 90%;
   }
   section:nth-of-type(1) {
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
   }
   section:nth-of-type(2) {
     border: 1px solid green;
     width: 100%;
   }
-  .findaddress {
-    width: 80vw;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
-    font-family: 'Pretendard';
-    font-style: normal;
+`;
+const Hr = styled.hr`
+  border: none;
+  width: 100vw;
+  height: 1px;
 
-    border-radius: 4px;
-    color: white;
-    background-color: ${({ theme }) => theme.mainColor.blue500};
-    border: none;
-    margin: 15px 0;
-    padding: 12.5px 0;
-  }
+  background-color: #f5f5f5;
+  margin: 10px;
 `;
 const Kakomap = styled(Map)`
   width: 100vw;

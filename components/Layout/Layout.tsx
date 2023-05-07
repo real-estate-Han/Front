@@ -63,7 +63,7 @@ export const Content = styled.main`
   box-sizing: border-box;
   padding-bottom: 150px;
   overflow: auto;
-  padding: 0 20px;
+  /* padding: 0 20px; */
   /* margin-top: 1rem; */
   /* border: 1px solid ${({ theme }) => theme.font.regular}; */
 `;

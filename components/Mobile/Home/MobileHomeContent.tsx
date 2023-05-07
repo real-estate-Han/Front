@@ -5,9 +5,10 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import { MdArrowForwardIos } from 'react-icons/md';
-import PostItem from '@components/PostItem';
+import PostItems from '@components/PostItem';
 import { useQuery } from '@apollo/client';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
+import { MdOutlineSearch } from 'react-icons/md';
 const MobileHomeContent = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
   const postData = clusterData?.allpost?.posts;
@@ -42,7 +43,7 @@ const MobileHomeContent = () => {
         </div>
       </BrandingBox>
       <SearchBar ref={inputBoxRef}>
-        <Image className="searchicon" src="/icon/search.svg" width={28} height={28} alt="search.svg"></Image>
+        <MdOutlineSearch className="searchicon" size={28}></MdOutlineSearch>
         <input className="searchinput" placeholder="지역을 입력하세요" />
       </SearchBar>
       <div className="filtertitle">조건별 매물 검색</div>
@@ -55,7 +56,7 @@ const MobileHomeContent = () => {
       <div className="filtertitle">문산읍 추천매물</div>
       <div className="recommandItem">
         {postData.map((p: any, idx: number) => {
-          return <PostItem key={idx} widthPercent={40} postData={p}></PostItem>;
+          return <PostItems key={idx} widthPercent={40} postData={p}></PostItems>;
         })}
       </div>
     </Wrap>
@@ -72,6 +73,8 @@ const Wrap = styled.div`
   width: 100%;
   height: 100%;
   background-color: #ffffff;
+  box-sizing: border-box;
+  padding: 0 20px;
   /* border: 1px solid black; */
   .titleLogo {
     color: #0059f9;
