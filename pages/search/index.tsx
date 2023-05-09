@@ -5,13 +5,28 @@ import { useRef, useState } from 'react';
 export default function SearchPage() {
   const [backPoint, setBackPoint] = useState<boolean>(false);
   const inputBoxRef = useRef<HTMLDivElement>(null);
+  const [selected, setSelected] = useState<string>('saleItem');
 
   return (
     <>
       <BackPoint>뒤로</BackPoint>
       <Sale>
-        <SaleItem>매물</SaleItem>
-        <SaleNumber>매물번호</SaleNumber>
+        <SaleItem
+          selected={selected}
+          onClick={() => {
+            setSelected('saleItem');
+          }}
+        >
+          매물
+        </SaleItem>
+        <SaleNumber
+          selected={selected}
+          onClick={() => {
+            setSelected('saleNumber');
+          }}
+        >
+          매물번호
+        </SaleNumber>
       </Sale>
 
       <SearchBar ref={inputBoxRef}>
@@ -35,15 +50,41 @@ const Sale = styled.section`
   width: 100%;
   height: 58px;
   border: 1px solid transparent;
+  border-bottom: 1px solid black;
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 20px;
 `;
-const SaleItem = styled.div``;
-const SaleNumber = styled.div`
+const SaleItem = styled.div<{ selected: string }>`
+  position: relative;
+  ::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 0;
+    display: ${({ selected }) => (selected === 'saleItem' ? 'block' : 'none')};
+    width: 100%;
+    height: 5px;
+    margin: -10px 0 0 0;
+    background: moccasin;
+  }
+`;
+const SaleNumber = styled.div<{ selected: string }>`
   margin-left: 10px;
+  position: relative;
+  ::after {
+    content: '';
+    display: ${({ selected }) => (selected === 'saleNumber' ? 'block' : 'none')};
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    margin: -10px 0 0 0;
+    background: moccasin;
+  }
 `;
 const SearchBar = styled.div`
   width: 100%;
