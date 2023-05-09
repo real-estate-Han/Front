@@ -30,14 +30,14 @@ export const Layout = ({ children }: childeren) => {
           </Modal>
         ) : null}
         {detailState ? (
-          <Modal WideModal modalState={detailState} closeModal={changeDetailState}>
+          <Modal fullview={true} WideModal modalState={detailState} closeModal={changeDetailState}>
             <DetailContent />
           </Modal>
         ) : null}
       </>
       {/* <Header></Header> */}
       <Content>{children}</Content>
-      {isMobile ? (
+      {/* {isMobile ? (
         <Footer>
           <MenuBar></MenuBar>
         </Footer>
@@ -45,7 +45,10 @@ export const Layout = ({ children }: childeren) => {
         <Footer>
           <FooterContent />
         </Footer>
-      )}
+      )} */}
+      <Footer>
+        <MenuBar></MenuBar>
+      </Footer>
     </Wrapper>
   );
 };

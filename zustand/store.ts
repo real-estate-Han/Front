@@ -1,3 +1,4 @@
+import { postType } from '@utils/type';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
@@ -13,6 +14,8 @@ interface State {
   changeLoginState: () => void;
   changeSignUpState: () => void;
   switchLoginSignUp: () => void;
+  filterdData: [postType?];
+  setFilterdData: (data: [postType?]) => void;
 }
 
 //모달창 상태 관리 및 매물 상태관리
@@ -22,6 +25,8 @@ const useStore = create<State>(set => ({
   detailState: false,
   detailID: '',
   detailType: '',
+  filterdData: [],
+  setFilterdData: (data: [postType?]) => set(state => ({ filterdData: data })),
   setDetailType: (type: string) => set(state => ({ detailType: type })),
   setDetailID: (id: string) => set(state => ({ detailID: id })),
   changeDetailState: () => set(state => ({ detailState: !state.detailState })),

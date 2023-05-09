@@ -37,6 +37,7 @@ export interface postInputType {
   itemTag?: [string];
   itemElectricity?: number;
   itemOption?: string;
+  itemWaterMark?: boolean;
 }
 
 export interface postType extends postInputType {

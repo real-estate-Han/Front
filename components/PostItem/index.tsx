@@ -3,6 +3,7 @@ import { postType } from '@utils/type';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { boxShadow } from '@components/stylesUtil';
+import useStore from '@zustand/store';
 
 interface PostItemProps {
   postData: postType;
@@ -10,8 +11,13 @@ interface PostItemProps {
   wide?: boolean;
 }
 function PostItems({ postData, widthPercent, wide }: PostItemProps) {
+  const { changeDetailState, setDetailID, setDetailType, setFilterdData } = useStore(state => state);
+  const openDetail = (id: string) => {
+    changeDetailState();
+    setDetailID(id);
+  };
   return (
-    <Wrapper widthPercent={widthPercent} wide={wide}>
+    <Wrapper widthPercent={widthPercent} wide={wide} onClick={openDetail.bind(null, postData?._id!)}>
       <div className="titmeImg">
         <Image
           priority
@@ -44,13 +50,13 @@ const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
   padding: 0px;
   gap: 4px;
   width: ${({ wide }) => (wide ? '350px' : '167px')};
-  height: 281px;
+  height: ${({ wide }) => (wide ? '211px' : '281px')};
   background: #ffffff;
   border-radius: 4px;
   font-family: 'Pretendard';
   font-style: normal;
   letter-spacing: -0.02em;
-
+  border-bottom: 1px solid #e0e0e0;
   .titmeImg {
     position: relative;
     .likeButton {

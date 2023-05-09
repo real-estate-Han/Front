@@ -38,7 +38,7 @@ export default function PostMain({
   const [detailFile, setDetailFile] = useState<File[]>([]);
   const [transactionType, setTransactionType] = useState<string>('');
   const [itemType, setItemType] = useState<string>('');
-
+  const [waterMark, setWaterMark] = useState<boolean>(false);
   const {
     register,
     setError,
@@ -53,7 +53,9 @@ export default function PostMain({
   const handleItemTypeChange = (event: any) => {
     event && setItemType(event?.target.value);
   };
-
+  const handleWaterMarkChange = (event: any) => {
+    event && setWaterMark(event.target.value);
+  };
   const [tabIndex, setTabIndex] = useState('monthly/House');
   const onFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -98,14 +100,14 @@ export default function PostMain({
   };
   const [CreatPost, { data, loading, error }] = useMutation(Creat_POST);
   const onSubmit: SubmitHandler<postInputType> = async data => {
-    // const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
-    // let detailS3URL: string[] = [];
-    // if (detailFile) {
-    //   for (let i = 0; i < detailFile.length; i++) {
-    //     const url = await S3UpLoadFile(detailFile[i]);
-    //     detailS3URL.push(url!);
-    //   }
-    // }
+    const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
+    let detailS3URL: string[] = [];
+    if (detailFile) {
+      for (let i = 0; i < detailFile.length; i++) {
+        const url = await S3UpLoadFile(detailFile[i]);
+        detailS3URL.push(url!);
+      }
+    }
 
     const PostInputData = {
       ...data,
@@ -114,26 +116,27 @@ export default function PostMain({
       region_1depth: region_1depth,
       region_2depth: region_2depth,
       region_3depth: region_3depth,
-      // itemTitleimg: titleS3URL,
-      // itemDetailimg: detailS3URL,
+      itemTitleimg: titleS3URL,
+      itemDetailimg: detailS3URL,
       itemType: itemType,
       transactionType: transactionType,
+      itemWaterMark: waterMark,
     };
     console.log(PostInputData);
-    // const Geo = position;
-    // CreatPost({ variables: { postInput: PostInputData, geo: Geo } });
-    // error &&
-    //   Swal.fire({
-    //     title: error.message,
-    //     icon: 'error',
-    //     confirmButtonText: '확인',
-    //   });
-    // !error &&
-    //   Swal.fire({
-    //     title: '매물이 등록되었습니다.',
-    //     icon: 'success',
-    //     confirmButtonText: '확인',
-    //   });
+    const Geo = position;
+    CreatPost({ variables: { postInput: PostInputData, geo: Geo } });
+    error &&
+      Swal.fire({
+        title: error.message,
+        icon: 'error',
+        confirmButtonText: '확인',
+      });
+    !error &&
+      Swal.fire({
+        title: '매물이 등록되었습니다.',
+        icon: 'success',
+        confirmButtonText: '확인',
+      });
   };
 
   return (
@@ -163,6 +166,17 @@ export default function PostMain({
       <Hr></Hr>
       <form onSubmit={handleSubmit(onSubmit)}>
         <>
+          <span>워터마크 적용하기</span>
+          <div>
+            <SelectedButton value="true" onClick={handleWaterMarkChange} selected={waterMark}>
+              적용
+            </SelectedButton>
+            <SelectedButton value="false" onClick={handleWaterMarkChange} selected={waterMark}>
+              미적용
+            </SelectedButton>
+          </div>
+          <Hr></Hr>
+          <span>거래 종류</span>
           <div>
             <SelectedButton
               value="monthly"
@@ -182,6 +196,7 @@ export default function PostMain({
         </>
         <Hr></Hr>
         <>
+          <span>매물 종류</span>
           <div>
             <SelectedButton value="oneroom" onClick={handleItemTypeChange} selected={itemType}>
               원룸
@@ -210,6 +225,7 @@ export default function PostMain({
             </SelectedButton>
           </div>
         </>
+        <Hr></Hr>
         <section>
           <PostItemList
             itemType={itemType}

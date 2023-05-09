@@ -7,12 +7,17 @@ import PostItems from '@components/PostItem';
 import styled from '@emotion/styled';
 
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
+import useStore from '@zustand/store';
 import { useEffect, useRef, useState } from 'react';
 import { MdOutlineSearch } from 'react-icons/md';
 import { MdOutlineSettingsInputComponent } from 'react-icons/md';
 const MainPage = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
-  const postData = clusterData?.allpost?.posts;
+  // clusterData?.allpost?.posts
+  const { filterdData, setFilterdData } = useStore(state => state);
+  useEffect(() => {
+    setFilterdData(clusterData?.allpost?.posts);
+  }, [clusterData]);
   const baseRef = useRef<HTMLDivElement>(null);
   // console.log(baseRef);
   const [throttle, setThrottle] = useState<boolean>(false);
@@ -73,8 +78,12 @@ const MainPage = () => {
           <div>단지 2</div>
         </ItemTabBar>
         <ItemBox barFixed={barFixed}>
-          {postData?.map((p: any, idx: number) => {
-            return <PostItems wide={true} key={idx} widthPercent={40} postData={p}></PostItems>;
+          {filterdData?.map((p: any, idx: number) => {
+            return (
+              <>
+                <PostItems wide={true} key={idx} widthPercent={40} postData={p}></PostItems>
+              </>
+            );
           })}
         </ItemBox>
       </ItemList>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { Inputs } from '@components/Inputs';
 import { useForm } from 'react-hook-form';
@@ -10,6 +10,22 @@ import Image from 'next/image';
 import { S3DeleteFile, S3DeleteFiles } from '@utils/S3util';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import { css } from '@emotion/react';
+import TopBar from '@components/TopBar';
+
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import {
+  MdArrowBackIos,
+  MdFavoriteBorder,
+  MdOutlineFileUpload,
+  MdAspectRatio,
+  MdOutlineSpaceDashboard,
+  MdOutlineGarage,
+  MdOutlineCalendarToday,
+} from 'react-icons/md';
+import DebtIcon from 'public/icon/debt';
+import HomeIcon from 'public/icon/homeicon';
 export interface LoginContentType {
   email: string;
   password: string;
@@ -17,9 +33,9 @@ export interface LoginContentType {
 
 const DetailContent = () => {
   const { detailID, detailType, changeDetailState } = useStore(state => state);
-  const itemDetailsellType = detailType && detailType.split('/')[0];
-  const itemDetailType = detailType && detailType.split('/')[1];
-
+  const itemDetailsellType = detailType && detailType.split('/')[0]; //transactionType
+  const itemDetailType = detailType && detailType.split('/')[1]; //itemType
+  const [currentSlide, setCurrentSlide] = useState(1);
   const {
     data: DetailData,
     loading,
@@ -61,20 +77,77 @@ const DetailContent = () => {
       Swal.fire(mutateErr.message, '', 'error');
     }
   };
-  console.log(DetailData?.post);
-  return (
-    <div className="DetailContent">
-      <button onClick={changeDetailState}> 창 닫기</button>
-      {/* <button onClick={DeletePost}>삭제하기</button> */}
-      <ImageBox>
-        <Image
-          src={DetailData?.post.itemTitleimg || './next.svg'}
-          alt="titleImage"
-          // style={{ objectFit: 'contain' }}
-          fill
-        ></Image>
-      </ImageBox>
+  const settings = {
+    infinite: true,
+    speed: 10,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    beforeChange: (current: number, next: number) => setCurrentSlide(next + 1),
+  };
 
+  const shareUrl = window.location.href;
+
+  const handleClick = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: document.title,
+        url: shareUrl,
+      });
+    } else {
+      alert(`Share this link: ${shareUrl}`);
+    }
+  };
+
+  return (
+    <Wrap className="DetailContent">
+      <TopbarBox>
+        <MdArrowBackIos size={28} onClick={changeDetailState} color="white" />
+        <div className="maintitle"></div>
+        <div className="subtitle">
+          <div>
+            <MdOutlineFileUpload size={28} color="white" onClick={handleClick} />
+          </div>
+          <div>
+            <MdFavoriteBorder size={28} color="white" />
+          </div>
+        </div>
+      </TopbarBox>
+
+      {/* <button onClick={DeletePost}>삭제하기</button> */}
+      <Slider {...settings}>
+        <ImageBox>
+          <Image
+            src={DetailData?.post.itemTitleimg || './next.svg'}
+            alt="titleImage"
+            // style={{ objectFit: 'contain' }}
+            fill
+          ></Image>
+        </ImageBox>
+        {DetailData?.post.itemDetailimg.map((pic: string, index: number) => {
+          return (
+            <ImageBox>
+              <Image key={index} src={pic || './next.svg'} alt="titleImage" fill />
+            </ImageBox>
+          );
+        })}
+      </Slider>
+      <SlideNumber>
+        {currentSlide}/{DetailData?.post.itemDetailimg.length + 1}
+      </SlideNumber>
+      <PostTable1>
+        <div className="uniqeNuberbar">
+          <div className="uniqeNuber">등록번호 12345678</div>
+          <div className="postdate">2023.03.28</div>
+        </div>
+        <div className="itemaddress"> 경기 파주시 파평면 율곡리</div>
+        <div className="itemprice"> 매매 3억 3천</div>
+        <div className="itemmanage"> 관리비 10만원</div>
+        <div className="itemfavor">관심 매물 등록 5회</div>
+      </PostTable1>
+      <PostTable2>
+        <div className="itemtitle">상세정보</div>
+        <></>
+      </PostTable2>
       <PostTable>
         <tbody>
           <tr>
@@ -197,19 +270,20 @@ const DetailContent = () => {
           </tr>
         </tbody>
       </PostTable>
-      {DetailData?.post.itemDetailimg.map((pic: string, index: number) => {
-        return (
-          <ImageBox>
-            <Image key={index} src={pic || './next.svg'} alt="titleImage" fill />
-          </ImageBox>
-        );
-      })}
-    </div>
+    </Wrap>
   );
 };
 
 export default DetailContent;
-
+const Wrap = styled.div`
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100%;
+  position: relative;
+  background-color: #f5f5f5;
+  overflow-x: hidden;
+  overflow-y: auto;
+`;
 const PostTable = styled.table`
   width: 100%;
 
@@ -244,12 +318,11 @@ const PostTable = styled.table`
 
 const ImageBox = styled.div`
   width: 100%;
-  height: 70vh;
-  max-height: 500px;
-  margin: 0 auto;
-  margin: 5px auto;
+  height: 40vh;
+  max-height: 300px;
+
   position: relative;
-  @media (min-width: 400px) {
+  /* @media (min-width: 400px) {
     max-height: 200px;
   }
   @media (min-width: 600px) {
@@ -259,5 +332,135 @@ const ImageBox = styled.div`
   @media (min-width: 900px) {
     height: 70vh;
     max-height: 500px;
+  } */
+`;
+const TopbarBox = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 45px;
+  margin-top: 43px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  box-sizing: border-box;
+  padding-left: 20px;
+  padding-right: 20px;
+  /* border-bottom: 1px solid #f5f5f5; */
+  /* margin-bottom: 28px; */
+  .maintitle {
+    color: #222222;
   }
+  .subtitle {
+    color: #666666;
+    gap: 4px;
+    display: flex;
+  }
+`;
+const SlideNumber = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+
+  position: absolute;
+  width: 40px;
+  height: 22px;
+  left: 330px;
+  top: 258px;
+  color: white;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  text-align: center;
+  letter-spacing: 0.02em;
+
+  background: rgba(0, 0, 0, 0.54);
+  border-radius: 11px;
+`;
+
+const PostTable1 = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: #ffffff;
+  padding: 20px;
+  gap: 8px;
+  width: 100%;
+  height: 181px;
+  margin-bottom: 8px;
+  .uniqeNuberbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    height: 24px;
+  }
+  .uniqeNuber {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px 12px;
+
+    color: #ffffff;
+    width: 124px;
+    height: 24px;
+    font-size: 12px;
+
+    background: #222222;
+    border-radius: 12px;
+  }
+  .postdate {
+    font-size: 14px;
+    color: #888888;
+  }
+  .itemfavor {
+    font-weight: 400;
+    font-size: 12px;
+    color: #0059f9;
+  }
+  .itemmanage {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000000;
+  }
+  .itemprice {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    color: #000000;
+  }
+  .itemaddress {
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+  }
+`;
+
+const PostTable2 = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: #ffffff;
+  padding: 20px;
+  gap: 20px;
+  width: 100%;
+  height: 440px;
+  margin-bottom: 8px;
 `;

@@ -17,9 +17,12 @@ interface makerType {
   position: { lat: number; lng: number };
   content: postType;
 }
+interface Iprops {
+  initialData: [postType];
+}
 export default function ClusterMap() {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
-  const { detailState, changeDetailState, setDetailID, setDetailType } = useStore(state => state);
+  const { detailState, changeDetailState, setDetailID, setDetailType, setFilterdData } = useStore(state => state);
   const [map, setMap] = useState<kakao.maps.Map>();
   const [mapState, setMapState] = useState<any>();
   //useMediaQuery
@@ -42,6 +45,7 @@ export default function ClusterMap() {
 
       return contain;
     });
+    setFilterdData(filterdata);
     setSelectedData(filterdata);
   };
 
