@@ -1,15 +1,20 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 
 export default function SearchPage() {
-  const [backPoint, setBackPoint] = useState<boolean>(false);
+  const router = useRouter();
   const inputBoxRef = useRef<HTMLDivElement>(null);
   const [selected, setSelected] = useState<string>('saleItem');
 
+  const onClickBtn = () => {
+    router.back();
+  };
+
   return (
     <>
-      <BackPoint>뒤로</BackPoint>
+      <BackBtn onClick={onClickBtn}>뒤로</BackBtn>
       <Sale>
         <SaleItem
           selected={selected}
@@ -45,7 +50,7 @@ export default function SearchPage() {
     </>
   );
 }
-const BackPoint = styled.section``;
+const BackBtn = styled.section``;
 const Sale = styled.section`
   width: 100%;
   height: 58px;
