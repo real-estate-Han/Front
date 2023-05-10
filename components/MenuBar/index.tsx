@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import react from 'react';
+import react, { useEffect, useState } from 'react';
 import {
   MdOutlineHome,
   MdMoreHoriz,
@@ -11,8 +11,19 @@ import {
 } from 'react-icons/md';
 const MenuBar = () => {
   const router = useRouter();
+  const [hiddenBar, setHiddenBar] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (router.asPath === '/search') {
+      setHiddenBar(true);
+      console.log('숨기기');
+    } else {
+      setHiddenBar(false);
+      console.log('보이기');
+    }
+  }, [router]);
   return (
-    <MenuDiv>
+    <MenuDiv hiddenBar={hiddenBar}>
       <div
         className="MenuButton"
         onClick={() => {
@@ -54,8 +65,8 @@ const MenuBar = () => {
 
 export default MenuBar;
 
-const MenuDiv = styled.div`
-  display: flex;
+const MenuDiv = styled.div<{ hiddenBar: boolean }>`
+  display: ${({ hiddenBar }) => (hiddenBar ? 'none' : 'flex')};
   z-index: 3;
   justify-content: space-around;
   align-items: center;

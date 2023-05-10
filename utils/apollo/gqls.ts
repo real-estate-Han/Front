@@ -90,3 +90,9 @@ export const DELETE_POST = gql`
     deletePost(id: $deletePostId)
   }
 `;
+
+export const FAVOR_TOGGLE = gql`
+  mutation Mutation($PostId: ID!) {
+    deletePost(id: $PostId)
+  }
+`;

@@ -121,6 +121,7 @@ export default function PostMain({
       itemType: itemType,
       transactionType: transactionType,
       itemWaterMark: waterMark,
+      itemFavorCount: 0,
     };
     console.log(PostInputData);
     const Geo = position;
