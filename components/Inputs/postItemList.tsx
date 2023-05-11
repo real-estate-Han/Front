@@ -101,7 +101,7 @@ export function PostItemList({ register, errors, transactionType, itemType }: In
           <Inputs type="date" text="매물입주가능날짜" {...register('itemMovein')} />
           <span>{errors?.itemMovein?.message}</span>
 
-          <Inputs type="number" text="보안/안전시설" {...register('itemSecurity')} />
+          <Inputs type="text" text="보안/안전시설" {...register('itemSecurity')} />
           <DetailDescription>,로 구분지어주세요 ex) 공동현관,CCTV,경보기 </DetailDescription>
           <span>{errors?.itemFloor?.message}</span>
         </>

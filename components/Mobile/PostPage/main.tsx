@@ -1,13 +1,13 @@
 import styled from '@emotion/styled';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { ChangeEvent, MouseEventHandler, useState } from 'react';
+import { ChangeEvent, MouseEventHandler, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { postInputType, postType } from '@utils/type';
 import Image from 'next/image';
 import { PostItemList } from '@components/Inputs/postItemList';
-import { useMutation } from '@apollo/client';
-import { Creat_POST } from '@utils/apollo/gqls';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { Creat_POST, GET_CLUSTER_DATA, IS_LOGINED } from '@utils/apollo/gqls';
 import imageCompression from 'browser-image-compression';
 import { S3UpLoadFile } from '../../../utils/S3util';
 import CommonButton from '@components/Button';
@@ -38,7 +38,7 @@ export default function PostMain({
   const [detailFile, setDetailFile] = useState<File[]>([]);
   const [transactionType, setTransactionType] = useState<string>('');
   const [itemType, setItemType] = useState<string>('');
-  const [waterMark, setWaterMark] = useState<boolean>(false);
+  const [waterMark, setWaterMark] = useState<string>('');
   const {
     register,
     setError,
@@ -99,45 +99,65 @@ export default function PostMain({
     }
   };
   const [CreatPost, { data, loading, error }] = useMutation(Creat_POST);
+  const [checkLogin, { data: isLogined, error: loginErr }] = useLazyQuery(IS_LOGINED, {
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'no-cache',
+  });
+  useEffect(() => {
+    checkLogin();
+  }, []);
   const onSubmit: SubmitHandler<postInputType> = async data => {
-    const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
-    let detailS3URL: string[] = [];
-    if (detailFile) {
-      for (let i = 0; i < detailFile.length; i++) {
-        const url = await S3UpLoadFile(detailFile[i]);
-        detailS3URL.push(url!);
+    checkLogin();
+    console.log(isLogined);
+    if (isLogined?.checklogin == 'success') {
+      const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
+      let detailS3URL: string[] = [];
+      if (detailFile) {
+        for (let i = 0; i < detailFile.length; i++) {
+          const url = await S3UpLoadFile(detailFile[i]);
+          detailS3URL.push(url!);
+        }
       }
-    }
 
-    const PostInputData = {
-      ...data,
-      itemAddress: kakaoAddress,
-      kakaoLoadAddress: kakaoLoadAddress,
-      region_1depth: region_1depth,
-      region_2depth: region_2depth,
-      region_3depth: region_3depth,
-      itemTitleimg: titleS3URL,
-      itemDetailimg: detailS3URL,
-      itemType: itemType,
-      transactionType: transactionType,
-      itemWaterMark: waterMark,
-      itemFavorCount: 0,
-    };
-    console.log(PostInputData);
-    const Geo = position;
-    CreatPost({ variables: { postInput: PostInputData, geo: Geo } });
-    error &&
+      const PostInputData = {
+        ...data,
+        itemAddress: kakaoAddress,
+        itemLoadAddress: kakaoLoadAddress,
+        region_1depth: region_1depth,
+        region_2depth: region_2depth,
+        region_3depth: region_3depth,
+        itemTitleimg: titleS3URL,
+        itemDetailimg: detailS3URL,
+        itemType: itemType,
+        transactionType: transactionType,
+        itemWaterMark: waterMark,
+        itemFavorCount: 0,
+      };
+      // console.log(PostInputData);
+      const Geo = position;
+      CreatPost({ variables: { postInput: PostInputData, geo: Geo }, refetchQueries: [{ query: GET_CLUSTER_DATA }] });
+      error &&
+        Swal.fire({
+          title: error.message,
+          icon: 'error',
+          confirmButtonText: '확인',
+        });
+      !error &&
+        Swal.fire({
+          title: '매물이 등록되었습니다.',
+          icon: 'success',
+          confirmButtonText: '확인',
+        });
+    } else {
+    }
+    if (isLogined?.checklogin == 'failed' || isLogined == undefined) {
+      console.log('tlfvo');
       Swal.fire({
-        title: error.message,
+        title: '로그인이 필요합니다.',
         icon: 'error',
         confirmButtonText: '확인',
       });
-    !error &&
-      Swal.fire({
-        title: '매물이 등록되었습니다.',
-        icon: 'success',
-        confirmButtonText: '확인',
-      });
+    }
   };
 
   return (
@@ -169,10 +189,10 @@ export default function PostMain({
         <>
           <span>워터마크 적용하기</span>
           <div>
-            <SelectedButton value="true" onClick={handleWaterMarkChange} selected={waterMark}>
+            <SelectedButton value="on" onClick={handleWaterMarkChange} selected={waterMark}>
               적용
             </SelectedButton>
-            <SelectedButton value="false" onClick={handleWaterMarkChange} selected={waterMark}>
+            <SelectedButton value="off" onClick={handleWaterMarkChange} selected={waterMark}>
               미적용
             </SelectedButton>
           </div>

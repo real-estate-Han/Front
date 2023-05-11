@@ -37,7 +37,7 @@ export interface postInputType {
   itemTag?: [string];
   itemElectricity?: number;
   itemOption?: string;
-  itemWaterMark?: boolean;
+  itemWaterMark?: string;
 
   itemMoreInfo?: string;
   itemManagementInfo?: string;

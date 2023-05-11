@@ -1,10 +1,4 @@
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-  NormalizedCacheObject,
-  useQuery,
-} from '@apollo/client';
+import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject, useQuery } from '@apollo/client';
 import { GET_CLUSTER_DATA } from './gqls';
 import { setContext } from '@apollo/client/link/context';
 import { useMemo } from 'react';
@@ -12,10 +6,7 @@ import { useMemo } from 'react';
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const httpLink = createHttpLink({
-  uri:
-    // process.env.NODE_ENV === "production" ?
-    process.env.NEXT_PUBLIC_API_URL,
-  // : "http://localhost:8080/graphql",
+  uri: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_API_URL : 'http://localhost:8080/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -42,9 +33,7 @@ function createApolloClient() {
     cache: new InMemoryCache(),
   });
 }
-export function initializeApollo(
-  initialState: NormalizedCacheObject | null = null,
-) {
+export function initializeApollo(initialState: NormalizedCacheObject | null = null) {
   const _apolloClient = apolloClient ?? createApolloClient();
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state

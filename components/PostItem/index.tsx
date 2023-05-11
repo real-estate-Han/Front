@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import { boxShadow } from '@components/stylesUtil';
 import useStore from '@zustand/store';
+import { MdFavoriteBorder } from 'react-icons/md';
 
 interface PostItemProps {
   postData: postType;
@@ -28,7 +29,7 @@ function PostItems({ postData, widthPercent, wide }: PostItemProps) {
           height={200}
         />
         <div className="likeButton">
-          <Image priority src="/icon/favor.svg" width={28} height={28} alt="favor" />
+          <MdFavoriteBorder size={28} />
         </div>
       </div>
       <div className="detailbox">

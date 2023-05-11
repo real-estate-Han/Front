@@ -93,6 +93,12 @@ export const DELETE_POST = gql`
 
 export const FAVOR_TOGGLE = gql`
   mutation Mutation($PostId: ID!) {
-    deletePost(id: $PostId)
+    likePost(id: $PostId)
+  }
+`;
+
+export const IS_LOGINED = gql`
+  query Query {
+    checklogin
   }
 `;

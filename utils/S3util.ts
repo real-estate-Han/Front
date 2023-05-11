@@ -1,8 +1,4 @@
-import {
-  S3Client,
-  PutObjectCommand,
-  DeleteObjectCommand,
-} from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 const client: any = new S3Client({
@@ -15,7 +11,7 @@ const client: any = new S3Client({
 //파일 받아 S3에 업로드 후 url 반환
 export const S3UpLoadFile = async (titleFile?: File) => {
   try {
-    const S3key = `${titleFile?.name}${Date.now().toString()}`;
+    const S3key = `${titleFile?.name}`;
     const bucketParams = {
       Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME!,
       Key: S3key,

@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { Inputs } from '@components/Inputs';
 import { useForm } from 'react-hook-form';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { DELETE_POST, FAVOR_TOGGLE, GET_DETAIL_POST, GET_USER } from '@utils/apollo/gqls';
+import { DELETE_POST, FAVOR_TOGGLE, GET_DETAIL_POST, GET_USER, IS_LOGINED } from '@utils/apollo/gqls';
 import Swal from 'sweetalert2';
 import useStore from '@zustand/store';
 import Image from 'next/image';
@@ -79,28 +79,47 @@ const DetailContent = () => {
       Swal.fire(mutateErr.message, '', 'error');
     }
   };
+  const [checkLogin, { data: isLogined, error: loginErr }] = useLazyQuery(IS_LOGINED, {
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'no-cache',
+  });
   const [isFavor, setIsFavor] = useState(false);
   const [favorMutate, { error: favorErr }] = useMutation(FAVOR_TOGGLE);
   const FavorToggle = () => {
-    if (!favorErr) {
-      favorMutate({
-        variables: { favorPostId: detailID },
-      }).then(res => {
-        if (res) {
-          setIsFavor(!isFavor);
-        }
+    checkLogin();
+    if (isLogined?.checklogin == 'success') {
+      if (!favorErr) {
+        favorMutate({
+          variables: { PostId: detailID },
+        }).then(res => {
+          if (res) {
+            console.log(res);
+            setIsFavor(!isFavor);
+          }
+        });
+      }
+    }
+    if (isLogined?.checklogin == 'failed' || isLogined == undefined) {
+      console.log('tlfvo');
+      Swal.fire({
+        title: '로그인이 필요합니다.',
+        icon: 'error',
+        confirmButtonText: '확인',
       });
-    } else {
-      Swal.fire(favorErr.message, '', 'error');
     }
   };
 
   const settings = {
     infinite: true,
-    speed: 10,
+    speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    adaptiveHeight: true,
+    arrows: true,
+    className: 'slides',
     beforeChange: (current: number, next: number) => setCurrentSlide(next + 1),
+    nextArrow: <MdOutlineArrowForwardIos size={28} color="white" />,
+    prevArrow: <MdArrowBackIos size={28} color="white" />,
   };
 
   const shareUrl = window.location.href;
@@ -126,12 +145,11 @@ const DetailContent = () => {
             <MdOutlineFileUpload size={28} color="white" onClick={handleClick} />
           </div>
           <div>
-            <MdFavoriteBorder size={28} color="white" />
+            <MdFavoriteBorder size={28} onClick={FavorToggle} color={isFavor ? 'orange' : 'white'} />
           </div>
         </div>
       </TopbarBox>
 
-      {/* <button onClick={DeletePost}>삭제하기</button> */}
       <Slider {...settings}>
         <ImageBox>
           <Image
@@ -343,6 +361,22 @@ const Wrap = styled.div`
   background-color: #f5f5f5;
   overflow-x: hidden;
   overflow-y: auto;
+  .slides {
+    position: relative;
+    .slick-prev,
+    .slick-next {
+      position: absolute;
+      top: 50%;
+    }
+    .slick-prev {
+      left: 5%;
+      z-index: 10;
+    }
+    .slick-next {
+      right: 5%;
+      z-index: 10;
+    }
+  }
 `;
 
 const ImageBox = styled.div`
