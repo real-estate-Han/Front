@@ -1,21 +1,17 @@
-import {
-  S3Client,
-  PutObjectCommand,
-  DeleteObjectCommand,
-} from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 const client: any = new S3Client({
-  region: "ap-northeast-2",
+  region: 'ap-northeast-2',
   credentials: {
     accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID!,
     secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY!,
   },
 });
-
+//파일 받아 S3에 업로드 후 url 반환
 export const S3UpLoadFile = async (titleFile?: File) => {
   try {
-    const S3key = `${titleFile?.name}${Date.now().toString()}`;
+    const S3key = `${titleFile?.name}`;
     const bucketParams = {
       Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME!,
       Key: S3key,
@@ -27,47 +23,31 @@ export const S3UpLoadFile = async (titleFile?: File) => {
     });
 
     const uploadRes = await fetch(url, {
-      method: "PUT",
+      method: 'PUT',
       body: titleFile,
       headers: {
-        "Content-type": titleFile!.type,
+        'Content-type': titleFile!.type,
       },
     });
 
     const S3FileURL = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com/${S3key}`;
     return S3FileURL;
   } catch (err) {
-    console.log("Error", err);
+    console.log('Error', err);
   }
 };
-// export const S3UpLoadFiles = async (detailFile?: File[]) => {
-//   let S3FileURLs: string[] = [];
-//   try {
-//     detailFile?.forEach(async file => {
-//       const url = await S3UpLoadFile(file).then(res => {
-//         S3FileURLs.push(res!);
-//       });
-//       // await S3FileURLs.push(url!);
-//     });
-//     // console.log("S3FileURLs", S3FileURLs);
-//     // const result = [...S3FileURLs];
-//     // console.log("result", result);
-//     return S3FileURLs;
-//   } catch (err) {
-//     console.log("Error", err);
-//   }
-// };
 
+//url로 파일 삭제
 export const S3DeleteFile = async (fileurl?: string) => {
   try {
-    const fileName = fileurl?.split("/").pop();
+    const fileName = fileurl?.split('/').pop();
     const bucketParams = {
       Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME!,
       Key: fileName,
     };
     const data = await client.send(new DeleteObjectCommand(bucketParams));
   } catch (err) {
-    console.log("Error", err);
+    console.log('Error', err);
   }
 };
 
@@ -77,6 +57,6 @@ export const S3DeleteFiles = async (detailFile?: File[]) => {
       S3DeleteFile(file.name);
     });
   } catch (err) {
-    console.log("Error", err);
+    console.log('Error', err);
   }
 };

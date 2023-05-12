@@ -1,5 +1,5 @@
-import { gql, useQuery } from "@apollo/client";
-import { postType } from "../type";
+import { gql, useQuery } from '@apollo/client';
+import { postType } from '../type';
 
 export const GET_USER = gql`
   query Login($email: String!, $password: String!) {
@@ -16,6 +16,7 @@ export const GET_CLUSTER_DATA = gql`
       posts {
         _id
         itemAddress
+        itemType
         itemUniqueID
         itemTitleimg
         itemGeoLocation {
@@ -43,18 +44,27 @@ export const GET_DETAIL_POST = gql`
       itemAreaLand
       itemAreaBuilding
       itemFloor
+      itemElevator
+      itemHeating
+      itemParking
+      itemBalcony
       itemPurpose
       itemRooms
       itemStatus
-      itemField
+      itemLandNumber
       itemMovein
       itemApproval
       itemSubway
+      itemFloorHeight
       itemTitleimg
       itemDetailimg
       itemTag
+      itemTruck
       itemElectricity
-      # itemOption
+      itemOption
+      itemAreaTotal
+      itemLandType
+      itemLandNumber
       createdAt
       updatedAt
     }
@@ -78,5 +88,17 @@ export const Creat_POST = gql`
 export const DELETE_POST = gql`
   mutation Mutation($deletePostId: ID!) {
     deletePost(id: $deletePostId)
+  }
+`;
+
+export const FAVOR_TOGGLE = gql`
+  mutation Mutation($PostId: ID!) {
+    likePost(id: $PostId)
+  }
+`;
+
+export const IS_LOGINED = gql`
+  query Query {
+    checklogin
   }
 `;

@@ -1,31 +1,22 @@
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-  NormalizedCacheObject,
-  useQuery,
-} from "@apollo/client";
-import { GET_CLUSTER_DATA } from "./gqls";
-import { setContext } from "@apollo/client/link/context";
-import { useMemo } from "react";
+import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject, useQuery } from '@apollo/client';
+import { GET_CLUSTER_DATA } from './gqls';
+import { setContext } from '@apollo/client/link/context';
+import { useMemo } from 'react';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const httpLink = createHttpLink({
-  uri:
-    process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_API_URL
-      : "http://localhost:8080/graphql",
+  uri: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_API_URL : 'http://localhost:8080/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
   // ssr 일떄 window는 undefined이니 오류발생  예외처리해줘야한다.
-  const token = typeof window !== "undefined" && localStorage.getItem("token");
+  const token = typeof window !== 'undefined' && localStorage.getItem('token');
 
   return {
     headers: {
       ...headers,
-      authorization: token ? token : "",
+      authorization: token ? token : '',
     },
   };
 });
@@ -37,14 +28,12 @@ const authLink = setContext((_, { headers }) => {
 
 function createApolloClient() {
   return new ApolloClient({
-    ssrMode: typeof window === "undefined",
+    ssrMode: typeof window === 'undefined',
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
   });
 }
-export function initializeApollo(
-  initialState: NormalizedCacheObject | null = null
-) {
+export function initializeApollo(initialState: NormalizedCacheObject | null = null) {
   const _apolloClient = apolloClient ?? createApolloClient();
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
@@ -53,7 +42,7 @@ export function initializeApollo(
     _apolloClient.cache.restore(initialState);
   }
   // For SSG and SSR always create a new Apollo Client
-  if (typeof window === "undefined") return _apolloClient;
+  if (typeof window === 'undefined') return _apolloClient;
   // Create the Apollo Client once in the client
   if (!apolloClient) apolloClient = _apolloClient;
 
