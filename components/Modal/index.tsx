@@ -8,6 +8,7 @@ interface ModalProps {
   WideModal?: boolean;
   fullview?: boolean;
   disableScroll?: boolean;
+  customHeight?: string;
 }
 
 const Modal = (props: ModalProps) => {
@@ -29,7 +30,7 @@ const Modal = (props: ModalProps) => {
   }, [props.modalState]);
 
   return (
-    <ModalStyled WideModal={props?.WideModal} onClick={props.closeModal} fullview={props?.fullview}>
+    <ModalStyled WideModal={props?.WideModal} customHeight={props?.customHeight} onClick={props.closeModal} fullview={props?.fullview}>
       <div className="modalBody" onClick={e => e.stopPropagation()}>
         {props.children}
       </div>
@@ -42,6 +43,7 @@ export default Modal;
 const ModalStyled = styled.div<{
   WideModal: boolean | undefined;
   fullview: boolean | undefined;
+  customHeight: string | undefined;
 }>`
   position: fixed;
   top: 0;
@@ -55,9 +57,9 @@ const ModalStyled = styled.div<{
   align-items: center;
 
   .modalBody {
-    /* max-width: ${props => (props.WideModal ? '1000px' : '500px')}; */
-    width: ${props => (props.fullview ? '100vw' : '80%')};
-    height: ${props => (props.fullview ? '100vh' : '80%')};
+     max-width: ${props => (props.WideModal ? '1000px' : '300px')}; 
+    width: ${props => (props.fullview ? '100vw' : '70%')};
+    height: ${props => (props.fullview ? '100vh' : `${props.customHeight || "55%"}`)};
     overflow-y: auto;
     max-height: ${props => (props.fullview ? '100vh' : props.WideModal ? '800px' : '500px')};
     position: absolute;

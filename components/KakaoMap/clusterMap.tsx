@@ -13,16 +13,27 @@ import { initializeApollo } from '@utils/apollo/apolloclient';
 import Image from 'next/image';
 
 import { useMediaQuery } from 'react-responsive';
+import { useRouter } from 'next/router';
 interface makerType {
   position: { lat: number; lng: number };
   content: postType;
 }
 interface Iprops {
-  initialData: [postType];
+  initialData?: [postType];
 }
-export default function ClusterMap() {
+export default function ClusterMap({ initialData }: Iprops) {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
-  const { detailState, changeDetailState, setDetailID, setDetailType, setFilterdData } = useStore(state => state);
+  const { setDetailID, setDetailType, setFilterdData } = useStore(
+    state => state,
+  );
+  const [clusterDataState, setClusterDataState] = useState<any>();
+  useEffect(() => {
+    if (initialData) {
+      setClusterDataState(initialData);
+    } else {
+      setClusterDataState(clusterData?.allpost?.posts);
+    }
+  }, [clusterData]);
   const [map, setMap] = useState<kakao.maps.Map>();
   const [mapState, setMapState] = useState<any>();
   //useMediaQuery
@@ -41,7 +52,9 @@ export default function ClusterMap() {
     if (!map && !mapState) return;
     const bounds = new kakao.maps.LatLngBounds(mapState?.sw, mapState?.ne!);
     const filterdata = clusterData?.allpost?.posts.filter((p: any) => {
-      const contain = bounds.contain(new kakao.maps.LatLng(p.itemGeoLocation.lat, p.itemGeoLocation.lng));
+      const contain = bounds.contain(
+        new kakao.maps.LatLng(p.itemGeoLocation.lat, p.itemGeoLocation.lng),
+      );
 
       return contain;
     });
@@ -71,21 +84,23 @@ export default function ClusterMap() {
     // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대
     mapr && mapr.setLevel(level!, { anchor: cluster.getCenter() });
   };
-
+  const router = useRouter();
   const MarkerContainer = ({ position, content }: makerType) => {
     const [isVisible, setIsVisible] = useState(false);
     return (
       <MapMarker
         position={position} // 마커를 표시할 위치
         onClick={() => {
-          changeDetailState();
           setDetailID(content._id!);
           setDetailType(content.itemType!);
+          router.push(`/detail/${content._id}`);
         }} // 마커를 클릭했을 때 실행할 함수
         onMouseOver={() => setIsVisible(true)} // 마커에 마우스를 올렸을 때 간단히 매물 보여주기
         onMouseOut={() => setIsVisible(false)}
       >
-        {isVisible && <PostItem widthPercent={100} postData={content}></PostItem>}
+        {isVisible && (
+          <PostItem widthPercent={100} postData={content}></PostItem>
+        )}
       </MapMarker>
     );
   };
@@ -113,7 +128,7 @@ export default function ClusterMap() {
               calculator={[4, 8, 16, 32]} // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
               onClusterclick={onClusterclick}
             >
-              {clusterData?.allpost?.posts.map((pos: any) => (
+              {clusterDataState?.map((pos: any) => (
                 <MarkerContainer
                   key={`${pos.itemGeoLocation.lat}-${pos.itemGeoLocation.lng}`}
                   position={{

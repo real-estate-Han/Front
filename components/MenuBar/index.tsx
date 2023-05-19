@@ -1,10 +1,13 @@
+import { useLazyQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
+import { IS_LOGINED } from '@utils/apollo/gqls';
 import useStore from '@zustand/store';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import react, { useEffect, useState } from 'react';
+import { set } from 'react-hook-form';
 import {
   MdOutlineHome,
   MdMoreHoriz,
@@ -12,13 +15,58 @@ import {
   MdOutlineLocationOn,
   MdOutlineFavoriteBorder,
 } from 'react-icons/md';
+import Swal from 'sweetalert2';
 const MenuBar = () => {
   const router = useRouter();
   const [hiddenBar, setHiddenBar] = useState<boolean>(false);
-  const [sidemenu, setSidemenu] = useState<boolean>(false);
-  const toggleSidemenu = () => {
-    setSidemenu(!sidemenu);
+  const [currentUrl, setCurrentUrl] = useState<string>('/');
+  const [isLogined, setIsLogined] = useState<string>('');
+  const { sideMenu, setSideMenu, clearState } = useStore(state => state);
+  const [checkLogined, { data, error: loginErr }] = useLazyQuery(IS_LOGINED, {
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'no-cache',
+  });
+
+  const checkLogin = async () => {
+    const currentToken = await localStorage.getItem('token');
+    if (currentToken) {
+      setIsLogined('success');
+    } else {
+      setIsLogined('fail');
+    }
   };
+  const changeMenu = () => {
+    checkLogin();
+    setSideMenu();
+  };
+  useEffect(() => {
+    checkLogin();
+  }, [isLogined]);
+
+  const LogoutButton = () => {
+    Swal.fire({
+      title: '로그아웃 하시겠습니까?',
+      showCancelButton: true,
+      confirmButtonText: '확인',
+      cancelButtonText: '취소',
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('likeposts');
+        localStorage.removeItem('mycontents');
+        localStorage.removeItem('userstatus');
+        Swal.fire({
+          title: '로그아웃 되었습니다.',
+          icon: 'success',
+          confirmButtonText: '확인',
+        });
+      }
+      clearState();
+    });
+  };
+
   const { changeLoginState, changeSignUpState } = useStore(state => state);
   useEffect(() => {
     if (router.asPath === '/search') {
@@ -26,11 +74,37 @@ const MenuBar = () => {
     } else {
       setHiddenBar(false);
     }
+    setCurrentUrl(router.asPath);
   }, [router]);
-
+  const licktoLikepage = () => {
+    checkLogined().then(res => {
+      if (res.data.checklogin.checklogin == 'success') {
+        router.push('/heart');
+      } else {
+        Swal.fire({
+          title: '로그인이 필요합니다.',
+          icon: 'warning',
+          confirmButtonText: '확인',
+        }).then(() => {
+          changeLoginState();
+        });
+      }
+    });
+  };
   const linktoPostpage = () => {
-    router.push('/post');
-    toggleSidemenu();
+    checkLogined().then(res => {
+      if (res.data.checklogin.status == 'owner') {
+        router.push('/post');
+      } else {
+        Swal.fire({
+          title: '관리자만 등록 가능합니다',
+          icon: 'warning',
+          confirmButtonText: '확인',
+        }).then(() => {});
+      }
+    });
+
+    setSideMenu();
   };
 
   return (
@@ -41,17 +115,35 @@ const MenuBar = () => {
           router.push('/');
         }}
       >
-        <MdOutlineHome size={28} />
-        <span>홈</span>
+        <MdOutlineHome
+          size={28}
+          color={currentUrl == '/' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
+        />
+        <span
+          style={{
+            color: currentUrl == '/' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
+          }}
+        >
+          홈
+        </span>
       </div>
       <div
         className="MenuButton"
         onClick={() => {
-          router.push('/heart');
+          licktoLikepage();
         }}
       >
-        <MdOutlineFavoriteBorder size={28} />
-        <span>관심목록</span>
+        <MdOutlineFavoriteBorder
+          size={28}
+          color={currentUrl == '/heart' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
+        />
+        <span
+          style={{
+            color: currentUrl == '/heart' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
+          }}
+        >
+          관심목록
+        </span>
       </div>
       <div
         className="MenuButton"
@@ -59,20 +151,48 @@ const MenuBar = () => {
           router.push('/main');
         }}
       >
-        <MdOutlineLocationOn size={28} />
-        <span>지도</span>
+        <MdOutlineLocationOn
+          size={28}
+          color={currentUrl == '/main' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
+        />
+        <span
+          style={{
+            color: currentUrl == '/main' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
+          }}
+        >
+          지도
+        </span>
       </div>
       <div className="MenuButton">
-        <MdOutlineMapsHomeWork size={28} />
-        <span>의뢰하기</span>
+        <MdOutlineMapsHomeWork
+          size={28}
+          color={currentUrl == '/quest' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
+        />
+        <span
+          style={{
+            color: currentUrl == '/quest' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
+          }}
+        >
+          의뢰하기
+        </span>
       </div>
-      <div className="MenuButton" onClick={toggleSidemenu}>
-        <MdMoreHoriz size={28} />
-        <span>더보기</span>
+      <div className="MenuButton" onClick={changeMenu}>
+        <MdMoreHoriz
+          size={28}
+          color={sideMenu ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
+        />
+        <span style={{ color: sideMenu ? '#0059F9' : 'rgba(0, 0, 0, 0.54)' }}>
+          더보기
+        </span>
       </div>
 
-      <SideMenu sidemenu={sidemenu}>
-        <div onClick={changeLoginState}> 로그인 및 회원가입 </div>
+      <SideMenu sideMenu={sideMenu}>
+        {isLogined == 'success' ? (
+          <div onClick={LogoutButton}> 로그아웃 </div>
+        ) : (
+          <div onClick={changeLoginState}> 로그인 및 회원가입 </div>
+        )}
+
         <div onClick={linktoPostpage}> 매물 올리기</div>
       </SideMenu>
     </MenuDiv>
@@ -130,7 +250,7 @@ const closeModalAnimation = keyframes`
   }
 `;
 
-const SideMenu = styled.div<{ sidemenu: boolean }>`
+const SideMenu = styled.div<{ sideMenu: boolean }>`
   position: fixed;
   bottom: 100px;
   right: 5px;
@@ -144,9 +264,10 @@ const SideMenu = styled.div<{ sidemenu: boolean }>`
   justify-content: space-around;
   align-items: center;
   z-index: 4;
-  transform: ${({ sidemenu }) => (sidemenu ? 'translateX(0%)' : 'translateX(110%);')};
+  transform: ${({ sideMenu }) =>
+    sideMenu ? 'translateX(0%)' : 'translateX(110%);'};
   animation: ${props =>
-    props.sidemenu
+    props.sideMenu
       ? css`
           ${openModalAnimation} 0.4s ease
         `

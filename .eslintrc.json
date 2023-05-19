@@ -27,7 +27,7 @@
     "max-len": [
       "error",
       {
-        "code": 120,
+        "code": 80,
         "ignoreComments": true, // 주석 제외
         "ignoreStrings": true, // 문자열 제외
         "ignoreTemplateLiterals": true // 템플릿 리터럴 제외

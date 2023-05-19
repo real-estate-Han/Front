@@ -134,9 +134,15 @@ const Wrap = styled.div`
     color: #ffffff;
   }
   .recommandItem {
-    float: left;
-    width: 100%;
-    padding-bottom: 31px;
+    display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; // 각 아이템을 자리에 맞게 배치
+  width: 100%;
+  gap :30px;
+  
+  /* & > * {
+    flex-basis: 33%; // 한 줄에 4개 아이템이 들어가도록 설정
+  } */
   }
 `;
 const BrandingBox = styled.div`

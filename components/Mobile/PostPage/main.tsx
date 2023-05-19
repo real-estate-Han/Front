@@ -14,6 +14,7 @@ import CommonButton from '@components/Button';
 import CommonLabel from '@components/Label';
 import Hr from '@components/Hr';
 import SelectedButton from '@components/Button/selectedButton';
+import { useRouter } from 'next/router';
 
 interface KakaoMapProps {
   kakaoLoadAddress?: string;
@@ -99,17 +100,23 @@ export default function PostMain({
     }
   };
   const [CreatPost, { data, loading, error }] = useMutation(Creat_POST);
-  const [checkLogin, { data: isLogined, error: loginErr }] = useLazyQuery(IS_LOGINED, {
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'no-cache',
-  });
+  const [checkLogin, { data: isLogined, error: loginErr }] = useLazyQuery(
+    IS_LOGINED,
+    {
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'no-cache',
+    },
+  );
   useEffect(() => {
     checkLogin();
   }, []);
+
+  const router = useRouter();
+
   const onSubmit: SubmitHandler<postInputType> = async data => {
     checkLogin();
-    console.log(isLogined);
-    if (isLogined?.checklogin == 'success') {
+
+    if (isLogined?.checklogin.checklogin == 'success') {
       const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
       let detailS3URL: string[] = [];
       if (detailFile) {
@@ -135,7 +142,10 @@ export default function PostMain({
       };
       // console.log(PostInputData);
       const Geo = position;
-      CreatPost({ variables: { postInput: PostInputData, geo: Geo }, refetchQueries: [{ query: GET_CLUSTER_DATA }] });
+      CreatPost({
+        variables: { postInput: PostInputData, geo: Geo },
+        refetchQueries: [{ query: GET_CLUSTER_DATA }],
+      });
       error &&
         Swal.fire({
           title: error.message,
@@ -148,9 +158,13 @@ export default function PostMain({
           icon: 'success',
           confirmButtonText: '확인',
         });
+      router.push('/main');
     } else {
     }
-    if (isLogined?.checklogin == 'failed' || isLogined == undefined) {
+    if (
+      isLogined?.checklogin.checklogin == 'failed' ||
+      isLogined == undefined
+    ) {
       console.log('tlfvo');
       Swal.fire({
         title: '로그인이 필요합니다.',
@@ -167,18 +181,38 @@ export default function PostMain({
           <CommonLabel htmlFor="itemTitleImg">
             <span>메인 사진 고르기</span>
           </CommonLabel>
-          <input onChange={onFileChange} id="itemTitleImg" hidden type={'file'} />
-          {titleImg ? <Image src={titleImg} alt="title_img" width={150} height={120} /> : null}
+          <input
+            onChange={onFileChange}
+            id="itemTitleImg"
+            hidden
+            type={'file'}
+          />
+          {titleImg ? (
+            <Image src={titleImg} alt="title_img" width={150} height={120} />
+          ) : null}
         </div>
         <div className="detailImgBox">
           <CommonLabel htmlFor="detailImg">
             상세 사진 고르기
-            <input hidden id="detailImg" type={'file'} multiple onChange={onFileChange} />
+            <input
+              hidden
+              id="detailImg"
+              type={'file'}
+              multiple
+              onChange={onFileChange}
+            />
           </CommonLabel>
           <div className="detailimglist">
             {detailImg?.map((img, idx) => {
               return (
-                <Image key={idx} src={img} alt="titleImg" width={150} height={120} style={{ marginLeft: '5px' }} />
+                <Image
+                  key={idx}
+                  src={img}
+                  alt="titleImg"
+                  width={150}
+                  height={120}
+                  style={{ marginLeft: '5px' }}
+                />
               );
             })}
           </div>
@@ -189,10 +223,18 @@ export default function PostMain({
         <>
           <span>워터마크 적용하기</span>
           <div>
-            <SelectedButton value="on" onClick={handleWaterMarkChange} selected={waterMark}>
+            <SelectedButton
+              value="on"
+              onClick={handleWaterMarkChange}
+              selected={waterMark}
+            >
               적용
             </SelectedButton>
-            <SelectedButton value="off" onClick={handleWaterMarkChange} selected={waterMark}>
+            <SelectedButton
+              value="off"
+              onClick={handleWaterMarkChange}
+              selected={waterMark}
+            >
               미적용
             </SelectedButton>
           </div>
@@ -207,10 +249,20 @@ export default function PostMain({
             >
               월세
             </SelectedButton>
-            <SelectedButton value="jense" name="jense" onClick={handleTransactionTypeChange} selected={transactionType}>
+            <SelectedButton
+              value="jense"
+              name="jense"
+              onClick={handleTransactionTypeChange}
+              selected={transactionType}
+            >
               전세
             </SelectedButton>
-            <SelectedButton value="sale" name="sale" onClick={handleTransactionTypeChange} selected={transactionType}>
+            <SelectedButton
+              value="sale"
+              name="sale"
+              onClick={handleTransactionTypeChange}
+              selected={transactionType}
+            >
               매매
             </SelectedButton>
           </div>
@@ -219,29 +271,61 @@ export default function PostMain({
         <>
           <span>매물 종류</span>
           <div>
-            <SelectedButton value="oneroom" onClick={handleItemTypeChange} selected={itemType}>
+            <SelectedButton
+              value="oneroom"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
               원룸
             </SelectedButton>
 
-            <SelectedButton value="tworoom" onClick={handleItemTypeChange} selected={itemType}>
+            <SelectedButton
+              value="tworoom"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
               투-쓰리룸
             </SelectedButton>
-            <SelectedButton value="office" onClick={handleItemTypeChange} selected={itemType}>
+            <SelectedButton
+              value="office"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
               오피스텔
             </SelectedButton>
-            <SelectedButton value="house" onClick={handleItemTypeChange} selected={itemType}>
+            <SelectedButton
+              value="house"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
               주택
             </SelectedButton>
-            <SelectedButton value="apartment" onClick={handleItemTypeChange} selected={itemType}>
+            <SelectedButton
+              value="apartment"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
               아파트
             </SelectedButton>
-            <SelectedButton value="land" onClick={handleItemTypeChange} selected={itemType}>
+            <SelectedButton
+              value="land"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
               토지
             </SelectedButton>
-            <SelectedButton value="factory" onClick={handleItemTypeChange} selected={itemType}>
+            <SelectedButton
+              value="factory"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
               공장-창고
             </SelectedButton>
-            <SelectedButton value="shop" onClick={handleItemTypeChange} selected={itemType}>
+            <SelectedButton
+              value="shop"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
               상가
             </SelectedButton>
           </div>
