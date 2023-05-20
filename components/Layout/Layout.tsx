@@ -53,11 +53,6 @@ export const Layout = ({ children }: childeren) => {
             <SignupContent />
           </Modal>
         ) : null}
-        {/* {detailState ? (
-          <Modal fullview={true} WideModal modalState={detailState} closeModal={changeDetailState}>
-            <DetailContent />
-          </Modal>
-        ) : null} */}
       </>
       {/* <Header></Header> */}
       <Content>{children}</Content>
