@@ -166,7 +166,7 @@ const DetailPage = () => {
   }, [likePostState]);
 
   return (
-    <Wrap className="DetailContent">
+    <Wrap>
       <TopbarBox>
         <MdArrowBackIos
           size={28}
