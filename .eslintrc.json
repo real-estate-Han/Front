@@ -5,13 +5,10 @@
     "es6": true,
     "node": true
   },
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
   "extends": [
     "airbnb",
     "plugin:import/recommended",
+    "plugin:storybook/recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
@@ -27,7 +24,7 @@
     "max-len": [
       "error",
       {
-        "code": 80,
+        "code": 120,
         "ignoreComments": true, // 주석 제외
         "ignoreStrings": true, // 문자열 제외
         "ignoreTemplateLiterals": true // 템플릿 리터럴 제외
