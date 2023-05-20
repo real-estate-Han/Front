@@ -1,5 +1,3 @@
-import Head from 'next/head';
-
 import { MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
 
 export default function KakaoMapUtil() {

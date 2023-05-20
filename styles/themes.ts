@@ -1,9 +1,8 @@
-// AppTheme is basic type for the themes based on dark theme
 export type AppTheme = typeof dark;
-
+// 추후 다크모드를 위해 white theme도 추가할 예정
 const dark = {
   name: 'dark',
-  background: '#EEF1FF',
+  background: '#ffffff',
   components: {
     background: '#7a7880',
     shadow1: '#504e55',
@@ -26,12 +25,12 @@ const dark = {
     logoShadow2: '#ade8f4',
   },
   mainColor: {
-    main01: '#d9ed92',
-    main02: 'b5e48c',
-    main03: '#99d98c',
-    main04: '#76c893',
-    main05: '#52b69a',
-    main06: '#34a0a4',
+    blue700: '#0039D5',
+    blue500: '#0059F9',
+    blue200: '#9FAFFD',
+    orange700: '#FF9E00',
+    orange500: '#FFBF00',
+    orange200: '#FFDF81',
     main07: '#168aad',
     main08: '#1a759f',
     main09: '#1e6091',
@@ -64,12 +63,12 @@ const light: AppTheme = {
     logoShadow2: '#6d5dfc',
   },
   mainColor: {
-    main01: '#d9ed92',
-    main02: 'b5e48c',
-    main03: '#99d98c',
-    main04: '#76c893',
-    main05: '#52b69a',
-    main06: '#34a0a4',
+    blue700: '#0039D5',
+    blue500: '#0059F9',
+    blue200: '#9FAFFD',
+    orange700: '#FF9E00',
+    orange500: '#FFBF00',
+    orange200: '#FFDF81',
     main07: '#168aad',
     main08: '#1a759f',
     main09: '#1e6091',

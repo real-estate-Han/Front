@@ -1,14 +1,15 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { Inputs } from "@components/Inputs";
-import { useForm } from "react-hook-form";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { DELETE_POST, GET_DETAIL_POST } from "@utils/apollo/gqls";
-import Swal from "sweetalert2";
-import useStore from "@zustand/store";
-import Image from "next/image";
-import { S3DeleteFile, S3DeleteFiles } from "@pages/post/S3util";
-import { GET_CLUSTER_DATA } from "@utils/apollo/gqls";
+import React from 'react';
+import styled from '@emotion/styled';
+import { Inputs } from '@components/Inputs';
+import { useForm } from 'react-hook-form';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { DELETE_POST, GET_DETAIL_POST, GET_USER } from '@utils/apollo/gqls';
+import Swal from 'sweetalert2';
+import useStore from '@zustand/store';
+import Image from 'next/image';
+import { S3DeleteFile, S3DeleteFiles } from '@utils/S3util';
+import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
+import { css } from '@emotion/react';
 export interface LoginContentType {
   email: string;
   password: string;
@@ -16,8 +17,9 @@ export interface LoginContentType {
 
 const DetailContent = () => {
   const { detailID, detailType, changeDetailState } = useStore(state => state);
-  const itemDetailsellType = detailType && detailType.split("/")[0];
-  const itemDetailType = detailType && detailType.split("/")[1];
+  const itemDetailsellType = detailType && detailType.split('/')[0];
+  const itemDetailType = detailType && detailType.split('/')[1];
+
   const {
     data: DetailData,
     loading,
@@ -26,68 +28,81 @@ const DetailContent = () => {
     variables: {
       postId: detailID,
     },
+    fetchPolicy: 'network-only',
   });
-  console.log(DetailData);
+
   const [deleteMutate, { error: mutateErr }] = useMutation(DELETE_POST);
   const DeletePost = () => {
     // console.log(mutateErr);
     if (!mutateErr) {
       Swal.fire({
-        title: "정말 삭제하시겠습니까?",
-        text: "삭제된 데이터는 복구되지 않습니다.",
-        icon: "warning",
+        title: '정말 삭제하시겠습니까?',
+        text: '삭제된 데이터는 복구되지 않습니다.',
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "삭제",
-        cancelButtonText: "취소",
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '삭제',
+        cancelButtonText: '취소',
       }).then(async result => {
         if (result.isConfirmed) {
-          await S3DeleteFile(DetailData.post.itemTitleimg);
-          await S3DeleteFiles(DetailData.post.itemDetailimg);
           await deleteMutate({
             variables: { deletePostId: detailID },
             refetchQueries: [{ query: GET_CLUSTER_DATA }],
+          }).then(async () => {
+            await S3DeleteFile(DetailData.post.itemTitleimg);
+            await S3DeleteFiles(DetailData.post.itemDetailimg);
           });
-          Swal.fire("삭제되었습니다.", "", "success");
+          Swal.fire('삭제되었습니다.', '', 'success');
           changeDetailState();
         }
       });
     } else {
-      Swal.fire(mutateErr.message, "", "error");
+      Swal.fire(mutateErr.message, '', 'error');
     }
   };
+  console.log(DetailData?.post);
   return (
-    <div>
-      <button onClick={DeletePost}>삭제하기</button>
-      <Image
-        src={DetailData?.post.itemTitleimg || "./next.svg"}
-        alt="titleImage"
-        width={500}
-        height={500}
-      ></Image>
-      <p>매물번호{DetailData?.post.itemUniqueID}</p>
-      <div className="ItemPrice"></div>
+    <div className="DetailContent">
+      <button onClick={changeDetailState}> 창 닫기</button>
+      {/* <button onClick={DeletePost}>삭제하기</button> */}
+      <ImageBox>
+        <Image
+          src={DetailData?.post.itemTitleimg || './next.svg'}
+          alt="titleImage"
+          // style={{ objectFit: 'contain' }}
+          fill
+        ></Image>
+      </ImageBox>
+
       <PostTable>
         <tbody>
+          <tr>
+            <th>매물번호</th>
+            <td>{DetailData?.post.itemUniqueID}</td>
+          </tr>
           <tr>
             <th>매물 주소</th>
             <td>{DetailData?.post.itemAddress}</td>
           </tr>
-          {itemDetailsellType == "jense" && (
+        </tbody>
+      </PostTable>
+      <PostTable>
+        <tbody>
+          {itemDetailsellType == 'jense' && (
             <>
               <th>전세</th>
               <td>{DetailData?.post.itemJense}</td>
             </>
           )}
-          {itemDetailsellType == "sale" && (
+          {itemDetailsellType == 'sale' && (
             <>
               <th>매매가</th>
               <td>{DetailData?.post.itemSale}</td>
             </>
           )}
           <tr>
-            {itemDetailsellType == "monthly" && (
+            {itemDetailsellType == 'monthly' && (
               <>
                 <th>월세</th>
                 <td>{DetailData?.post.itemMonthly}</td>
@@ -96,7 +111,7 @@ const DetailContent = () => {
               </>
             )}
           </tr>
-          {itemDetailType !== "land" && (
+          {itemDetailType !== 'land' && (
             <>
               <tr>
                 <th>관리비</th>
@@ -106,7 +121,7 @@ const DetailContent = () => {
               </tr>
             </>
           )}
-          {(itemDetailType === "House" || itemDetailType === "Mart") && (
+          {(itemDetailType === 'House' || itemDetailType === 'Mart') && (
             <>
               <tr>
                 <th>공급면적</th>
@@ -134,7 +149,7 @@ const DetailContent = () => {
               </tr>
             </>
           )}
-          {(itemDetailType === "Factory" || itemDetailType === "Mart") && (
+          {(itemDetailType === 'Factory' || itemDetailType === 'Mart') && (
             <>
               <tr>
                 <th>대지면적</th>
@@ -156,7 +171,7 @@ const DetailContent = () => {
             <th>사용 승인일</th>
             <td>{DetailData?.post.itemApproval}</td>
           </tr>
-          {itemDetailType === "Land" && (
+          {itemDetailType === 'Land' && (
             <>
               <tr>
                 <th>토지합계면적</th>
@@ -168,6 +183,10 @@ const DetailContent = () => {
               </tr>
             </>
           )}
+        </tbody>
+      </PostTable>
+      <PostTable>
+        <tbody>
           <tr>
             <th>가까운 지하철</th>
             <td>{DetailData?.post.itemSubway}</td>
@@ -180,12 +199,9 @@ const DetailContent = () => {
       </PostTable>
       {DetailData?.post.itemDetailimg.map((pic: string, index: number) => {
         return (
-          <Image
-            src={pic || "./next.svg"}
-            alt="titleImage"
-            width={500}
-            height={500}
-          ></Image>
+          <ImageBox>
+            <Image key={index} src={pic || './next.svg'} alt="titleImage" fill />
+          </ImageBox>
         );
       })}
     </div>
@@ -196,10 +212,12 @@ export default DetailContent;
 
 const PostTable = styled.table`
   width: 100%;
+
   border-collapse: collapse;
   empty-cells: show;
   border-spacing: 0;
   border: 1px solid #e9ecef;
+
   tbody {
     border: 1px solid #e9ecef;
     th {
@@ -221,5 +239,25 @@ const PostTable = styled.table`
       border-left: 1px solid #e9ecef;
       text-align: center;
     }
+  }
+`;
+
+const ImageBox = styled.div`
+  width: 100%;
+  height: 70vh;
+  max-height: 500px;
+  margin: 0 auto;
+  margin: 5px auto;
+  position: relative;
+  @media (min-width: 400px) {
+    max-height: 200px;
+  }
+  @media (min-width: 600px) {
+    height: 50vh;
+    max-height: 400px;
+  }
+  @media (min-width: 900px) {
+    height: 70vh;
+    max-height: 500px;
   }
 `;

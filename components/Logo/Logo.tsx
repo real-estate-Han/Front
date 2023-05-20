@@ -12,8 +12,10 @@ export const Logo = styled.header<Props>`
   ${({ theme, size = 1 }) => {
     return css`
       color: ${theme.font.logo};
-      text-shadow: 0 0 ${0.1 * size}rem ${theme.font.logoShadow1}, 0 0 ${0.05 * size}rem ${theme.font.logoShadow2},
-        0 0 ${0.07 * size}rem ${theme.font.logoShadow2}, 0 0 ${0.08 * size}rem ${theme.font.logoShadow2},
+      text-shadow: 0 0 ${0.1 * size}rem ${theme.font.logoShadow1},
+        0 0 ${0.05 * size}rem ${theme.font.logoShadow2},
+        0 0 ${0.07 * size}rem ${theme.font.logoShadow2},
+        0 0 ${0.08 * size}rem ${theme.font.logoShadow2},
         0 0 ${0.1 * size}rem ${theme.font.logoShadow2};
     `;
   }}

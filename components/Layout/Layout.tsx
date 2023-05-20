@@ -1,23 +1,21 @@
-
-import { Logo } from "@components/Logo";
-import Modal from "@components/Modal";
-import styled from "@emotion/styled";
-import LoginContent from "@components/Modal/LoginContent";
-import useStore from "@zustand/store";
-import SignupContent from "@components/Modal/SignupContent";
-import DetailContent from "@components/Modal/DetailContent";
-type childeren = { children: React.ReactNode };
-
+import { Logo } from '@components/Logo';
+import Modal from '@components/Modal';
+import styled from '@emotion/styled';
+import LoginContent from '@components/Modal/LoginContent';
+import useStore from '@zustand/store';
+import SignupContent from '@components/Modal/SignupContent';
+import DetailContent from '@components/Modal/DetailContent';
+type childeren = { children?: React.ReactNode };
+import { useRouter } from 'next/router';
+import FooterContent from '@components/Footer/content';
+import MenuBar from '@components/MenuBar';
+import { useMediaQuery } from 'react-responsive';
 export const Layout = ({ children }: childeren) => {
-  const {
-    loginState,
-    signupState,
-    detailState,
-    changeDetailState,
-    changeSignUpState,
-    changeLoginState,
-  } = useStore(state => state);
-
+  const { loginState, signupState, detailState, changeDetailState, changeSignUpState, changeLoginState } = useStore(
+    state => state,
+  );
+  const param = useRouter();
+  const isMobile: boolean = useMediaQuery({ query: '(max-width:768px)' });
   return (
     <Wrapper>
       <>
@@ -32,52 +30,42 @@ export const Layout = ({ children }: childeren) => {
           </Modal>
         ) : null}
         {detailState ? (
-          <Modal
-            WideModal
-            modalState={detailState}
-            closeModal={changeDetailState}
-          >
+          <Modal WideModal modalState={detailState} closeModal={changeDetailState}>
             <DetailContent />
           </Modal>
         ) : null}
       </>
-      <Header>
-        <StyledLogo size={2}>한세일부동산</StyledLogo>
-        <div className="loginButton">
-
-          <button onClick={changeLoginState}>로그인</button>
-
-        </div>
-      </Header>
+      {/* <Header></Header> */}
       <Content>{children}</Content>
-      <Footer>
-        © {new Date().getFullYear()} NickOvchinnikov. All rights reserved.
-      </Footer>
+      {isMobile ? (
+        <Footer>
+          <MenuBar></MenuBar>
+        </Footer>
+      ) : (
+        <Footer>
+          <FooterContent />
+        </Footer>
+      )}
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
   gap: 0.1rem;
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
   color: ${({ theme }) => theme.font.regular};
   background-color: ${({ theme }) => theme.background};
-
-  /* @media (min-width: 500px) {
-    grid-template-columns: 1fr 3fr;
-  }
-  @media (min-width: 960px) {
-    grid-template-columns: 1fr 4fr 2fr;
-    grid-template-areas:
-      'header  header  search'
-      'content content content'
-      'footer  footer  footer';
-  } */
 `;
 export const Content = styled.main`
-  grid-area: content;
-  min-height: 84vh;
-  margin-top: 1rem;
-  border: 1px solid ${({ theme }) => theme.font.regular};
+  min-height: 82vh;
+  box-sizing: border-box;
+  padding-bottom: 150px;
+  overflow: auto;
+  /* padding: 0 20px; */
+  /* margin-top: 1rem; */
+  /* border: 1px solid ${({ theme }) => theme.font.regular}; */
 `;
 
 export const StyledLogo = styled(Logo)`
@@ -86,32 +74,29 @@ export const StyledLogo = styled(Logo)`
   justify-content: flex-start;
 
   background-color: ${({ theme }) => theme.components.primary};
-  border: 1px solid ${({ theme }) => theme.font.regular};
+  /* border: 1px solid ${({ theme }) => theme.font.regular}; */
 `;
 
 export const Header = styled.div`
-  background-color: ${({ theme }) => theme.components.primary};
-  grid-area: header;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 5vmin;
   width: 100%;
-  align-items: center;
-  & .loginButton {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 5vmin;
-    margin-right: 5vmin;
-  }
+  height: 48px;
+  background-color: white;
 `;
 
 export const Footer = styled.footer`
-  grid-area: footer;
   display: flex;
+  width: 100vw;
+  background-color: ${({ theme }) => theme.components.shadow1};
+  color: ${({ theme }) => theme.font.button};
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  height: 5rem;
+  @media (max-width: 768px) {
+    /* position: fixed;
+    bottom: 0;
+    left: 0; */
+    width: 100%;
+    height: 84px;
+    background: #ffffff;
+  }
 `;

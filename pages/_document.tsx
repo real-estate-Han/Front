@@ -9,7 +9,12 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <Script strategy="beforeInteractive" type="text/javascript" src={srcURL}></Script>
+        {/* 스크립트로 카카오맵 데이터 받아오기 */}
+        <Script
+          strategy="beforeInteractive"
+          type="text/javascript"
+          src={srcURL}
+        ></Script>
         <Global styles={GlobalStyles} />
       </Head>
       <body>
