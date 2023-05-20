@@ -7,6 +7,7 @@ import PostMain from '../../components/Mobile/PostPage/main';
 import Swal from 'sweetalert2';
 import TopBar from '@components/TopBar';
 import CommonButton from '@components/Button';
+import { useRouter } from 'next/router';
 export default function PostItem() {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [position, setPosition] = useState<GeoLocation>({
@@ -80,9 +81,17 @@ export default function PostItem() {
   const KakaoMapUtil = dynamic(() => import('@components/kakaoMapUtils'), {
     ssr: false,
   });
+
+  const router = useRouter();
+
   return (
     <Wrap>
-      <TopBar></TopBar>
+      <TopBar
+        mainTitle="매물 등록"
+        ArrowFn={() => {
+          router.back();
+        }}
+      ></TopBar>
       <Kakomap
         center={defaltPosition}
         level={mapLevel}

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-const SelectedButton = styled.button<{ selected: string | number; value: string | number }>`
+const SelectedButton = styled.button<{ selected: string | number | boolean; value: string | number | boolean }>`
   border-radius: 15px;
   border: none;
   margin: 10px 5px 0 5px;

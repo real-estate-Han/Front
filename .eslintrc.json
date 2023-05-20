@@ -5,13 +5,10 @@
     "es6": true,
     "node": true
   },
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
   "extends": [
     "airbnb",
     "plugin:import/recommended",
+    "plugin:storybook/recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",

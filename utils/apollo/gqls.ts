@@ -6,6 +6,11 @@ export const GET_USER = gql`
     login(email: $email, password: $password) {
       token
       userId
+      userEmail
+      userNickname
+      likeposts
+      status
+      posts
     }
   }
 `;
@@ -35,6 +40,7 @@ export const GET_DETAIL_POST = gql`
       _id
       itemUniqueID
       itemAddress
+      itemLoadAddress
       itemType
       itemDeposit
       itemMonthly
@@ -67,6 +73,10 @@ export const GET_DETAIL_POST = gql`
       itemLandNumber
       createdAt
       updatedAt
+      region_1depth
+      region_2depth
+      region_3depth
+      itemWaterMark
     }
   }
 `;
@@ -90,3 +100,54 @@ export const DELETE_POST = gql`
     deletePost(id: $deletePostId)
   }
 `;
+
+export const FAVOR_TOGGLE = gql`
+  mutation Mutation($PostId: ID!) {
+    likePost(id: $PostId)
+  }
+`;
+
+export const IS_LOGINED = gql`
+  query Query {
+    checklogin {
+      checklogin
+      status
+    }
+  }
+`;
+
+//   itemDirection
+//   itemAreaLand
+//   itemAreaBuilding
+//   itemSupplyArea
+//   itemExclusiveArea
+//   itemFloor
+//   itemLandType
+//   itemFloorHeight
+//   itemPurpose
+//   itemRooms
+//   itemBathroom
+//   itemStatus
+//   itemTruck
+//   itemLandNumber
+//   itemAreaTotal
+//   itemLandCategory
+//   itemTotalAreaLand
+//   itemMovein
+//   itemApproval
+//   itemSubway
+//   itemTitleimg
+//   itemDetailimg
+//   itemTag
+//   itemElectricity
+//   itemOption
+//   itemLoan
+//   itemWaterMark
+//   itemMoreInfo
+//   itemManagementInfo
+//   itemManagementException
+//   itemFavorCount
+//   itemSecurity
+//   creator
+//   createdAt
+//   updatedAt

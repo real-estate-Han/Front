@@ -31,20 +31,18 @@ export async function getStaticProps() {
 }
 
 export default function Home() {
-  const isMobile: boolean = useMediaQuery({ query: '(max-width: 768px)' });
-  const [mobileView, setMobileView] = useState(false);
-  useEffect(() => {
-    if (isMobile) {
-      setMobileView(true);
-    } else {
-      setMobileView(false);
-    }
-  }, [isMobile]);
+  // const isMobile: boolean = useMediaQuery({ query: '(max-width: 768px)' });
+  // const [mobileView, setMobileView] = useState(false);
+  // useEffect(() => {
+  //   if (isMobile) {
+  //     setMobileView(true);
+  //   } else {
+  //     setMobileView(false);
+  //   }
+  // }, [isMobile]);
   return (
     <Warp>
-      {mobileView ? <MobileHomeContent /> : null}
-
-      {/* <ClusterMap /> */}
+      <MobileHomeContent />
     </Warp>
   );
 }

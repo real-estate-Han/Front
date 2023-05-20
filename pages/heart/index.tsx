@@ -12,9 +12,16 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { MdOutlineSearch } from 'react-icons/md';
 import { MdOutlineSettingsInputComponent } from 'react-icons/md';
-const MainPage = () => {
+const HeartPage = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
   // clusterData?.allpost?.posts
+  const { likePostState } = useStore(state => state);
+  const likedData = clusterData?.allpost?.posts?.filter((p: any) => {
+    return likePostState?.some((l: any) => {
+      return p?._id === l;
+    });
+  });
+
   const { filterdData, setFilterdData } = useStore(state => state);
   useEffect(() => {
     setFilterdData(clusterData?.allpost?.posts);
@@ -22,7 +29,7 @@ const MainPage = () => {
   const baseRef = useRef<HTMLDivElement>(null);
   // console.log(baseRef);
   const router = useRouter();
-  
+
   const [throttle, setThrottle] = useState<boolean>(false);
   const [barFixed, setBarFixed] = useState<boolean>(false);
   const handleScroll = () => {
@@ -73,7 +80,7 @@ const MainPage = () => {
         </OptionBar>
       </UtilBox>
 
-      <ClusterMap />
+      <ClusterMap initialData={likedData} />
       <ItemList barFixed={barFixed}>
         <div className="graybar"></div>
         <ItemTabBar barFixed={barFixed}>
@@ -81,10 +88,15 @@ const MainPage = () => {
           <div>단지 2</div>
         </ItemTabBar>
         <ItemBox barFixed={barFixed}>
-          {filterdData?.map((p: any, idx: number) => {
+          {likedData?.map((p: any, idx: number) => {
             return (
               <>
-                <PostItems wide={true} key={idx} widthPercent={40} postData={p}></PostItems>
+                <PostItems
+                  wide={true}
+                  key={idx}
+                  widthPercent={40}
+                  postData={p}
+                ></PostItems>
               </>
             );
           })}
@@ -93,7 +105,7 @@ const MainPage = () => {
     </Wrap>
   );
 };
-export default MainPage;
+export default HeartPage;
 
 const Wrap = styled.div`
   width: 100%;

@@ -4,40 +4,64 @@ import styled from '@emotion/styled';
 import LoginContent from '@components/Modal/LoginContent';
 import useStore from '@zustand/store';
 import SignupContent from '@components/Modal/SignupContent';
-import DetailContent from '@components/Modal/DetailContent';
+import { useEffect } from 'react';
 type childeren = { children?: React.ReactNode };
 import { useRouter } from 'next/router';
 import FooterContent from '@components/Footer/content';
 import MenuBar from '@components/MenuBar';
 import { useMediaQuery } from 'react-responsive';
 export const Layout = ({ children }: childeren) => {
-  const { loginState, signupState, detailState, changeDetailState, changeSignUpState, changeLoginState } = useStore(
-    state => state,
-  );
+  const {
+    loginState,
+    signupState,
+    changeLikeState,
+    changeSignUpState,
+    changeLoginState,
+  } = useStore(state => state);
   const param = useRouter();
   const isMobile: boolean = useMediaQuery({ query: '(max-width:768px)' });
+
+  useEffect(() => {
+    const likeList = localStorage.getItem('likeposts');
+
+    if (likeList) {
+      const likeArr = JSON.parse(likeList);
+
+      changeLikeState(likeArr);
+    } else {
+      changeLikeState(['']);
+    }
+  }, []);
   return (
     <Wrapper>
       <>
         {loginState ? (
-          <Modal modalState={loginState} closeModal={changeLoginState}>
+          <Modal
+            customHeight="300px"
+            modalState={loginState}
+            closeModal={changeLoginState}
+          >
             <LoginContent></LoginContent>
           </Modal>
         ) : null}
         {signupState ? (
-          <Modal modalState={signupState} closeModal={changeSignUpState}>
+          <Modal
+            customHeight="400px"
+            modalState={signupState}
+            closeModal={changeSignUpState}
+          >
             <SignupContent />
           </Modal>
         ) : null}
-        {detailState ? (
-          <Modal WideModal modalState={detailState} closeModal={changeDetailState}>
+        {/* {detailState ? (
+          <Modal fullview={true} WideModal modalState={detailState} closeModal={changeDetailState}>
             <DetailContent />
           </Modal>
-        ) : null}
+        ) : null} */}
       </>
       {/* <Header></Header> */}
       <Content>{children}</Content>
-      {isMobile ? (
+      {/* {isMobile ? (
         <Footer>
           <MenuBar></MenuBar>
         </Footer>
@@ -45,7 +69,10 @@ export const Layout = ({ children }: childeren) => {
         <Footer>
           <FooterContent />
         </Footer>
-      )}
+      )} */}
+      <Footer>
+        <MenuBar></MenuBar>
+      </Footer>
     </Wrapper>
   );
 };

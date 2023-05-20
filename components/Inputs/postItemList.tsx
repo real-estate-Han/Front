@@ -51,6 +51,12 @@ export function PostItemList({ register, errors, transactionType, itemType }: In
           <Inputs type="number" text="매물관리비" {...register('itemManagement', { valueAsNumber: true })} />
           <span>{errors?.itemManagement?.message}</span>
 
+          <Inputs type="text" text="관리비 포함" {...register('itemManagementInfo')} />
+          <span>{errors?.itemManagementInfo?.message}</span>
+
+          <Inputs type="text" text="별도 부과 관리비" {...register('itemManagementException')} />
+          <span>{errors?.itemManagementException?.message}</span>
+
           <Inputs type="number" text="매물층수" {...register('itemFloor', { valueAsNumber: true })} />
           <DetailDescription>반지하 0, 옥탑방 99로 입력해주세요</DetailDescription>
           <span>{errors?.itemFloor?.message}</span>
@@ -94,6 +100,10 @@ export function PostItemList({ register, errors, transactionType, itemType }: In
 
           <Inputs type="date" text="매물입주가능날짜" {...register('itemMovein')} />
           <span>{errors?.itemMovein?.message}</span>
+
+          <Inputs type="text" text="보안/안전시설" {...register('itemSecurity')} />
+          <DetailDescription>,로 구분지어주세요 ex) 공동현관,CCTV,경보기 </DetailDescription>
+          <span>{errors?.itemFloor?.message}</span>
         </>
       )}
 
@@ -135,11 +145,15 @@ export function PostItemList({ register, errors, transactionType, itemType }: In
       <Inputs type="text" text="매물 가까운 지하철" {...register('itemSubway')} />
       <span>{errors?.itemSubway?.message}</span>
 
-      <Inputs type="text" text="매물 옵션/추가 설명" {...register('itemOption')} />
-      <DetailDescription>추가 옵션 설명마다 /를 붙여주세요</DetailDescription>
+      <Inputs type="text" text="매물 옵션" {...register('itemOption')} />
+      <DetailDescription>옵션 설명마다 /를 붙여주세요</DetailDescription>
       <br />
-      <DetailDescription>예) 주차가능/올수리/버스정류량</DetailDescription>
+      <DetailDescription>예) 올수리/가스레인지/전자도어락</DetailDescription>
       <span>{errors?.itemOption?.message}</span>
+      <Inputs textarea type="text" text="매물 추가 설명" {...register('itemMoreInfo')} />
+      <DetailDescription>추가 설명마다 /를 붙여주세요</DetailDescription>
+      <br />
+      <span>{errors?.itemMoreInfo?.message}</span>
     </>
   );
 }
