@@ -11,9 +11,23 @@ interface InputProps {
   textarea?: boolean;
 }
 
+// eslint-disable-next-line react/display-name
 export const Inputs = forwardRef(
-  ({ type, width, placeholder, defaultValue, disabled, text, textarea, ...rest }: InputProps, ref: any) => {
+  (
+    {
+      type,
+      width,
+      placeholder,
+      defaultValue,
+      disabled,
+      text,
+      textarea,
+      ...rest
+    }: InputProps,
+    ref: any,
+  ) => {
     return (
+      // eslint-disable-next-line jsx-a11y/aria-role
       <StyledDiv role="label" width={width}>
         {textarea ? (
           <TextAreaCustom
@@ -31,7 +45,7 @@ export const Inputs = forwardRef(
             defaultValue={defaultValue}
             disabled={disabled}
             {...rest}
-          ></IdInput>
+          />
         )}
         <span>{text}</span>
       </StyledDiv>

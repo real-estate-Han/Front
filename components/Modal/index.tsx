@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 
@@ -30,7 +31,12 @@ const Modal = (props: ModalProps) => {
   }, [props.modalState]);
 
   return (
-    <ModalStyled WideModal={props?.WideModal} customHeight={props?.customHeight} onClick={props.closeModal} fullview={props?.fullview}>
+    <ModalStyled
+      WideModal={props?.WideModal}
+      customHeight={props?.customHeight}
+      onClick={props.closeModal}
+      fullview={props?.fullview}
+    >
       <div className="modalBody" onClick={e => e.stopPropagation()}>
         {props.children}
       </div>
@@ -57,11 +63,13 @@ const ModalStyled = styled.div<{
   align-items: center;
 
   .modalBody {
-     max-width: ${props => (props.WideModal ? '1000px' : '300px')}; 
+    max-width: ${props => (props.WideModal ? '1000px' : '300px')};
     width: ${props => (props.fullview ? '100vw' : '70%')};
-    height: ${props => (props.fullview ? '100vh' : `${props.customHeight || "55%"}`)};
+    height: ${props =>
+      props.fullview ? '100vh' : `${props.customHeight || '55%'}`};
     overflow-y: auto;
-    max-height: ${props => (props.fullview ? '100vh' : props.WideModal ? '800px' : '500px')};
+    max-height: ${props =>
+      props.fullview ? '100vh' : props.WideModal ? '800px' : '500px'};
     position: absolute;
     color: black;
     padding: 30px 30px 30px 30px;

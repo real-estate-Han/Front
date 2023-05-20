@@ -3,12 +3,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import dynamic from 'next/dynamic';
 import { GeoLocation } from '@utils/type';
-import PostMain from '../../components/Mobile/PostPage/main';
 import Swal from 'sweetalert2';
 import TopBar from '@components/TopBar';
 import CommonButton from '@components/Button';
 import { useRouter } from 'next/router';
-export default function PostItem() {
+import PostMain from '../../components/Mobile/PostPage/main';
+
+const PostItem = () => {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [position, setPosition] = useState<GeoLocation>({
     lat: 0,
@@ -26,7 +27,7 @@ export default function PostItem() {
   const [mapLevel, setMapLevel] = useState(10);
   const getByGeoCoder = (lng: number, lat: number) => {
     if (!map) return;
-    var geocoder = new kakao.maps.services.Geocoder();
+    let geocoder = new kakao.maps.services.Geocoder();
     geocoder.coord2Address(lng, lat, function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
         console.log(result);
@@ -41,7 +42,7 @@ export default function PostItem() {
   const kakaomapref = useRef<kakao.maps.Map>();
   const getByAddress = (address: string | undefined) => {
     if (!map) return;
-    var geocoder = new kakao.maps.services.Geocoder();
+    let geocoder = new kakao.maps.services.Geocoder();
     address &&
       geocoder.addressSearch(address, function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
@@ -91,11 +92,11 @@ export default function PostItem() {
         ArrowFn={() => {
           router.back();
         }}
-      ></TopBar>
+      />
       <Kakomap
         center={defaltPosition}
         level={mapLevel}
-        isPanto={true}
+        isPanto
         onClick={(_t, mouseEvent) =>
           setPosition({
             lat: mouseEvent.latLng.getLat(),
@@ -128,7 +129,9 @@ export default function PostItem() {
       />
     </Wrap>
   );
-}
+};
+
+export default PostItem;
 const Wrap = styled.div`
   box-sizing: border-box;
   display: flex;

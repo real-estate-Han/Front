@@ -6,11 +6,12 @@ import { Global } from '@emotion/react';
 import { Layout } from '@components/Layout';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '@utils/apollo/apolloclient';
-export default function App({ Component, pageProps }: AppProps) {
+
+const App = ({ Component, pageProps }: AppProps) => {
   const client = useApollo(pageProps.initialApolloState);
   return (
     <ApolloProvider client={client}>
-      <ThemeProvider theme={Themes['dark']}>
+      <ThemeProvider theme={Themes.dark}>
         <Layout>
           <Component {...pageProps} />
         </Layout>
@@ -18,4 +19,5 @@ export default function App({ Component, pageProps }: AppProps) {
       </ThemeProvider>
     </ApolloProvider>
   );
-}
+};
+export default App;

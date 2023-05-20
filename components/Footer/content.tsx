@@ -1,11 +1,4 @@
-import { Logo } from '@components/Logo';
-import Modal from '@components/Modal';
 import styled from '@emotion/styled';
-import LoginContent from '@components/Modal/LoginContent';
-import useStore from '@zustand/store';
-import SignupContent from '@components/Modal/SignupContent';
-
-import { useRouter } from 'next/router';
 
 const FooterContent = () => {
   return (

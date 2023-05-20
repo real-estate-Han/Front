@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useLazyQuery } from '@apollo/client';
 import { css } from '@emotion/react';
 import { keyframes } from '@emotion/react';
@@ -16,6 +17,7 @@ import {
   MdOutlineFavoriteBorder,
 } from 'react-icons/md';
 import Swal from 'sweetalert2';
+
 const MenuBar = () => {
   const router = useRouter();
   const [hiddenBar, setHiddenBar] = useState<boolean>(false);
@@ -78,7 +80,7 @@ const MenuBar = () => {
   }, [router]);
   const licktoLikepage = () => {
     checkLogined().then(res => {
-      if (res.data.checklogin.checklogin == 'success') {
+      if (res.data.checklogin.checklogin === 'success') {
         router.push('/heart');
       } else {
         Swal.fire({
@@ -93,14 +95,14 @@ const MenuBar = () => {
   };
   const linktoPostpage = () => {
     checkLogined().then(res => {
-      if (res.data.checklogin.status == 'owner') {
+      if (res.data.checklogin.status === 'owner') {
         router.push('/post');
       } else {
         Swal.fire({
           title: '관리자만 등록 가능합니다',
           icon: 'warning',
           confirmButtonText: '확인',
-        }).then(() => {});
+        });
       }
     });
 
@@ -117,11 +119,11 @@ const MenuBar = () => {
       >
         <MdOutlineHome
           size={28}
-          color={currentUrl == '/' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
+          color={currentUrl === '/' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
         />
         <span
           style={{
-            color: currentUrl == '/' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
+            color: currentUrl === '/' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
           }}
         >
           홈
@@ -135,11 +137,11 @@ const MenuBar = () => {
       >
         <MdOutlineFavoriteBorder
           size={28}
-          color={currentUrl == '/heart' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
+          color={currentUrl === '/heart' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
         />
         <span
           style={{
-            color: currentUrl == '/heart' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
+            color: currentUrl === '/heart' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
           }}
         >
           관심목록
@@ -153,11 +155,11 @@ const MenuBar = () => {
       >
         <MdOutlineLocationOn
           size={28}
-          color={currentUrl == '/main' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
+          color={currentUrl === '/main' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
         />
         <span
           style={{
-            color: currentUrl == '/main' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
+            color: currentUrl === '/main' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
           }}
         >
           지도
@@ -166,11 +168,11 @@ const MenuBar = () => {
       <div className="MenuButton">
         <MdOutlineMapsHomeWork
           size={28}
-          color={currentUrl == '/quest' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
+          color={currentUrl === '/quest' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
         />
         <span
           style={{
-            color: currentUrl == '/quest' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
+            color: currentUrl === '/quest' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)',
           }}
         >
           의뢰하기
@@ -187,7 +189,7 @@ const MenuBar = () => {
       </div>
 
       <SideMenu sideMenu={sideMenu}>
-        {isLogined == 'success' ? (
+        {isLogined === 'success' ? (
           <div onClick={LogoutButton}> 로그아웃 </div>
         ) : (
           <div onClick={changeLoginState}> 로그인 및 회원가입 </div>

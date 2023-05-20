@@ -5,7 +5,7 @@ type Props = {
   onAddKeyword: (string: string) => void;
 };
 
-function Record({ onAddKeyword }: Props) {
+const Record = ({ onAddKeyword }: Props) => {
   // ① props로 전달받은 onAddKeyword의 데이터로 들어갈 state이다
   const [searchValue, setSearchValue] = useState<string>('');
 
@@ -30,10 +30,15 @@ function Record({ onAddKeyword }: Props) {
   return (
     <header>
       <form onSubmit={onSubmit}>
-        <input type="search" value={searchValue} onChange={onChangeSearch} placeholder="모임 이름 / 소개 / 태그 검색" />
+        <input
+          type="search"
+          value={searchValue}
+          onChange={onChangeSearch}
+          placeholder="모임 이름 / 소개 / 태그 검색"
+        />
       </form>
     </header>
   );
-}
+};
 
 export default Record;

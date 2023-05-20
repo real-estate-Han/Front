@@ -1,24 +1,19 @@
+/* eslint-disable no-unsafe-optional-chaining */
+/* eslint-disable react/no-array-index-key */
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { Inputs } from '@components/Inputs';
-import { useForm } from 'react-hook-form';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import {
   DELETE_POST,
   FAVOR_TOGGLE,
   GET_DETAIL_POST,
-  GET_USER,
   IS_LOGINED,
 } from '@utils/apollo/gqls';
 import Swal from 'sweetalert2';
 import useStore from '@zustand/store';
-import Image from 'next/image';
 import { S3DeleteFile, S3DeleteFiles } from '@utils/S3util';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
-import { css } from '@emotion/react';
-import TopBar from '@components/TopBar';
-
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -36,6 +31,7 @@ import {
 import DebtIcon from 'public/icon/debt';
 import HomeIcon from 'public/icon/homeicon';
 import ImageBox from '@components/ImageBox';
+
 export interface LoginContentType {
   email: string;
   password: string;
@@ -104,7 +100,7 @@ const DetailPage = () => {
   const FavorToggle = () => {
     checkLogin().then(res => {
       console.log(res);
-      if (res.data.checklogin.checklogin == 'success') {
+      if (res.data.checklogin.checklogin === 'success') {
         if (!favorErr) {
           favorMutate({
             variables: { PostId: detailID },
@@ -121,8 +117,8 @@ const DetailPage = () => {
         }
       }
       if (
-        res.data.checklogin.checklogin == 'failed' ||
-        isLogined == undefined
+        res.data.checklogin.checklogin === 'failed' ||
+        isLogined === undefined
       ) {
         Swal.fire({
           title: '로그인이 필요합니다.',
@@ -179,7 +175,7 @@ const DetailPage = () => {
           }}
           color="white"
         />
-        <div className="maintitle"></div>
+        <div className="maintitle" />
         <div className="subtitle">
           <div>
             <MdOutlineFileUpload
@@ -207,11 +203,11 @@ const DetailPage = () => {
           src={DetailData?.post.itemTitleimg}
           watermark={DetailData?.post.itemWaterMark}
           alt="title"
-        ></ImageBox>
+        />
         {DetailData?.post.itemDetailimg.map((pic: string, index: number) => {
           return (
             <React.Fragment key={index}>
-              <ImageBox src={pic} alt="titleImage"></ImageBox>
+              <ImageBox src={pic} alt="titleImage" />
             </React.Fragment>
           );
         })}

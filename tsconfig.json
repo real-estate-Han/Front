@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -14,7 +14,13 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "types": ["kakao.maps.d.ts", "next", "next/types/global", "jest", "@testing-library/jest-dom"],
+    "types": [
+      "kakao.maps.d.ts",
+      "next",
+      "next/types/global",
+      "jest",
+      "@testing-library/jest-dom"
+    ],
     "baseUrl": ".",
     "paths": {
       "@components/*": ["components/*"],

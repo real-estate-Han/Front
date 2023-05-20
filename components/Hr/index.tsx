@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { deflate } from 'zlib';
 
 const Hr = styled.div`
   border: none;

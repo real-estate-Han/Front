@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import { useQuery } from '@apollo/client';
 import OptionButton from '@components/Button/optionButtion';
 import Hr from '@components/Hr';
@@ -12,6 +13,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { MdOutlineSearch } from 'react-icons/md';
 import { MdOutlineSettingsInputComponent } from 'react-icons/md';
+
 const MainPage = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
   // clusterData?.allpost?.posts
@@ -22,14 +24,14 @@ const MainPage = () => {
   const baseRef = useRef<HTMLDivElement>(null);
   // console.log(baseRef);
   const router = useRouter();
-  
+
   const [throttle, setThrottle] = useState<boolean>(false);
   const [barFixed, setBarFixed] = useState<boolean>(false);
   const handleScroll = () => {
     if (throttle) return;
     if (!throttle) {
       setThrottle(true);
-      setTimeout(async () => {
+      setTimeout(() => {
         if (document.documentElement.scrollTop >= 420) {
           setBarFixed(true);
           setThrottle(false);
@@ -51,23 +53,23 @@ const MainPage = () => {
     <Wrap>
       <UtilBox className="whiteback" barFixed={barFixed}>
         <SearchBar>
-          <MdOutlineSearch className="searchicon" size={28}></MdOutlineSearch>
+          <MdOutlineSearch className="searchicon" size={28} />
           <input className="searchinput" placeholder="지역을 입력하세요" />
         </SearchBar>
         <OptionBar ref={baseRef}>
-          <OptionButton selected={'1'} value={''}>
+          <OptionButton selected="1" value="">
             <MdOutlineSettingsInputComponent size={24} />
           </OptionButton>
-          <OptionButton selected={'1'} value={''}>
+          <OptionButton selected="1" value="">
             매물종류
           </OptionButton>
-          <OptionButton selected={'1'} value={''}>
+          <OptionButton selected="1" value="">
             거래유형/가격
           </OptionButton>
-          <OptionButton selected={'1'} value={''}>
+          <OptionButton selected="1" value="">
             관리비
           </OptionButton>
-          <OptionButton selected={'1'} value={''}>
+          <OptionButton selected="1" value="">
             면적
           </OptionButton>
         </OptionBar>
@@ -75,7 +77,7 @@ const MainPage = () => {
 
       <ClusterMap />
       <ItemList barFixed={barFixed}>
-        <div className="graybar"></div>
+        <div className="graybar" />
         <ItemTabBar barFixed={barFixed}>
           <div>전체매물 23</div>
           <div>단지 2</div>
@@ -84,7 +86,7 @@ const MainPage = () => {
           {filterdData?.map((p: any, idx: number) => {
             return (
               <>
-                <PostItems wide={true} key={idx} widthPercent={40} postData={p}></PostItems>
+                <PostItems wide key={idx} widthPercent={40} postData={p} />
               </>
             );
           })}

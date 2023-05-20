@@ -2,17 +2,21 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { MdOutlineLocationOn, MdLocationCity, MdDirectionsSubway } from 'react-icons/md';
+import {
+  MdOutlineLocationOn,
+  MdLocationCity,
+  MdDirectionsSubway,
+} from 'react-icons/md';
+import { MdOutlineSearch, MdCancel, MdArrowBackIos } from 'react-icons/md';
 import SearchExample from './searchExample';
 import RecentSearch from './recentSearch';
-import { MdOutlineSearch, MdCancel, MdArrowBackIos } from 'react-icons/md';
 
 interface onAddKeyword {
   id: number;
   text: string;
 }
 
-export default function SearchPage() {
+const SearchPage = () => {
   const router = useRouter();
   const [selected, setSelected] = useState<string>('saleItem');
   const [salesInput, setSalesInput] = useState<boolean>(false);
@@ -68,17 +72,23 @@ export default function SearchPage() {
             {salesInput ? (
               <input className="searchinput" placeholder="매물번호 입력" />
             ) : (
-              <input className="searchinput" placeholder="지역명 또는 단지명을 입력하세요." />
+              <input
+                className="searchinput"
+                placeholder="지역명 또는 단지명을 입력하세요."
+              />
             )}
 
             <MdCancel size={28} color="#D9D9D9" className="cancleicon" />
           </SearchBar>
         </header>
-        <div>{record ? <RecentSearch /> : saleNumberEmpty ? '' : <SearchExample />}</div>
+        <div>
+          {record ? <RecentSearch /> : saleNumberEmpty ? '' : <SearchExample />}
+        </div>
       </SearchWrap>
     </>
   );
-}
+};
+export default SearchPage;
 const BackBtn = styled.section`
   margin-left: 20px;
   margin-top: 5px;
@@ -118,7 +128,8 @@ const SaleNumber = styled.div<{ selected: string }>`
 
   ::after {
     content: '';
-    display: ${({ selected }) => (selected === 'saleNumber' ? 'block' : 'none')};
+    display: ${({ selected }) =>
+      selected === 'saleNumber' ? 'block' : 'none'};
     position: absolute;
     top: 47px;
     left: 0;

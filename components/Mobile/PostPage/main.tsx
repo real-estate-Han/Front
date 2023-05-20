@@ -1,20 +1,26 @@
 import styled from '@emotion/styled';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { ChangeEvent, MouseEventHandler, useState, useEffect } from 'react';
+import {
+  ChangeEvent,
+  MouseEventHandler,
+  useState,
+  useEffect,
+  SetStateAction,
+} from 'react';
 import Swal from 'sweetalert2';
 import { postInputType, postType } from '@utils/type';
 import Image from 'next/image';
-import { PostItemList } from '@components/Inputs/postItemList';
+import PostItemList from '@components/Inputs/postItemList';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Creat_POST, GET_CLUSTER_DATA, IS_LOGINED } from '@utils/apollo/gqls';
 import imageCompression from 'browser-image-compression';
-import { S3UpLoadFile } from '../../../utils/S3util';
 import CommonButton from '@components/Button';
 import CommonLabel from '@components/Label';
 import Hr from '@components/Hr';
 import SelectedButton from '@components/Button/selectedButton';
 import { useRouter } from 'next/router';
+import { S3UpLoadFile } from '../../../utils/S3util';
 
 interface KakaoMapProps {
   kakaoLoadAddress?: string;
@@ -25,14 +31,14 @@ interface KakaoMapProps {
   region_3depth?: string;
 }
 
-export default function PostMain({
+const PostMain = ({
   kakaoLoadAddress,
   region_1depth,
   region_2depth,
   region_3depth,
   kakaoAddress,
   position,
-}: KakaoMapProps) {
+}: KakaoMapProps) => {
   const [titleImg, setTitleImg] = useState<string>();
   const [detailImg, setDetailImg] = useState<string[]>();
   const [titleFile, setTitleFile] = useState<File>();
@@ -42,7 +48,6 @@ export default function PostMain({
   const [waterMark, setWaterMark] = useState<string>('');
   const {
     register,
-    setError,
     handleSubmit,
     getValues,
     formState: { errors },
@@ -59,7 +64,7 @@ export default function PostMain({
   };
   const [tabIndex, setTabIndex] = useState('monthly/House');
   const onFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
+    const { files } = event.target;
     const option = {
       maxSizeMB: 2,
       maxWidthOrHeight: 700,
@@ -81,11 +86,12 @@ export default function PostMain({
     } else {
       let fileUrl: string[] = [];
       theFile = files!;
-      let fileArr = [];
+      let fileArr: File[] = [];
 
       for (let i = 0; i < theFile.length; i++) {
-        const compressedFile = await imageCompression(theFile[i], option);
-        fileArr.push(compressedFile);
+        imageCompression(theFile[i], option).then(res => {
+          fileArr.push(res);
+        });
 
         const reader = new FileReader();
 
@@ -116,13 +122,16 @@ export default function PostMain({
   const onSubmit: SubmitHandler<postInputType> = async data => {
     checkLogin();
 
-    if (isLogined?.checklogin.checklogin == 'success') {
+    if (isLogined?.checklogin.checklogin === 'success') {
       const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
       let detailS3URL: string[] = [];
       if (detailFile) {
         for (let i = 0; i < detailFile.length; i++) {
-          const url = await S3UpLoadFile(detailFile[i]);
-          detailS3URL.push(url!);
+          S3UpLoadFile(detailFile[i]).then(res => {
+            if (res) {
+              detailS3URL.push(res);
+            }
+          });
         }
       }
 
@@ -130,13 +139,13 @@ export default function PostMain({
         ...data,
         itemAddress: kakaoAddress,
         itemLoadAddress: kakaoLoadAddress,
-        region_1depth: region_1depth,
-        region_2depth: region_2depth,
-        region_3depth: region_3depth,
+        region_1depth,
+        region_2depth,
+        region_3depth,
         itemTitleimg: titleS3URL,
         itemDetailimg: detailS3URL,
-        itemType: itemType,
-        transactionType: transactionType,
+        itemType,
+        transactionType,
         itemWaterMark: waterMark,
         itemFavorCount: 0,
       };
@@ -159,11 +168,10 @@ export default function PostMain({
           confirmButtonText: '확인',
         });
       router.push('/main');
-    } else {
     }
     if (
-      isLogined?.checklogin.checklogin == 'failed' ||
-      isLogined == undefined
+      isLogined?.checklogin.checklogin === 'failed' ||
+      isLogined === undefined
     ) {
       console.log('tlfvo');
       Swal.fire({
@@ -181,12 +189,7 @@ export default function PostMain({
           <CommonLabel htmlFor="itemTitleImg">
             <span>메인 사진 고르기</span>
           </CommonLabel>
-          <input
-            onChange={onFileChange}
-            id="itemTitleImg"
-            hidden
-            type={'file'}
-          />
+          <input onChange={onFileChange} id="itemTitleImg" hidden type="file" />
           {titleImg ? (
             <Image src={titleImg} alt="title_img" width={150} height={120} />
           ) : null}
@@ -197,7 +200,7 @@ export default function PostMain({
             <input
               hidden
               id="detailImg"
-              type={'file'}
+              type="file"
               multiple
               onChange={onFileChange}
             />
@@ -206,6 +209,7 @@ export default function PostMain({
             {detailImg?.map((img, idx) => {
               return (
                 <Image
+                  // eslint-disable-next-line react/no-array-index-key
                   key={idx}
                   src={img}
                   alt="titleImg"
@@ -218,7 +222,7 @@ export default function PostMain({
           </div>
         </div>
       </ImageContainer>
-      <Hr></Hr>
+      <Hr />
       <form onSubmit={handleSubmit(onSubmit)}>
         <>
           <span>워터마크 적용하기</span>
@@ -238,7 +242,7 @@ export default function PostMain({
               미적용
             </SelectedButton>
           </div>
-          <Hr></Hr>
+          <Hr />
           <span>거래 종류</span>
           <div>
             <SelectedButton
@@ -267,7 +271,7 @@ export default function PostMain({
             </SelectedButton>
           </div>
         </>
-        <Hr></Hr>
+        <Hr />
         <>
           <span>매물 종류</span>
           <div>
@@ -330,7 +334,7 @@ export default function PostMain({
             </SelectedButton>
           </div>
         </>
-        <Hr></Hr>
+        <Hr />
         <section>
           <PostItemList
             itemType={itemType}
@@ -345,8 +349,8 @@ export default function PostMain({
       </form>
     </>
   );
-}
-
+};
+export default PostMain;
 const ImageContainer = styled.section`
   display: flex;
   width: 90%;

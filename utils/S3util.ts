@@ -1,4 +1,8 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 const client: any = new S3Client({
@@ -8,7 +12,7 @@ const client: any = new S3Client({
     secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY!,
   },
 });
-//파일 받아 S3에 업로드 후 url 반환
+// 파일 받아 S3에 업로드 후 url 반환
 export const S3UpLoadFile = async (titleFile?: File) => {
   try {
     const S3key = `${titleFile?.name}`;
@@ -37,7 +41,7 @@ export const S3UpLoadFile = async (titleFile?: File) => {
   }
 };
 
-//url로 파일 삭제
+// url로 파일 삭제
 export const S3DeleteFile = async (fileurl?: string) => {
   try {
     const fileName = fileurl?.split('/').pop();
@@ -51,10 +55,11 @@ export const S3DeleteFile = async (fileurl?: string) => {
   }
 };
 
+// eslint-disable-next-line require-await
 export const S3DeleteFiles = async (detailFile?: File[]) => {
   try {
     detailFile?.forEach(async file => {
-      S3DeleteFile(file.name);
+      await S3DeleteFile(file.name);
     });
   } catch (err) {
     console.log('Error', err);

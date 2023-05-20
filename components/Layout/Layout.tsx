@@ -5,11 +5,12 @@ import LoginContent from '@components/Modal/LoginContent';
 import useStore from '@zustand/store';
 import SignupContent from '@components/Modal/SignupContent';
 import { useEffect } from 'react';
-type childeren = { children?: React.ReactNode };
+
 import { useRouter } from 'next/router';
-import FooterContent from '@components/Footer/content';
 import MenuBar from '@components/MenuBar';
 import { useMediaQuery } from 'react-responsive';
+
+type childeren = { children?: React.ReactNode };
 export const Layout = ({ children }: childeren) => {
   const {
     loginState,
@@ -41,7 +42,7 @@ export const Layout = ({ children }: childeren) => {
             modalState={loginState}
             closeModal={changeLoginState}
           >
-            <LoginContent></LoginContent>
+            <LoginContent />
           </Modal>
         ) : null}
         {signupState ? (
@@ -66,7 +67,7 @@ export const Layout = ({ children }: childeren) => {
         </Footer>
       )} */}
       <Footer>
-        <MenuBar></MenuBar>
+        <MenuBar />
       </Footer>
     </Wrapper>
   );

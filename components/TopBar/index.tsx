@@ -1,6 +1,6 @@
-import react from 'react';
 import styled from '@emotion/styled';
 import { MdArrowBackIos } from 'react-icons/md';
+
 interface Props {
   mainTitle: string;
   ArrowFn: () => void;
@@ -10,7 +10,6 @@ const TopBar = ({ mainTitle, ArrowFn }: Props) => {
     <TopbarBox>
       <MdArrowBackIos size={28} onClick={ArrowFn} />
       <div className="maintitle">{mainTitle}</div>
-      <div className="subtitle"></div>
     </TopbarBox>
   );
 };
