@@ -1,7 +1,11 @@
 import styled from '@emotion/styled';
-import { MdOutlineLocationOn, MdLocationCity, MdOutlineDirectionsSubwayFilled } from 'react-icons/md';
+import {
+  MdOutlineLocationOn,
+  MdLocationCity,
+  MdOutlineDirectionsSubwayFilled,
+} from 'react-icons/md';
 
-function SearchExample() {
+const SearchExample = () => {
   return (
     <SearchExampleContainer>
       <SearchExampleTitle>이렇게 검색해보세요</SearchExampleTitle>
@@ -31,7 +35,7 @@ function SearchExample() {
       </SearchExampleDiv>
     </SearchExampleContainer>
   );
-}
+};
 
 const SearchExampleContainer = styled.div`
   width: 100%;

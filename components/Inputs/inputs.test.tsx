@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { Inputs } from './Inputs';
 
-test('props주고 렌더링 잘 되는지', async () => {
+test('props주고 렌더링 잘 되는지', () => {
   const placeholder = '[ㅇㅁㅇ]b';
   const defaultValue = 'default value';
   const text = 'Input text';
@@ -41,7 +41,7 @@ test('disable 일때 안보이는지', () => {
       type="text"
       width={width}
       defaultValue={defaultValue}
-      disabled={true}
+      disabled
       text={text}
       placeholder={placeholder}
     />,

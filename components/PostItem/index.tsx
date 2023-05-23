@@ -1,17 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { postType } from '@utils/type';
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import { boxShadow } from '@components/stylesUtil';
+import useStore from '@zustand/store';
+import { MdFavoriteBorder, MdOutlineFavorite } from 'react-icons/md';
+import { useRouter } from 'next/router';
 
 interface PostItemProps {
   postData: postType;
   widthPercent: number;
   wide?: boolean;
 }
-function PostItems({ postData, widthPercent, wide }: PostItemProps) {
+const PostItems = ({ postData, widthPercent, wide }: PostItemProps) => {
+  const router = useRouter();
+  const { likePostState } = useStore(state => state);
+  const [isFavor, setIsFavor] = useState(false);
+  const openDetail = (id: string) => {
+    router.push(`/detail/${id}`);
+  };
+  useEffect(() => {
+    if (likePostState.includes(postData._id!)) {
+      setIsFavor(true);
+    } else {
+      setIsFavor(false);
+    }
+  }, [likePostState]);
+
   return (
-    <Wrapper widthPercent={widthPercent} wide={wide}>
+    <Wrapper
+      widthPercent={widthPercent}
+      wide={wide}
+      onClick={openDetail.bind(null, postData?._id as string)}
+    >
       <div className="titmeImg">
         <Image
           priority
@@ -22,7 +42,11 @@ function PostItems({ postData, widthPercent, wide }: PostItemProps) {
           height={200}
         />
         <div className="likeButton">
-          <Image priority src="/icon/favor.svg" width={28} height={28} alt="favor" />
+          {isFavor ? (
+            <MdOutlineFavorite size={28} color="#FF9E00" />
+          ) : (
+            <MdFavoriteBorder size={28} color="white" />
+          )}
         </div>
       </div>
       <div className="detailbox">
@@ -33,24 +57,24 @@ function PostItems({ postData, widthPercent, wide }: PostItemProps) {
       </div>
     </Wrapper>
   );
-}
+};
 export default PostItems;
 
 const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
-  /* float: left; */
   display: flex;
   flex-direction: ${({ wide }) => (wide ? 'row' : 'column')};
   align-items: flex-start;
   padding: 0px;
   gap: 4px;
   width: ${({ wide }) => (wide ? '350px' : '167px')};
-  height: 281px;
+  height: ${({ wide }) => (wide ? '211px' : '311px')};
   background: #ffffff;
   border-radius: 4px;
   font-family: 'Pretendard';
   font-style: normal;
   letter-spacing: -0.02em;
-
+  border-bottom: 1px solid #e0e0e0;
+  margin-top: 5px;
   .titmeImg {
     position: relative;
     .likeButton {
@@ -89,45 +113,3 @@ const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
     gap: ${({ wide }) => (wide ? '6px' : '8px')};
   }
 `;
-const PostInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  font-size: 1.2vmin;
-  .ItemPrice {
-    display: flex;
-  }
-`;
-{
-  /* <PostInfo>
-        <p>매물번호{postData.itemUniqueID}</p>
-        <div className="ItemPrice">
-          {postData.itemDeposit && (
-            <p>
-              <span>보</span>
-              {postData.itemDeposit}
-            </p>
-          )}
-          {postData.itemMonthly && (
-            <p>
-              <span>월</span>
-              {postData.itemMonthly}
-            </p>
-          )}
-          {postData.itemJense && (
-            <p>
-              <span>전</span>
-              {postData.itemJense}
-            </p>
-          )}
-          {postData.itemSale && (
-            <p>
-              <span>매</span>
-              {postData.itemSale}
-            </p>
-          )}
-        </div>
-        {postData.itemAddress}
-      </PostInfo> */
-}

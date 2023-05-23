@@ -9,6 +9,7 @@ import PostItems from '@components/PostItem';
 import { useQuery } from '@apollo/client';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import { MdOutlineSearch } from 'react-icons/md';
+
 const MobileHomeContent = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
   const postData = clusterData?.allpost?.posts;
@@ -43,7 +44,7 @@ const MobileHomeContent = () => {
         </div>
       </BrandingBox>
       <SearchBar ref={inputBoxRef}>
-        <MdOutlineSearch className="searchicon" size={28}></MdOutlineSearch>
+        <MdOutlineSearch className="searchicon" size={28} />
         <input className="searchinput" placeholder="지역을 입력하세요" />
       </SearchBar>
       <div className="filtertitle">조건별 매물 검색</div>
@@ -56,7 +57,8 @@ const MobileHomeContent = () => {
       <div className="filtertitle">문산읍 추천매물</div>
       <div className="recommandItem">
         {postData.map((p: any, idx: number) => {
-          return <PostItems key={idx} widthPercent={40} postData={p}></PostItems>;
+          // eslint-disable-next-line react/no-array-index-key
+          return <PostItems key={idx} widthPercent={40} postData={p} />;
         })}
       </div>
     </Wrap>
@@ -134,9 +136,15 @@ const Wrap = styled.div`
     color: #ffffff;
   }
   .recommandItem {
-    float: left;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; // 각 아이템을 자리에 맞게 배치
     width: 100%;
-    padding-bottom: 31px;
+    gap: 30px;
+
+    /* & > * {
+    flex-basis: 33%; // 한 줄에 4개 아이템이 들어가도록 설정
+  } */
   }
 `;
 const BrandingBox = styled.div`

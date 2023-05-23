@@ -1,7 +1,6 @@
-import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useState } from 'react';
-import Record from './record';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import Record from './record';
 
 interface keyInterface {
   id: number;
@@ -19,7 +18,7 @@ type Props = {
 //   onClickSearchBtn: () => void;
 // }
 
-function RecentSearch() {
+const RecentSearch = () => {
   // 로컬 스토리지에 저장한 검색어를 관리할 useState keywords
   const [keywords, setKeywords] = useState<keyInterface[]>([]);
   // ① window 즉, 브라우저가 모두 렌더링된 상태에서 해당 함수를 실행할 수 있도록 작업
@@ -39,7 +38,7 @@ function RecentSearch() {
   const handleAddKeyword = (text: string) => {
     const newKeyword = {
       id: Date.now(),
-      text: text,
+      text,
     };
     setKeywords([newKeyword, ...keywords]);
   };
@@ -47,12 +46,12 @@ function RecentSearch() {
   // 단일 검색어 삭제
   const handleRemoveKeyword = (id: number) => {
     const nextKeyword = keywords.filter(keyword => {
-      return keyword.id != id;
+      return keyword.id !== id;
     });
     setKeywords(nextKeyword);
   };
 
-  //검색어 전체 삭제
+  // 검색어 전체 삭제
   const handleClearKeywords = () => {
     setKeywords([]);
   };
@@ -76,7 +75,11 @@ function RecentSearch() {
           ? keywords.map(k => (
               <li key={k.id}>
                 <p>{k.text}</p>
-                <button className="removeBtn" type="button" onClick={() => handleRemoveKeyword(k.id)}>
+                <button
+                  className="removeBtn"
+                  type="button"
+                  onClick={() => handleRemoveKeyword(k.id)}
+                >
                   <img src="/images/together/btn_delete.svg" alt="삭제" />
                 </button>
               </li>
@@ -85,7 +88,7 @@ function RecentSearch() {
       </ul>
     </>
   );
-}
+};
 const RecentContainer = styled.div`
   width: 90%;
   height: 552px;

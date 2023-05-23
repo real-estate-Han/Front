@@ -37,6 +37,13 @@ export interface postInputType {
   itemTag?: [string];
   itemElectricity?: number;
   itemOption?: string;
+  itemWaterMark?: string;
+
+  itemMoreInfo?: string;
+  itemManagementInfo?: string;
+  itemManagementException?: string;
+  itemFavorCount?: number;
+  itemSecurity?: string;
 }
 
 export interface postType extends postInputType {

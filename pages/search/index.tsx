@@ -2,17 +2,21 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { MdOutlineLocationOn, MdLocationCity, MdDirectionsSubway } from 'react-icons/md';
+import {
+  MdOutlineLocationOn,
+  MdLocationCity,
+  MdDirectionsSubway,
+} from 'react-icons/md';
+import { MdOutlineSearch, MdCancel, MdArrowBackIos } from 'react-icons/md';
 import SearchExample from './searchExample';
 import RecentSearch from './recentSearch';
-import { MdOutlineSearch, MdCancel, MdArrowBackIos } from 'react-icons/md';
 
 interface onAddKeyword {
   id: number;
   text: string;
 }
 
-export default function SearchPage() {
+const SearchPage = () => {
   const router = useRouter();
   const [selected, setSelected] = useState<string>('saleItem');
   const [salesInput, setSalesInput] = useState<boolean>(false);
@@ -131,7 +135,6 @@ export default function SearchPage() {
               <MdCancel size={28} color="#D9D9D9" className="cancleicon" onClick={() => setInputValue('')}>
                 &times;
               </MdCancel>
-
               {isHaveInputValue && (
                 <DropDownBox>
                   {dropDownList.length === 0 && <DropDownItem>해당하는 단어가 없습니다</DropDownItem>}
@@ -152,7 +155,9 @@ export default function SearchPage() {
             </div>
           </SearchBar>
         </header>
-        <div>{record ? <RecentSearch /> : saleNumberEmpty ? '' : <SearchExample />}</div>
+        <div>
+          {record ? <RecentSearch /> : saleNumberEmpty ? '' : <SearchExample />}
+        </div>
       </SearchWrap>
       {/* <WholeBox> */}
       {/* <Title text="AutoComplete" /> */}
@@ -180,7 +185,8 @@ export default function SearchPage() {
       </WholeBox> */}
     </>
   );
-}
+};
+export default SearchPage;
 const BackBtn = styled.section`
   margin-left: 20px;
   margin-top: 5px;
@@ -220,7 +226,8 @@ const SaleNumber = styled.div<{ selected: string }>`
 
   ::after {
     content: '';
-    display: ${({ selected }) => (selected === 'saleNumber' ? 'block' : 'none')};
+    display: ${({ selected }) =>
+      selected === 'saleNumber' ? 'block' : 'none'};
     position: absolute;
     top: 47px;
     left: 0;

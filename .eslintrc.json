@@ -14,15 +14,18 @@
     "plugin:import/recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "airbnb-typescript"
+    "plugin:@typescript-eslint/recommended"
   ],
   "plugins": ["react", "react-hooks", "@emotion", "@typescript-eslint"],
   "rules": {
+    "prefer-const": "warn", // const 사용 권장
+    "camelcase": "off", // 카멜케이스 사용 가능
+    "no-var": "off", // var,let 사용 가능
     "comma-dangle": "off", // trailing comma 생략 가능
     "consistent-return": "off", // 함수에 return문 생략 가능
     "func-names": "off", // 익명 함수 사용 가능
     "max-classes-per-file": "off", // 파일 하나당 클래스 개수 제한 없음
+    "react/jsx-no-bind": "off", // JSX에 함수 바인딩 사용 가능
     // 한 줄에 120글자를 넘길 수 없음
     "max-len": [
       "error",
@@ -48,9 +51,16 @@
         "allowTaggedTemplates": true // tagged template 허용
       }
     ],
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
     "no-unused-vars": ["off"], // 사용하지 않는 변수 선언 가능
-    "no-use-before-define": "on", // 변수가 선언문보다 더 위에 있어도 사용 가능
-    "prefer-arrow-callback": "error", // 콜백 함수는 반드시 화살표 함수로 작성
+    "no-use-before-define": 0, // 변수가 선언문보다 더 위에 있어도 사용 가능
+    "prefer-arrow-callback": "off", // 콜백 함수는 반드시 화살표 함수로 작성
     "prefer-template": "off", // 문자열을 문자열 연결 연산자(+)로 연결 가능
     "require-await": "error", // 내부에 await 표현식 없이 async를 사용할 수 없음,
     "@typescript-eslint/no-var-requires": "off",
@@ -69,8 +79,7 @@
     "react/jsx-no-useless-fragment": ["off"], // 무의미한(자식 요소가 1개 또는 fragment가 html의 자식인 경우) fragment 사용 가능
     "react/react-in-jsx-scope": "off", // jsx를 사용하기 위해 반드시 React를 import 하지 않아도 됨
     "react/require-default-props": "off", // defaultProps를 지정하지 않아도 됨
-    "react/prop-types": ["off"], // propTypes 설정하지 않아도 됨
-    "arrow-body-style": ["error", "as-needed"]
+    "react/prop-types": ["off"] // propTypes 설정하지 않아도 됨
   },
   "settings": {
     "import/resolver": {

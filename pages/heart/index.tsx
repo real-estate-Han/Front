@@ -4,9 +4,7 @@ import OptionButton from '@components/Button/optionButtion';
 import Hr from '@components/Hr';
 import ClusterMap from '@components/KakaoMap/clusterMap';
 import PostItems from '@components/PostItem';
-
 import styled from '@emotion/styled';
-
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import useStore from '@zustand/store';
 import { useRouter } from 'next/router';
@@ -14,9 +12,16 @@ import { useEffect, useRef, useState } from 'react';
 import { MdOutlineSearch } from 'react-icons/md';
 import { MdOutlineSettingsInputComponent } from 'react-icons/md';
 
-const MainPage = () => {
+const HeartPage = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
   // clusterData?.allpost?.posts
+  const { likePostState } = useStore(state => state);
+  const likedData = clusterData?.allpost?.posts?.filter((p: any) => {
+    return likePostState?.some((l: any) => {
+      return p?._id === l;
+    });
+  });
+
   const { filterdData, setFilterdData } = useStore(state => state);
   useEffect(() => {
     setFilterdData(clusterData?.allpost?.posts);
@@ -75,7 +80,7 @@ const MainPage = () => {
         </OptionBar>
       </UtilBox>
 
-      <ClusterMap />
+      <ClusterMap initialData={likedData} />
       <ItemList barFixed={barFixed}>
         <div className="graybar" />
         <ItemTabBar barFixed={barFixed}>
@@ -83,7 +88,7 @@ const MainPage = () => {
           <div>단지 2</div>
         </ItemTabBar>
         <ItemBox barFixed={barFixed}>
-          {filterdData?.map((p: any, idx: number) => {
+          {likedData?.map((p: any, idx: number) => {
             return (
               <>
                 <PostItems wide key={idx} widthPercent={40} postData={p} />
@@ -95,7 +100,7 @@ const MainPage = () => {
     </Wrap>
   );
 };
-export default MainPage;
+export default HeartPage;
 
 const Wrap = styled.div`
   width: 100%;
