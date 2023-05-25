@@ -236,24 +236,27 @@ const ItemTabBar = styled.div<{ barFixed: boolean }>`
 const ItemBox = styled.div<{ barFixed: boolean }>`
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
   width: 100%;
-  height: 100%;
   overflow-y: auto;
   padding-top: 10px;
+  padding-left: 10px;
   padding-bottom: 290px;
   transition: all 2s ease;
   background-color: white;
+  @media (max-width: 699px) {
+    justify-content: center;
+  }
   ${({ barFixed }) =>
     barFixed &&
     `
     transition: all 2s ease;
-      z-index: 2;
-      background-color: white;
+    z-index: 2;
+    background-color: white;
     position: fixed;
     top: 182px;
-    left: 0
+    left: 0;
   `}
 `;

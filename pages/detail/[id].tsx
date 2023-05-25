@@ -31,6 +31,7 @@ import {
 import DebtIcon from 'public/icon/debt';
 import HomeIcon from 'public/icon/homeicon';
 import ImageBox from '@components/ImageBox';
+import CommonButton from '@components/Button';
 
 export interface LoginContentType {
   email: string;
@@ -56,33 +57,38 @@ const DetailPage = () => {
   const [deleteMutate, { error: mutateErr }] = useMutation(DELETE_POST);
 
   const DeletePost = () => {
-    // console.log(mutateErr);
-    if (!mutateErr) {
-      Swal.fire({
-        title: '정말 삭제하시겠습니까?',
-        text: '삭제된 데이터는 복구되지 않습니다.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: '삭제',
-        cancelButtonText: '취소',
-      }).then(async result => {
-        if (result.isConfirmed) {
-          await deleteMutate({
-            variables: { deletePostId: detailID },
-            refetchQueries: [{ query: GET_CLUSTER_DATA }],
-          }).then(async () => {
-            await S3DeleteFile(DetailData.post.itemTitleimg);
-            await S3DeleteFiles(DetailData.post.itemDetailimg);
-          });
-          Swal.fire('삭제되었습니다.', '', 'success');
-          router.push('/main');
-        }
-      });
-    } else {
-      Swal.fire(mutateErr.message, '', 'error');
-    }
+    checkLogin().then(res => {
+      if (res.data.checklogin.status === 'owner') {
+        Swal.fire({
+          title: '정말 삭제하시겠습니까?',
+          text: '삭제된 데이터는 복구되지 않습니다.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: '삭제',
+          cancelButtonText: '취소',
+        }).then(async result => {
+          if (result.isConfirmed) {
+            await deleteMutate({
+              variables: { deletePostId: detailID },
+              refetchQueries: [{ query: GET_CLUSTER_DATA }],
+            }).then(async () => {
+              await S3DeleteFile(DetailData.post.itemTitleimg);
+              await S3DeleteFiles(DetailData.post.itemDetailimg);
+            });
+            Swal.fire('삭제되었습니다.', '', 'success');
+            router.push('/main');
+          }
+        });
+      } else {
+        Swal.fire({
+          title: '권한이 없습니다.',
+          icon: 'error',
+          confirmButtonText: '확인',
+        });
+      }
+    });
   };
   const [checkLogin, { data: isLogined, error: loginErr }] = useLazyQuery(
     IS_LOGINED,
@@ -93,9 +99,22 @@ const DetailPage = () => {
   );
   const [isFavor, setIsFavor] = useState(false);
   const [favorMutate, { error: favorErr }] = useMutation(FAVOR_TOGGLE);
+  const [isOwner, setIsOwner] = useState(false);
+
+  const IsOwnerLogin = async () => {
+    await checkLogin().then(res => {
+      console.log(res.data.checklogin.status);
+      if (res.data.checklogin.status === 'owner') {
+        setIsOwner(true);
+      } else {
+        setIsOwner(false);
+      }
+    });
+  };
+
   useEffect(() => {
-    checkLogin();
-  }, []);
+    IsOwnerLogin();
+  }, [isOwner]);
 
   const FavorToggle = () => {
     checkLogin().then(res => {
@@ -142,7 +161,7 @@ const DetailPage = () => {
     prevArrow: <MdArrowBackIos size={28} color="white" />,
   };
 
-  const handleClick = () => {
+  const ShareClick = () => {
     const shareUrl = window && window.location.href;
     if (navigator.share) {
       navigator.share({
@@ -165,6 +184,16 @@ const DetailPage = () => {
     }
   }, [likePostState]);
 
+  const [selectedValue, setSelectedValue] = useState('');
+  const [options, setOptions] = useState(['Option 1', 'Option 2', 'Option 3']);
+
+  const handleInputChange = (event: any) => {
+    setSelectedValue(event.target.value);
+  };
+
+  const getValue = () => {
+    console.log(selectedValue);
+  };
   return (
     <Wrap>
       <TopbarBox>
@@ -178,11 +207,7 @@ const DetailPage = () => {
         <div className="maintitle" />
         <div className="subtitle">
           <div>
-            <MdOutlineFileUpload
-              size={28}
-              color="white"
-              onClick={handleClick}
-            />
+            <MdOutlineFileUpload size={28} color="white" onClick={ShareClick} />
           </div>
           <div>
             {isFavor ? (
@@ -215,6 +240,12 @@ const DetailPage = () => {
       <SlideNumber>
         {currentSlide}/{DetailData?.post.itemDetailimg.length + 1}
       </SlideNumber>
+      {isOwner ? (
+        <OwnerBox>
+          <CommonButton>수정</CommonButton>
+          <CommonButton onClick={DeletePost}>삭제</CommonButton>
+        </OwnerBox>
+      ) : null}
       <PostTable1>
         <div className="uniqeNuberbar">
           <div className="uniqeNuber">등록번호 12345678</div>
@@ -312,7 +343,20 @@ const Wrap = styled.div`
     }
   }
 `;
+const OwnerBox = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: row;
+  gap: 10px;
+  background: #ffffff;
+  padding: 20px;
 
+  width: 100%;
+  height: 50x;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  position: relative;
+`;
 const TopbarBox = styled.div`
   position: absolute;
   top: 0;

@@ -38,7 +38,7 @@ export interface postInputType {
   itemElectricity?: number;
   itemOption?: string;
   itemWaterMark?: string;
-
+  itemControlLine?: string;
   itemMoreInfo?: string;
   itemManagementInfo?: string;
   itemManagementException?: string;

@@ -63,11 +63,11 @@ export default PostItems;
 const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
   display: flex;
   flex-direction: ${({ wide }) => (wide ? 'row' : 'column')};
+  width: ${({ wide }) => (wide ? '350px' : '167px')};
+  height: ${({ wide }) => (wide ? '211px' : '311px')};
   align-items: flex-start;
   padding: 0px;
   gap: 4px;
-  width: ${({ wide }) => (wide ? '350px' : '167px')};
-  height: ${({ wide }) => (wide ? '211px' : '311px')};
   background: #ffffff;
   border-radius: 4px;
   font-family: 'Pretendard';
@@ -75,6 +75,13 @@ const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
   letter-spacing: -0.02em;
   border-bottom: 1px solid #e0e0e0;
   margin-top: 5px;
+  @media (max-width: 403px) {
+    flex-direction: row;
+    width: 400px;
+    height: 211px;
+  }
+  @media (min-width: 404px) {
+  }
   .titmeImg {
     position: relative;
     .likeButton {
@@ -103,7 +110,6 @@ const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
     line-height: 14px;
     letter-spacing: -0.02em;
     color: #888888;
-    /* overflow: hidden; */
   }
   .detailbox {
     display: flex;

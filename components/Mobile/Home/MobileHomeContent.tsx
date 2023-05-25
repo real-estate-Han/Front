@@ -143,8 +143,8 @@ const Wrap = styled.div`
     gap: 30px;
 
     /* & > * {
-    flex-basis: 33%; // 한 줄에 4개 아이템이 들어가도록 설정
-  } */
+      flex-basis: 33%; // 한 줄에 4개 아이템이 들어가도록 설정
+    } */
   }
 `;
 const BrandingBox = styled.div`
@@ -207,47 +207,3 @@ const SearchBar = styled.div`
     }
   }
 `;
-// const [mouseDownClientX, setMouseDownClientX] = useState(0);
-// const [mouseDownClientY, setMouseDownClientY] = useState(0);
-// const [mouseUpClientX, setMouseUpClientX] = useState(0);
-// const [mouseUpClientY, setMouseUpClientY] = useState(0);
-// const [tochedX, setTochedX] = useState(0);
-// const [tochedY, setTochedY] = useState(0);
-
-// const onMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-//   setMouseDownClientX(e.clientX);
-//   setMouseDownClientY(e.clientY);
-// };
-// const onMouseUp = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-//   setMouseUpClientX(e.clientX);
-//   setMouseUpClientY(e.clientY);
-// };
-// useEffect(() => {
-//   const dragSpaceX = Math.abs(mouseDownClientX - mouseUpClientX);
-//   const dragSpaceY = Math.abs(mouseDownClientY - mouseUpClientY);
-//   const vector = dragSpaceX / dragSpaceY;
-
-//   if (mouseDownClientX !== 0 && dragSpaceX > 100 && vector > 2) {
-//     if (mouseUpClientX < mouseDownClientX) {
-//       // handleNextBtn();
-//     } else if (mouseUpClientX > mouseDownClientX) {
-//       // handlePrevBtn();
-//     }
-//   }
-// }, [mouseUpClientX]);
-
-// const onTouchStart = (e: React.TouchEvent) => {
-//   setTochedX(e.changedTouches[0].pageX);
-//   setTochedY(e.changedTouches[0].pageY);
-// };
-// const onTouchEnd = (e: React.TouchEvent) => {
-//   const distanceX = tochedX - e.changedTouches[0].pageX;
-//   const distanceY = tochedY - e.changedTouches[0].pageY;
-//   const vector = Math.abs(distanceX / distanceY);
-
-//   if (distanceX > 30 && vector > 2) {
-//     // handleNextBtn();
-//   } else if (distanceX < -30 && vector > 2) {
-//     // handlePrevBtn();
-//   }
-// };

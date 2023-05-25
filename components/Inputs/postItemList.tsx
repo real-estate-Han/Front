@@ -42,14 +42,14 @@ const PostItemList = ({
         <>
           <Inputs
             type="number"
-            text="매물월세"
+            text="매물월세 (만원)"
             {...register('itemMonthly', { valueAsNumber: true })}
           />
           <span>{errors?.itemMonthly?.message}</span>
 
           <Inputs
             type="number"
-            text="매물보증금"
+            text="매물보증금 (만원)"
             {...register('itemDeposit', { valueAsNumber: true })}
           />
           <span>{errors?.itemDeposit?.message}</span>
@@ -59,7 +59,7 @@ const PostItemList = ({
         <>
           <Inputs
             type="number"
-            text="매물전세보증금"
+            text="매물전세보증금 (만원)"
             {...register('itemJense', { valueAsNumber: true })}
           />
           <span>{errors?.itemJense?.message}</span>
@@ -69,7 +69,7 @@ const PostItemList = ({
         <>
           <Inputs
             type="number"
-            text="매물관리비"
+            text="매물관리비 (만원)"
             {...register('itemManagement', { valueAsNumber: true })}
           />
           <span>{errors?.itemManagement?.message}</span>
@@ -103,7 +103,7 @@ const PostItemList = ({
         <>
           <Inputs
             type="number"
-            text="매물매매가"
+            text="매물매매가 (만원)"
             {...register('itemSale', { valueAsNumber: true })}
           />
           <span>{errors?.itemSale?.message}</span>
@@ -113,7 +113,8 @@ const PostItemList = ({
         postType1 === 'shop' ||
         postType1 === 'oneroom' ||
         postType1 === 'tworoom' ||
-        postType1 === 'office') && (
+        postType1 === 'office' ||
+        postType1 === 'apartment') && (
         <>
           <Inputs
             type="float"
@@ -228,6 +229,19 @@ const PostItemList = ({
 
           <Inputs type="text" text="필지수" {...register('itemLandNumber')} />
           <span>{errors?.itemLandNumber?.message}</span>
+          <>
+            <Inputs
+              type="text"
+              text="민통선 여부 "
+              list="optionlist"
+              {...register('itemControlLine')}
+            />
+            <datalist id="optionlist">
+              <option value="민통선" />
+              <option value="그외" />
+            </datalist>
+          </>
+          <span>{errors?.itemControlLine?.message}</span>
         </>
       )}
       <Inputs type="text" text="융자 여부" {...register('itemLoan')} />

@@ -119,67 +119,67 @@ const PostMain = ({
 
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<postInputType> = async data => {
-    checkLogin();
-
-    if (isLogined?.checklogin.checklogin === 'success') {
-      const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
-      let detailS3URL: string[] = [];
-      if (detailFile) {
-        for (let i = 0; i < detailFile.length; i++) {
-          S3UpLoadFile(detailFile[i]).then(res => {
-            if (res) {
-              detailS3URL.push(res);
-            }
-          });
+  const onSubmit: SubmitHandler<postInputType> = data => {
+    checkLogin().then(async res => {
+      console.log(res, isLogined);
+      if (res.data?.checklogin.status === 'owner') {
+        const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
+        let detailS3URL: string[] = [];
+        if (detailFile) {
+          for (let i = 0; i < detailFile.length; i++) {
+            S3UpLoadFile(detailFile[i]).then(res => {
+              if (res) {
+                detailS3URL.push(res);
+              }
+            });
+          }
         }
-      }
 
-      const PostInputData = {
-        ...data,
-        itemAddress: kakaoAddress,
-        itemLoadAddress: kakaoLoadAddress,
-        region_1depth,
-        region_2depth,
-        region_3depth,
-        itemTitleimg: titleS3URL,
-        itemDetailimg: detailS3URL,
-        itemType,
-        transactionType,
-        itemWaterMark: waterMark,
-        itemFavorCount: 0,
-      };
-      // console.log(PostInputData);
-      const Geo = position;
-      CreatPost({
-        variables: { postInput: PostInputData, geo: Geo },
-        refetchQueries: [{ query: GET_CLUSTER_DATA }],
-      });
-      error &&
+        const PostInputData = {
+          ...data,
+          itemAddress: kakaoAddress,
+          itemLoadAddress: kakaoLoadAddress,
+          region_1depth,
+          region_2depth,
+          region_3depth,
+          itemTitleimg: titleS3URL,
+          itemDetailimg: detailS3URL,
+          itemType,
+          transactionType,
+          itemWaterMark: waterMark,
+          itemFavorCount: 0,
+        };
+        // console.log(PostInputData);
+        const Geo = position;
+        CreatPost({
+          variables: { postInput: PostInputData, geo: Geo },
+          refetchQueries: [{ query: GET_CLUSTER_DATA }],
+        });
+        error &&
+          Swal.fire({
+            title: error.message,
+            icon: 'error',
+            confirmButtonText: '확인',
+          });
+        !error &&
+          Swal.fire({
+            title: '매물이 등록되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인',
+          });
+        router.push('/main');
+      }
+      if (
+        res.data?.checklogin.checklogin === 'failed' ||
+        res.data?.checklogin.status === 'geust'
+      ) {
         Swal.fire({
-          title: error.message,
+          title: '관리자자격이 필요합니다',
           icon: 'error',
           confirmButtonText: '확인',
         });
-      !error &&
-        Swal.fire({
-          title: '매물이 등록되었습니다.',
-          icon: 'success',
-          confirmButtonText: '확인',
-        });
-      router.push('/main');
-    }
-    if (
-      isLogined?.checklogin.checklogin === 'failed' ||
-      isLogined === undefined
-    ) {
-      console.log('tlfvo');
-      Swal.fire({
-        title: '로그인이 필요합니다.',
-        icon: 'error',
-        confirmButtonText: '확인',
-      });
-    }
+      }
+    });
   };
 
   return (

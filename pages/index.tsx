@@ -33,23 +33,4 @@ const Warp = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
-
-  & section:nth-of-type(1) {
-    /* border: 1px solid blue; */
-    box-sizing: border-box;
-    padding: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-  }
-  & section:nth-of-type(2) {
-    /* border: 1px solid green; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-  }
 `;

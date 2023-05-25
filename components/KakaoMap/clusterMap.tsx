@@ -150,10 +150,8 @@ const MapPostList = styled.div`
   width: 100%;
   height: 60%;
   margin: 0 auto;
-  gap: 1rem;
   justify-content: center;
   align-items: center;
-
   transition: 0.5s;
   position: fixed;
   top: 135px;
@@ -166,9 +164,13 @@ const MapPostList = styled.div`
 `;
 const Kakomap = styled(Map)`
   box-sizing: border-box;
-  width: 100vw;
+  width: 100%;
   height: 70vh;
   border-top: 2px solid #f5f5f5;
+  @media (min-width: 1000px) {
+    width: 1000px;
+    height: 700px;
+  }
 `;
 /* border: 1px solid black; */
 /* transition: 0.5s; */

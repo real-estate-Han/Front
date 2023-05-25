@@ -74,7 +74,6 @@ export const Layout = ({ children }: childeren) => {
 };
 
 const Wrapper = styled.div`
-  gap: 0.1rem;
   position: relative;
   width: 100vw;
   min-height: 100vh;
@@ -82,13 +81,15 @@ const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.background};
 `;
 export const Content = styled.main`
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+
   min-height: 82vh;
   box-sizing: border-box;
   padding-bottom: 150px;
-  overflow: auto;
-  /* padding: 0 20px; */
-  /* margin-top: 1rem; */
-  /* border: 1px solid ${({ theme }) => theme.font.regular}; */
+  overflow-y: auto;
+  box-sizing: border-box;
 `;
 
 export const StyledLogo = styled(Logo)`

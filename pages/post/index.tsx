@@ -39,7 +39,7 @@ const PostItem = () => {
       }
     });
   };
-  const kakaomapref = useRef<kakao.maps.Map>();
+
   const getByAddress = (address: string | undefined) => {
     if (!map) return;
     let geocoder = new kakao.maps.services.Geocoder();
@@ -54,14 +54,14 @@ const PostItem = () => {
             lat: parseFloat(result[0].y),
             lng: parseFloat(result[0].x),
           });
-          setMapLevel(3);
+          setMapLevel(2);
         }
       });
   };
 
   const findGeoLocation = () => {
     Swal.fire({
-      title: '도로명 주소를 입력해 주세요',
+      title: '주소를 입력해 주세요',
       input: 'text',
       inputAttributes: {
         autocapitalize: 'off',
@@ -84,6 +84,13 @@ const PostItem = () => {
   });
 
   const router = useRouter();
+  const sendSMS = () => {
+    const encodedPhoneNumber = encodeURIComponent('010-6788-7335');
+    const encodedMessage = encodeURIComponent('안녕하세요. 메시지 내용입니다.');
+    const url = `sms:${encodedPhoneNumber}?body=${encodedMessage}`;
+
+    window.location.href = url;
+  };
 
   return (
     <Wrap>
@@ -108,16 +115,17 @@ const PostItem = () => {
         {position && (
           <MapMarker position={position}>
             <div className="AddressInfo">
-              <span>{kakaoLoadAddress}</span>
+              <span>{kakaoLoadAddress ?? kakaoAddress}</span>
             </div>
           </MapMarker>
         )}
         <KakaoMapUtil />
       </Kakomap>
-
-      <label>
-        <CommonButton onClick={findGeoLocation}>주소 검색</CommonButton>
-      </label>
+      <a href="tel:01067887335">01067887335</a>
+      <CommonButton onClick={findGeoLocation}>주소 검색</CommonButton>
+      <button type="button" onClick={sendSMS}>
+        전화번호
+      </button>
       <Hr />
       <PostMain
         position={position}
@@ -145,13 +153,6 @@ const Wrap = styled.div`
   form {
     width: 90%;
   }
-  section:nth-of-type(1) {
-    /* border: 1px solid blue; */
-  }
-  section:nth-of-type(2) {
-    border: 1px solid green;
-    width: 100%;
-  }
 `;
 const Hr = styled.hr`
   border: none;
@@ -167,8 +168,8 @@ const Kakomap = styled(Map)`
   border-radius: 4px;
   transition: 0.5s;
 
-  @media (min-width: 1200px) {
-    width: 600px;
+  @media (min-width: 1000px) {
+    width: 1000px;
     height: 600px;
   }
 `;

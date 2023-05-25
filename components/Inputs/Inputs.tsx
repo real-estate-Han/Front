@@ -9,6 +9,7 @@ interface InputProps {
   disabled?: boolean;
   text?: string;
   textarea?: boolean;
+  list?: string;
 }
 
 // eslint-disable-next-line react/display-name
@@ -22,6 +23,7 @@ export const Inputs = forwardRef(
       disabled,
       text,
       textarea,
+      list,
       ...rest
     }: InputProps,
     ref: any,
@@ -44,6 +46,7 @@ export const Inputs = forwardRef(
             type={type}
             defaultValue={defaultValue}
             disabled={disabled}
+            list={list}
             {...rest}
           />
         )}
