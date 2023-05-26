@@ -53,7 +53,7 @@ const DetailPage = () => {
     },
     fetchPolicy: 'network-only',
   });
-
+  console.log(DetailData);
   const [deleteMutate, { error: mutateErr }] = useMutation(DELETE_POST);
 
   const DeletePost = () => {
@@ -242,7 +242,13 @@ const DetailPage = () => {
       </SlideNumber>
       {isOwner ? (
         <OwnerBox>
-          <CommonButton>수정</CommonButton>
+          <CommonButton
+            onClick={() => {
+              router.push(`/updatepage/${detailID}`);
+            }}
+          >
+            수정
+          </CommonButton>
           <CommonButton onClick={DeletePost}>삭제</CommonButton>
         </OwnerBox>
       ) : null}

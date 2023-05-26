@@ -99,11 +99,20 @@ const MenuBar = () => {
       if (res.data.checklogin.status === 'owner') {
         router.push('/post');
       } else {
-        Swal.fire({
-          title: '관리자만 등록 가능합니다',
-          icon: 'warning',
-          confirmButtonText: '확인',
-        });
+        const localdata = localStorage.getItem('token');
+        if (localdata) {
+          Swal.fire({
+            title: '재로그인이 필요합니다',
+            icon: 'warning',
+            confirmButtonText: '확인',
+          });
+        } else {
+          Swal.fire({
+            title: '관리자만 등록 가능합니다',
+            icon: 'warning',
+            confirmButtonText: '확인',
+          });
+        }
       }
     });
 

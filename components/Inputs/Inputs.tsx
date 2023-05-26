@@ -5,7 +5,7 @@ interface InputProps {
   placeholder?: string;
   type?: string;
   width?: string;
-  defaultValue?: string;
+  defaultValue?: string | number | undefined;
   disabled?: boolean;
   text?: string;
   textarea?: boolean;

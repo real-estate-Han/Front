@@ -65,6 +65,16 @@ const PostItemList = ({
           <span>{errors?.itemJense?.message}</span>
         </>
       )}
+      {sellType === 'sale' && (
+        <>
+          <Inputs
+            type="number"
+            text="매물매매가 (만원)"
+            {...register('itemSale', { valueAsNumber: true })}
+          />
+          <span>{errors?.itemSale?.message}</span>
+        </>
+      )}
       {postType1 !== 'land' && (
         <>
           <Inputs
@@ -99,16 +109,7 @@ const PostItemList = ({
           <span>{errors?.itemFloor?.message}</span>
         </>
       )}
-      {sellType === 'sale' && (
-        <>
-          <Inputs
-            type="number"
-            text="매물매매가 (만원)"
-            {...register('itemSale', { valueAsNumber: true })}
-          />
-          <span>{errors?.itemSale?.message}</span>
-        </>
-      )}
+
       {(postType1 === 'house' ||
         postType1 === 'shop' ||
         postType1 === 'oneroom' ||

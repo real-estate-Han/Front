@@ -39,9 +39,14 @@ export const GET_DETAIL_POST = gql`
     post(id: $postId) {
       _id
       itemUniqueID
+      itemGeoLocation {
+        lat
+        lng
+      }
       itemAddress
       itemLoadAddress
       itemType
+      transactionType
       itemDeposit
       itemMonthly
       itemJense
@@ -77,6 +82,7 @@ export const GET_DETAIL_POST = gql`
       region_2depth
       region_3depth
       itemWaterMark
+      itemMoreInfo
     }
   }
 `;
@@ -91,6 +97,14 @@ export const Creat_POST = gql`
         lat
         lng
       }
+    }
+  }
+`;
+export const UPDATE_POST = gql`
+  mutation Mutation($updatePostId: ID!, $postInput: PostInputData, $geo: Geo) {
+    updatePost(id: $updatePostId, postInput: $postInput, geo: $geo) {
+      _id
+      itemAddress
     }
   }
 `;
