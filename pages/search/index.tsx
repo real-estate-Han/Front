@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -23,8 +24,16 @@ const SearchPage = () => {
   const [saleNumberEmpty, setSaleNumberEmpty] = useState<boolean>(false);
   const [record, setRecord] = useState<boolean>(false);
   const inputBoxRef = useRef<HTMLDivElement>(null);
-  //검색창 자동완성
-  const wholeTextArray = ['apple', 'banana', 'coding', 'javascript', '원티드', '프리온보딩', '프론트엔드'];
+  // 검색창 자동완성
+  const wholeTextArray = [
+    'apple',
+    'banana',
+    'coding',
+    'javascript',
+    '원티드',
+    '프리온보딩',
+    '프론트엔드',
+  ];
   const [inputValue, setInputValue] = useState<string>('');
   const [isHaveInputValue, setIsHaveInputValue] = useState<boolean>(false);
   const [dropDownList, setDropDownList] = useState(wholeTextArray);
@@ -35,7 +44,9 @@ const SearchPage = () => {
       setIsHaveInputValue(false);
       setDropDownList([]);
     } else {
-      const choosenTextList = wholeTextArray.filter(textItem => textItem.includes(inputValue));
+      const choosenTextList = wholeTextArray.filter(textItem =>
+        textItem.includes(inputValue),
+      );
       setDropDownList(choosenTextList);
     }
   };
@@ -51,13 +62,17 @@ const SearchPage = () => {
   };
 
   const handleDropDownKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    //input에 값이 있을때만 작동
+    // input에 값이 있을때만 작동
     if (isHaveInputValue) {
-      if (event.key === 'ArrowDown' && dropDownList.length - 1 > dropDownItemIndex) {
+      if (
+        event.key === 'ArrowDown' &&
+        dropDownList.length - 1 > dropDownItemIndex
+      ) {
         setDropDownItemIndex(dropDownItemIndex + 1);
       }
 
-      if (event.key === 'ArrowUp' && dropDownItemIndex >= 0) setDropDownItemIndex(dropDownItemIndex - 1);
+      if (event.key === 'ArrowUp' && dropDownItemIndex >= 0)
+        setDropDownItemIndex(dropDownItemIndex - 1);
       if (event.key === 'Enter' && dropDownItemIndex >= 0) {
         clickDropDownItem(dropDownList[dropDownItemIndex]);
         setDropDownItemIndex(-1);
@@ -132,19 +147,28 @@ const SearchPage = () => {
                   placeholder="지역명 또는 단지명을 입력하세요."
                 />
               )}
-              <MdCancel size={28} color="#D9D9D9" className="cancleicon" onClick={() => setInputValue('')}>
+              <MdCancel
+                size={28}
+                color="#D9D9D9"
+                className="cancleicon"
+                onClick={() => setInputValue('')}
+              >
                 &times;
               </MdCancel>
               {isHaveInputValue && (
                 <DropDownBox>
-                  {dropDownList.length === 0 && <DropDownItem>해당하는 단어가 없습니다</DropDownItem>}
+                  {dropDownList.length === 0 && (
+                    <DropDownItem>해당하는 단어가 없습니다</DropDownItem>
+                  )}
                   {dropDownList.map((dropDownItem, dropDownIndex) => {
                     return (
                       <DropDownItem
                         key={dropDownIndex}
                         onClick={() => clickDropDownItem(dropDownItem)}
                         onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
-                        className={dropDownItemIndex === dropDownIndex ? 'selected' : ''}
+                        className={
+                          dropDownItemIndex === dropDownIndex ? 'selected' : ''
+                        }
                       >
                         {dropDownItem}
                       </DropDownItem>
@@ -292,7 +316,6 @@ const InputBox = styled.div`
   flex-direction: row;
   padding: 16px;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  /* border-radius: ${props => (props.isHaveInputValue ? activeBorderRadius : inactiveBorderRadius)}; */
   z-index: 3;
 
   &:focus-within {

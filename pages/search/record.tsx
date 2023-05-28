@@ -32,7 +32,6 @@ const Record = ({ onAddKeyword }: Props) => {
       {/* <form onSubmit={onSubmit}>
         <input type="search" value={searchValue} onChange={onChangeSearch} placeholder="모임 이름 / 소개 / 태그 검색" />
       </form> */}
-
     </header>
   );
 };
