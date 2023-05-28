@@ -16,8 +16,10 @@ import { MdOutlineSettingsInputComponent } from 'react-icons/md';
 
 const MainPage = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
+
   // clusterData?.allpost?.posts
   const { filterdData, setFilterdData } = useStore(state => state);
+
   useEffect(() => {
     setFilterdData(clusterData?.allpost?.posts);
   }, [clusterData]);
@@ -50,49 +52,53 @@ const MainPage = () => {
     };
   }, [throttle]);
   return (
-    <Wrap>
-      <UtilBox className="whiteback" barFixed={barFixed}>
-        <SearchBar>
-          <MdOutlineSearch className="searchicon" size={28} />
-          <input className="searchinput" placeholder="지역을 입력하세요" />
-        </SearchBar>
-        <OptionBar ref={baseRef}>
-          <OptionButton selected="1" value="">
-            <MdOutlineSettingsInputComponent size={24} />
-          </OptionButton>
-          <OptionButton selected="1" value="">
-            매물종류
-          </OptionButton>
-          <OptionButton selected="1" value="">
-            거래유형/가격
-          </OptionButton>
-          <OptionButton selected="1" value="">
-            관리비
-          </OptionButton>
-          <OptionButton selected="1" value="">
-            면적
-          </OptionButton>
-        </OptionBar>
-      </UtilBox>
+    <div>
+      <Wrap>
+        <UtilBox className="whiteback" barFixed={barFixed}>
+          <SearchBar>
+            <MdOutlineSearch className="searchicon" size={28} />
+            <input className="searchinput" placeholder="지역을 입력하세요" />
+          </SearchBar>
+          <OptionBar ref={baseRef}>
+            <OptionButton selected="1" value="">
+              <MdOutlineSettingsInputComponent size={24} />
+            </OptionButton>
+            <OptionButton selected="1" value="">
+              매물종류
+            </OptionButton>
+            <OptionButton selected="1" value="">
+              거래유형/가격
+            </OptionButton>
+            <OptionButton selected="1" value="">
+              관리비
+            </OptionButton>
+            <OptionButton selected="1" value="">
+              면적
+            </OptionButton>
+          </OptionBar>
+        </UtilBox>
 
-      <ClusterMap />
-      <ItemList barFixed={barFixed}>
-        <div className="graybar" />
-        <ItemTabBar barFixed={barFixed}>
-          <div>전체매물 23</div>
-          <div>단지 2</div>
-        </ItemTabBar>
-        <ItemBox barFixed={barFixed}>
-          {filterdData?.map((p: any, idx: number) => {
-            return (
-              <>
-                <PostItems wide key={idx} widthPercent={40} postData={p} />
-              </>
-            );
-          })}
-        </ItemBox>
-      </ItemList>
-    </Wrap>
+        <ClusterMap />
+        <>
+          <ItemList barFixed={barFixed}>
+            <div className="graybar" />
+            <ItemTabBar barFixed={barFixed}>
+              <div>전체매물 {clusterData?.allpost?.totalPosts}</div>
+              <div>단지 매물 {filterdData?.length}</div>
+            </ItemTabBar>
+            <ItemBox barFixed={barFixed}>
+              {filterdData?.map((p: any, idx: number) => {
+                return (
+                  <>
+                    <PostItems wide key={idx} widthPercent={40} postData={p} />
+                  </>
+                );
+              })}
+            </ItemBox>
+          </ItemList>
+        </>
+      </Wrap>
+    </div>
   );
 };
 export default MainPage;
@@ -100,18 +106,20 @@ export default MainPage;
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
   transition: all 2s ease;
+  overflow-x: hidden;
 `;
 const UtilBox = styled.div<{ barFixed: boolean }>`
   background-color: white;
   width: 100%;
-  height: ${({ barFixed }) => (barFixed ? '140px' : '135px')};
 
+  height: ${({ barFixed }) => (barFixed ? '140px' : '135px')};
   position: fixed;
   top: 0;
   left: 0;
@@ -124,6 +132,7 @@ const SearchBar = styled.div`
   top: 0;
   left: 5%;
   width: 90%;
+  max-width: 1000px;
   height: 58px;
   border: 1px solid transparent;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
@@ -133,6 +142,9 @@ const SearchBar = styled.div`
   justify-content: flex-start;
   margin-bottom: 8px;
   margin-top: 10px;
+  @media (min-width: 1000px) {
+    left: calc(50% - 500px);
+  }
   .searchicon {
     margin-left: 10px;
     margin-right: 5px;
@@ -165,6 +177,7 @@ const OptionBar = styled.div`
   top: 78px;
   left: 5%;
   width: 90%;
+  max-width: 1000px;
   height: 54px;
   overflow-x: auto;
   box-sizing: border-box;
@@ -173,13 +186,28 @@ const OptionBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  @media (min-width: 1000px) {
+    left: calc(50% - 500px);
+  }
 `;
-
+const ItemListBox = styled.div`
+  position: absolute;;
+  width:300px;
+  height: 300px;
+  left: 0;
+  top: 0;
+  background-color: red
+  z-index: 2;
+`;
 const ItemList = styled.div<{ barFixed: boolean }>`
-  width: 100%;
+  width: 100vw;
+  max-width: 1000px;
+
+  box-sizing: border-box;
   min-height: 350px;
   height: 70vh;
   margin-top: 83vh;
+  overflow: auto;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -231,24 +259,27 @@ const ItemTabBar = styled.div<{ barFixed: boolean }>`
 const ItemBox = styled.div<{ barFixed: boolean }>`
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
   width: 100%;
-  height: 100%;
   overflow-y: auto;
   padding-top: 10px;
+  padding-left: 10px;
   padding-bottom: 290px;
   transition: all 2s ease;
   background-color: white;
+  @media (max-width: 699px) {
+    justify-content: center;
+  }
   ${({ barFixed }) =>
     barFixed &&
     `
     transition: all 2s ease;
-      z-index: 2;
-      background-color: white;
+    z-index: 2;
+    background-color: white;
     position: fixed;
     top: 182px;
-    left: 0
+    left: 0;
   `}
 `;

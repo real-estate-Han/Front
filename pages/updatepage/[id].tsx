@@ -7,9 +7,25 @@ import Swal from 'sweetalert2';
 import TopBar from '@components/TopBar';
 import CommonButton from '@components/Button';
 import { useRouter } from 'next/router';
-import PostMain from '../../components/Mobile/PostPage/main';
+import { useQuery } from '@apollo/client';
+import { GET_DETAIL_POST } from '@utils/apollo/gqls';
 
-const PostItem = () => {
+import UpdateMain from '@components/Mobile/UpdatePage/main';
+
+const UpdatePage = () => {
+  const router = useRouter();
+  const detailID = router.query.id;
+  const {
+    data: DetailData,
+    loading,
+    error,
+  } = useQuery(GET_DETAIL_POST, {
+    variables: {
+      postId: detailID,
+    },
+    fetchPolicy: 'cache-first',
+  });
+
   const [map, setMap] = useState<kakao.maps.Map>();
   const [position, setPosition] = useState<GeoLocation>({
     lat: 0,
@@ -25,6 +41,24 @@ const PostItem = () => {
     lng: 126.78755348011892,
   });
   const [mapLevel, setMapLevel] = useState(10);
+  useEffect(() => {
+    if (DetailData) {
+      setPosition({
+        lat: DetailData?.post?.itemGeoLocation.lat,
+        lng: DetailData?.post?.itemGeoLocation.lng,
+      });
+      setDefaltPosition({
+        lat: DetailData?.post?.itemGeoLocation.lat,
+        lng: DetailData?.post?.itemGeoLocation.lng,
+      });
+      setKakaoLoadAddress(DetailData?.post?.itemLoadAddress);
+      setKakaoAddress(DetailData?.post?.itemAddress);
+      setRegion_1depth(DetailData?.post?.region_1depth);
+      setRegion_2depth(DetailData?.post?.region_2depth);
+      setRegion_3depth(DetailData?.post?.region_3depth);
+      setMapLevel(3);
+    }
+  }, [DetailData]);
   const getByGeoCoder = (lng: number, lat: number) => {
     if (!map) return;
     let geocoder = new kakao.maps.services.Geocoder();
@@ -82,7 +116,13 @@ const PostItem = () => {
     ssr: false,
   });
 
-  const router = useRouter();
+  const sendSMS = () => {
+    const encodedPhoneNumber = encodeURIComponent('010-6788-7335');
+    const encodedMessage = encodeURIComponent('안녕하세요. 메시지 내용입니다.');
+    const url = `sms:${encodedPhoneNumber}?body=${encodedMessage}`;
+
+    window.location.href = url;
+  };
 
   return (
     <Wrap>
@@ -113,11 +153,14 @@ const PostItem = () => {
         )}
         <KakaoMapUtil />
       </Kakomap>
-
+      <a href="tel:01067887335">01067887335</a>
       <CommonButton onClick={findGeoLocation}>주소 검색</CommonButton>
-
+      <button type="button" onClick={sendSMS}>
+        전화번호
+      </button>
       <Hr />
-      <PostMain
+      <UpdateMain
+        prvdata={DetailData?.post}
         position={position}
         region_1depth={region_1depth}
         region_2depth={region_2depth}
@@ -129,7 +172,7 @@ const PostItem = () => {
   );
 };
 
-export default PostItem;
+export default UpdatePage;
 const Wrap = styled.div`
   box-sizing: border-box;
   display: flex;

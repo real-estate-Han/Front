@@ -68,10 +68,10 @@ const MenuBar = () => {
       clearState();
     });
   };
-
+  console.log(router);
   const { changeLoginState, changeSignUpState } = useStore(state => state);
   useEffect(() => {
-    if (router.asPath === '/search') {
+    if (router.asPath === '/search' || router.pathname === '/detail/[id]') {
       setHiddenBar(true);
     } else {
       setHiddenBar(false);
@@ -95,14 +95,24 @@ const MenuBar = () => {
   };
   const linktoPostpage = () => {
     checkLogined().then(res => {
+      console.log(res);
       if (res.data.checklogin.status === 'owner') {
         router.push('/post');
       } else {
-        Swal.fire({
-          title: '관리자만 등록 가능합니다',
-          icon: 'warning',
-          confirmButtonText: '확인',
-        });
+        const localdata = localStorage.getItem('token');
+        if (localdata) {
+          Swal.fire({
+            title: '재로그인이 필요합니다',
+            icon: 'warning',
+            confirmButtonText: '확인',
+          });
+        } else {
+          Swal.fire({
+            title: '관리자만 등록 가능합니다',
+            icon: 'warning',
+            confirmButtonText: '확인',
+          });
+        }
       }
     });
 
@@ -224,6 +234,10 @@ const MenuDiv = styled.div<{ hiddenBar: boolean }>`
   background: #ffffff;
   color: rgba(0, 0, 0, 0.54);
   box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
+  @media (min-width: 1000px) {
+    width: 1000px;
+    left: calc(50% - 500px);
+  }
   .MenuButton {
     display: flex;
     flex-direction: column;
@@ -237,7 +251,7 @@ const MenuDiv = styled.div<{ hiddenBar: boolean }>`
 `;
 const openModalAnimation = keyframes`
   0% {
-    transform: translateX(100%);
+    transform: translateX(300%);
   }
   100% {
     transform: translateX(0);
@@ -248,7 +262,7 @@ const closeModalAnimation = keyframes`
     transform: translateX(0);
   }
   100% {
-    transform: translateX(100%);
+    transform: translateX(300%);
   }
 `;
 
@@ -267,7 +281,7 @@ const SideMenu = styled.div<{ sideMenu: boolean }>`
   align-items: center;
   z-index: 4;
   transform: ${({ sideMenu }) =>
-    sideMenu ? 'translateX(0%)' : 'translateX(110%);'};
+    sideMenu ? 'translateX(0%)' : 'translateX(300%);'};
   animation: ${props =>
     props.sideMenu
       ? css`
@@ -276,4 +290,7 @@ const SideMenu = styled.div<{ sideMenu: boolean }>`
       : css`
           ${closeModalAnimation} 0.4s ease
         `};
+  @media (min-width: 1000px) {
+    right: calc(5% + 75px);
+  }
 `;

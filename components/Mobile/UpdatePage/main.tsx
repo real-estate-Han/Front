@@ -13,7 +13,13 @@ import { postInputType, postType } from '@utils/type';
 import Image from 'next/image';
 import PostItemList from '@components/Mobile/PostPage/postItemList';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Creat_POST, GET_CLUSTER_DATA, IS_LOGINED } from '@utils/apollo/gqls';
+import {
+  Creat_POST,
+  GET_CLUSTER_DATA,
+  GET_DETAIL_POST,
+  IS_LOGINED,
+  UPDATE_POST,
+} from '@utils/apollo/gqls';
 import imageCompression from 'browser-image-compression';
 import CommonButton from '@components/Button';
 import CommonLabel from '@components/Label';
@@ -21,8 +27,10 @@ import Hr from '@components/Hr';
 import SelectedButton from '@components/Button/selectedButton';
 import { useRouter } from 'next/router';
 import { S3UpLoadFile } from '../../../utils/S3util';
+import UpdateItemList from './updateInputList';
 
 interface KakaoMapProps {
+  prvdata: postType;
   kakaoLoadAddress?: string;
   kakaoAddress?: string;
   position: { lng: number; lat: number };
@@ -31,14 +39,17 @@ interface KakaoMapProps {
   region_3depth?: string;
 }
 
-const PostMain = ({
+const UpdateMain = ({
   kakaoLoadAddress,
   region_1depth,
   region_2depth,
   region_3depth,
   kakaoAddress,
   position,
+  prvdata,
 }: KakaoMapProps) => {
+  const router = useRouter();
+  const updateID = router.query.id;
   const [titleImg, setTitleImg] = useState<string>();
   const [detailImg, setDetailImg] = useState<string[]>();
   const [titleFile, setTitleFile] = useState<File>();
@@ -52,6 +63,16 @@ const PostMain = ({
     getValues,
     formState: { errors },
   } = useForm<postType>();
+
+  useEffect(() => {
+    if (prvdata) {
+      setTitleImg(prvdata?.itemTitleimg as string);
+      setDetailImg(prvdata?.itemDetailimg as string[]);
+      setTransactionType(prvdata?.transactionType);
+      setItemType(prvdata?.itemType);
+      setWaterMark(prvdata?.itemWaterMark as string);
+    }
+  }, [prvdata]);
 
   const handleTransactionTypeChange = (event: any) => {
     event && setTransactionType(event.target.value);
@@ -105,7 +126,7 @@ const PostMain = ({
       setDetailFile(fileArr);
     }
   };
-  const [CreatPost, { data, loading, error }] = useMutation(Creat_POST);
+  const [UpdatePost, { data, loading, error }] = useMutation(UPDATE_POST);
   const [checkLogin, { data: isLogined, error: loginErr }] = useLazyQuery(
     IS_LOGINED,
     {
@@ -117,12 +138,16 @@ const PostMain = ({
     checkLogin();
   }, []);
 
-  const router = useRouter();
-
   const onSubmit: SubmitHandler<postInputType> = data => {
     checkLogin().then(async res => {
       if (res.data?.checklogin.status === 'owner') {
         const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
+        const filterTitleImage = () => {
+          if (!titleFile) {
+            return prvdata.itemTitleimg;
+          }
+          return titleS3URL;
+        };
         let detailS3URL: string[] = [];
         for (let i = 0; i < detailFile.length; i++) {
           // eslint-disable-next-line no-await-in-loop
@@ -131,7 +156,12 @@ const PostMain = ({
             detailS3URL.push(res);
           }
         }
-
+        const filterDetailImage = () => {
+          if (detailFile.length === 0) {
+            return prvdata.itemDetailimg;
+          }
+          return detailS3URL;
+        };
         const PostInputData = {
           ...data,
           itemAddress: kakaoAddress,
@@ -139,18 +169,24 @@ const PostMain = ({
           region_1depth,
           region_2depth,
           region_3depth,
-          itemTitleimg: titleS3URL,
-          itemDetailimg: detailS3URL,
+          itemTitleimg: filterTitleImage(),
+          itemDetailimg: filterDetailImage(),
           itemType,
           transactionType,
           itemWaterMark: waterMark,
-          itemFavorCount: 0,
+          itemFavorCount: prvdata.itemFavorCount,
         };
-        // console.log(PostInputData);
         const Geo = position;
-        CreatPost({
-          variables: { postInput: PostInputData, geo: Geo },
-          refetchQueries: [{ query: GET_CLUSTER_DATA }],
+        UpdatePost({
+          variables: {
+            updatePostId: updateID,
+            postInput: PostInputData,
+            geo: Geo,
+          },
+          refetchQueries: [
+            { query: GET_CLUSTER_DATA },
+            { query: GET_DETAIL_POST, variables: { id: updateID } },
+          ],
         });
         error &&
           Swal.fire({
@@ -160,7 +196,7 @@ const PostMain = ({
           });
         !error &&
           Swal.fire({
-            title: '매물이 등록되었습니다.',
+            title: '매물이 수정되었습니다.',
             icon: 'success',
             confirmButtonText: '확인',
           });
@@ -221,133 +257,134 @@ const PostMain = ({
         </div>
       </ImageContainer>
       <Hr />
-      <>
-        <span>워터마크 적용하기</span>
-        <div>
-          <SelectedButton
-            type="button"
-            value="on"
-            onClick={handleWaterMarkChange}
-            selected={waterMark}
-          >
-            적용
-          </SelectedButton>
-          <SelectedButton
-            type="button"
-            value="off"
-            onClick={handleWaterMarkChange}
-            selected={waterMark}
-          >
-            미적용
-          </SelectedButton>
-        </div>
-        <Hr />
-        <span>거래 종류</span>
-        <div>
-          <SelectedButton
-            type="button"
-            value="monthly"
-            name="monthly"
-            onClick={handleTransactionTypeChange}
-            selected={transactionType}
-          >
-            월세
-          </SelectedButton>
-          <SelectedButton
-            type="button"
-            value="jense"
-            name="jense"
-            onClick={handleTransactionTypeChange}
-            selected={transactionType}
-          >
-            전세
-          </SelectedButton>
-          <SelectedButton
-            type="button"
-            value="sale"
-            name="sale"
-            onClick={handleTransactionTypeChange}
-            selected={transactionType}
-          >
-            매매
-          </SelectedButton>
-        </div>
-      </>
-      <Hr />
-      <>
-        <span>매물 종류</span>
-        <div>
-          <SelectedButton
-            type="button"
-            value="oneroom"
-            onClick={handleItemTypeChange}
-            selected={itemType}
-          >
-            원룸
-          </SelectedButton>
-
-          <SelectedButton
-            type="button"
-            value="tworoom"
-            onClick={handleItemTypeChange}
-            selected={itemType}
-          >
-            투-쓰리룸
-          </SelectedButton>
-          <SelectedButton
-            type="button"
-            value="office"
-            onClick={handleItemTypeChange}
-            selected={itemType}
-          >
-            오피스텔
-          </SelectedButton>
-          <SelectedButton
-            type="button"
-            value="house"
-            onClick={handleItemTypeChange}
-            selected={itemType}
-          >
-            주택
-          </SelectedButton>
-          <SelectedButton
-            type="button"
-            value="apartment"
-            onClick={handleItemTypeChange}
-            selected={itemType}
-          >
-            아파트
-          </SelectedButton>
-          <SelectedButton
-            type="button"
-            value="land"
-            onClick={handleItemTypeChange}
-            selected={itemType}
-          >
-            토지
-          </SelectedButton>
-          <SelectedButton
-            type="button"
-            value="factory"
-            onClick={handleItemTypeChange}
-            selected={itemType}
-          >
-            공장-창고
-          </SelectedButton>
-          <SelectedButton
-            type="button"
-            value="shop"
-            onClick={handleItemTypeChange}
-            selected={itemType}
-          >
-            상가
-          </SelectedButton>
-        </div>
-      </>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <>
+          <span>워터마크 적용하기</span>
+          <div>
+            <SelectedButton
+              type="button"
+              value="on"
+              onClick={handleWaterMarkChange}
+              selected={waterMark}
+            >
+              적용
+            </SelectedButton>
+            <SelectedButton
+              type="button"
+              value="off"
+              onClick={handleWaterMarkChange}
+              selected={waterMark}
+            >
+              미적용
+            </SelectedButton>
+          </div>
+          <Hr />
+          <span>거래 종류</span>
+          <div>
+            <SelectedButton
+              type="button"
+              value="monthly"
+              name="monthly"
+              onClick={handleTransactionTypeChange}
+              selected={transactionType}
+            >
+              월세
+            </SelectedButton>
+            <SelectedButton
+              type="button"
+              value="jense"
+              name="jense"
+              onClick={handleTransactionTypeChange}
+              selected={transactionType}
+            >
+              전세
+            </SelectedButton>
+            <SelectedButton
+              type="button"
+              value="sale"
+              name="sale"
+              onClick={handleTransactionTypeChange}
+              selected={transactionType}
+            >
+              매매
+            </SelectedButton>
+          </div>
+        </>
+        <Hr />
+        <>
+          <span>매물 종류</span>
+          <div>
+            <SelectedButton
+              type="button"
+              value="oneroom"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
+              원룸
+            </SelectedButton>
+
+            <SelectedButton
+              type="button"
+              value="tworoom"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
+              투-쓰리룸
+            </SelectedButton>
+            <SelectedButton
+              type="button"
+              value="office"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
+              오피스텔
+            </SelectedButton>
+            <SelectedButton
+              type="button"
+              value="house"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
+              주택
+            </SelectedButton>
+            <SelectedButton
+              type="button"
+              value="apartment"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
+              아파트
+            </SelectedButton>
+            <SelectedButton
+              type="button"
+              value="land"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
+              토지
+            </SelectedButton>
+            <SelectedButton
+              type="button"
+              value="factory"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
+              공장-창고
+            </SelectedButton>
+            <SelectedButton
+              type="button"
+              value="shop"
+              onClick={handleItemTypeChange}
+              selected={itemType}
+            >
+              상가
+            </SelectedButton>
+          </div>
+        </>
         <Hr />
         <section>
-          <PostItemList
+          <UpdateItemList
+            prvdata={prvdata}
             itemType={itemType}
             transactionType={transactionType}
             tabIndex={tabIndex}
@@ -361,7 +398,7 @@ const PostMain = ({
     </>
   );
 };
-export default PostMain;
+export default UpdateMain;
 const ImageContainer = styled.section`
   display: flex;
   width: 90%;

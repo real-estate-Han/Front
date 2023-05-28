@@ -27,8 +27,8 @@ export interface postInputType {
   itemBalcony?: string;
   itemElevator?: string;
   itemDirection?: string;
-  itemSupplyArea?: string;
-  itemExclusiveArea?: string;
+  itemSupplyArea?: number;
+  itemExclusiveArea?: number;
   itemTruck?: string;
   itemLandCategory?: string;
   itemTotalAreaLand?: number;
@@ -38,12 +38,15 @@ export interface postInputType {
   itemElectricity?: number;
   itemOption?: string;
   itemWaterMark?: string;
-
+  itemControlLine?: string;
   itemMoreInfo?: string;
   itemManagementInfo?: string;
   itemManagementException?: string;
   itemFavorCount?: number;
   itemSecurity?: string;
+  itemTotalFloor: number;
+  itemParkingFee?: number;
+  itemCharge?: string;
 }
 
 export interface postType extends postInputType {

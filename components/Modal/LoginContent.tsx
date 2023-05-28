@@ -47,7 +47,6 @@ const LoginContent = () => {
           text: res.error.message,
         });
       if (!res.error) {
-        console.log(res);
         localStorage.setItem('token', res.data.login.token);
         localStorage.setItem('userId', res.data.login.userId);
         localStorage.setItem('userName', res.data.login.userNickname);

@@ -79,8 +79,8 @@ const Kakomap = styled(Map)`
   height: 400px;
   border: 1px solid black;
   transition: 0.5s;
-  @media (min-width: 1200px) {
-    width: 600px;
+  @media (min-width: 1000px) {
+    width: 1000px;
     height: 600px;
   }
 `;

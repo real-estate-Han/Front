@@ -5,6 +5,7 @@ import Image from 'next/image';
 import useStore from '@zustand/store';
 import { MdFavoriteBorder, MdOutlineFavorite } from 'react-icons/md';
 import { useRouter } from 'next/router';
+import { TitleString, itemSpace, itemTypeString } from '@utils/postString';
 
 interface PostItemProps {
   postData: postType;
@@ -18,6 +19,7 @@ const PostItems = ({ postData, widthPercent, wide }: PostItemProps) => {
   const openDetail = (id: string) => {
     router.push(`/detail/${id}`);
   };
+
   useEffect(() => {
     if (likePostState.includes(postData._id!)) {
       setIsFavor(true);
@@ -50,10 +52,20 @@ const PostItems = ({ postData, widthPercent, wide }: PostItemProps) => {
         </div>
       </div>
       <div className="detailbox">
-        <div className="itemType">월세 4000</div>
-        <div className="itemDetail">원룸</div>
-        <div className="itemDetail">2층, 33.05m2, 관리비 없음</div>
-        <div className="itemExtra">깨끗하고 조용해서 생활하기 편리</div>
+        <div className="itemType">
+          {TitleString(postData?.transactionType, postData)}
+        </div>
+        <div className="itemDetail">
+          {itemTypeString(postData?.itemType, postData)}
+        </div>
+        <div className="itemDetail">
+          {postData?.itemFloor
+            ? `${postData?.itemFloor}층`
+            : `${postData?.itemLandNumber}필지`}
+          , {itemSpace(postData?.itemType, postData)}, 관리비{' '}
+          {postData?.itemManagement ?? 0}만원
+        </div>
+        <div className="itemExtra">{postData?.itemOption}</div>
       </div>
     </Wrapper>
   );
@@ -63,11 +75,11 @@ export default PostItems;
 const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
   display: flex;
   flex-direction: ${({ wide }) => (wide ? 'row' : 'column')};
+  width: ${({ wide }) => (wide ? '350px' : '167px')};
+  height: ${({ wide }) => (wide ? '211px' : '331px')};
   align-items: flex-start;
   padding: 0px;
   gap: 4px;
-  width: ${({ wide }) => (wide ? '350px' : '167px')};
-  height: ${({ wide }) => (wide ? '211px' : '311px')};
   background: #ffffff;
   border-radius: 4px;
   font-family: 'Pretendard';
@@ -75,6 +87,13 @@ const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
   letter-spacing: -0.02em;
   border-bottom: 1px solid #e0e0e0;
   margin-top: 5px;
+  @media (max-width: 403px) {
+    flex-direction: row;
+    width: 400px;
+    height: 211px;
+  }
+  @media (min-width: 404px) {
+  }
   .titmeImg {
     position: relative;
     .likeButton {
@@ -103,7 +122,6 @@ const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
     line-height: 14px;
     letter-spacing: -0.02em;
     color: #888888;
-    /* overflow: hidden; */
   }
   .detailbox {
     display: flex;

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable react/no-array-index-key */
 import { useRouter } from 'next/router';
@@ -27,10 +28,24 @@ import {
   MdOutlineCalendarToday,
   MdOutlineArrowForwardIos,
   MdOutlineFavorite,
+  MdOutlineMailOutline,
 } from 'react-icons/md';
 import DebtIcon from 'public/icon/debt';
 import HomeIcon from 'public/icon/homeicon';
 import ImageBox from '@components/ImageBox';
+import CommonButton from '@components/Button';
+import {
+  TitleString,
+  formatDate,
+  itemFloorString,
+  itemMoveinString,
+  itemParkingString,
+  itemPriceString,
+  itemRoomString,
+  itemSpacem2,
+  itemtransactionTypeString,
+} from '@utils/postString';
+import FixedMap from '@components/KakaoMap/fixedMap';
 
 export interface LoginContentType {
   email: string;
@@ -56,33 +71,38 @@ const DetailPage = () => {
   const [deleteMutate, { error: mutateErr }] = useMutation(DELETE_POST);
 
   const DeletePost = () => {
-    // console.log(mutateErr);
-    if (!mutateErr) {
-      Swal.fire({
-        title: '정말 삭제하시겠습니까?',
-        text: '삭제된 데이터는 복구되지 않습니다.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: '삭제',
-        cancelButtonText: '취소',
-      }).then(async result => {
-        if (result.isConfirmed) {
-          await deleteMutate({
-            variables: { deletePostId: detailID },
-            refetchQueries: [{ query: GET_CLUSTER_DATA }],
-          }).then(async () => {
-            await S3DeleteFile(DetailData.post.itemTitleimg);
-            await S3DeleteFiles(DetailData.post.itemDetailimg);
-          });
-          Swal.fire('삭제되었습니다.', '', 'success');
-          router.push('/main');
-        }
-      });
-    } else {
-      Swal.fire(mutateErr.message, '', 'error');
-    }
+    checkLogin().then(res => {
+      if (res.data.checklogin.status === 'owner') {
+        Swal.fire({
+          title: '정말 삭제하시겠습니까?',
+          text: '삭제된 데이터는 복구되지 않습니다.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: '삭제',
+          cancelButtonText: '취소',
+        }).then(async result => {
+          if (result.isConfirmed) {
+            await deleteMutate({
+              variables: { deletePostId: detailID },
+              refetchQueries: [{ query: GET_CLUSTER_DATA }],
+            }).then(async () => {
+              await S3DeleteFile(DetailData.post.itemTitleimg);
+              await S3DeleteFiles(DetailData.post.itemDetailimg);
+            });
+            Swal.fire('삭제되었습니다.', '', 'success');
+            router.push('/main');
+          }
+        });
+      } else {
+        Swal.fire({
+          title: '권한이 없습니다.',
+          icon: 'error',
+          confirmButtonText: '확인',
+        });
+      }
+    });
   };
   const [checkLogin, { data: isLogined, error: loginErr }] = useLazyQuery(
     IS_LOGINED,
@@ -93,13 +113,24 @@ const DetailPage = () => {
   );
   const [isFavor, setIsFavor] = useState(false);
   const [favorMutate, { error: favorErr }] = useMutation(FAVOR_TOGGLE);
+  const [isOwner, setIsOwner] = useState(false);
+
+  const IsOwnerLogin = async () => {
+    await checkLogin().then(res => {
+      if (res.data.checklogin.status === 'owner') {
+        setIsOwner(true);
+      } else {
+        setIsOwner(false);
+      }
+    });
+  };
+
   useEffect(() => {
-    checkLogin();
-  }, []);
+    IsOwnerLogin();
+  }, [isOwner]);
 
   const FavorToggle = () => {
     checkLogin().then(res => {
-      console.log(res);
       if (res.data.checklogin.checklogin === 'success') {
         if (!favorErr) {
           favorMutate({
@@ -142,7 +173,7 @@ const DetailPage = () => {
     prevArrow: <MdArrowBackIos size={28} color="white" />,
   };
 
-  const handleClick = () => {
+  const ShareClick = () => {
     const shareUrl = window && window.location.href;
     if (navigator.share) {
       navigator.share({
@@ -164,6 +195,17 @@ const DetailPage = () => {
       setIsFavor(false);
     }
   }, [likePostState]);
+  const OptiobnString = DetailData?.post?.itemOption?.split('/');
+  const SecurityString = DetailData?.post?.itemSecurity?.split(',');
+  const itemMoreInfoString = DetailData?.post?.itemMoreInfo?.split('/');
+
+  const sendSMS = () => {
+    const encodedPhoneNumber = encodeURIComponent('010-6788-7335');
+    const encodedMessage = encodeURIComponent('안녕하세요. 메시지 내용입니다.');
+    const url = `sms:${encodedPhoneNumber}?body=${encodedMessage}`;
+
+    window.location.href = url;
+  };
 
   return (
     <Wrap>
@@ -178,11 +220,7 @@ const DetailPage = () => {
         <div className="maintitle" />
         <div className="subtitle">
           <div>
-            <MdOutlineFileUpload
-              size={28}
-              color="white"
-              onClick={handleClick}
-            />
+            <MdOutlineFileUpload size={28} color="white" onClick={ShareClick} />
           </div>
           <div>
             {isFavor ? (
@@ -215,43 +253,88 @@ const DetailPage = () => {
       <SlideNumber>
         {currentSlide}/{DetailData?.post.itemDetailimg.length + 1}
       </SlideNumber>
+      {isOwner ? (
+        <OwnerBox>
+          <CommonButton
+            onClick={() => {
+              router.push(`/updatepage/${detailID}`);
+            }}
+          >
+            수정
+          </CommonButton>
+          <CommonButton onClick={DeletePost}>삭제</CommonButton>
+        </OwnerBox>
+      ) : null}
       <PostTable1>
         <div className="uniqeNuberbar">
-          <div className="uniqeNuber">등록번호 12345678</div>
-          <div className="postdate">2023.03.28</div>
+          <div className="uniqeNuber">
+            등록번호 {DetailData?.post?.itemUniqueID}
+          </div>
+          <div className="postdate">
+            {formatDate(DetailData?.post?.createdAt)}
+          </div>
         </div>
-        <div className="itemaddress"> 경기 파주시 파평면 율곡리</div>
-        <div className="itemprice"> 매매 3억 3천</div>
-        <div className="itemmanage"> 관리비 10만원</div>
-        <div className="itemfavor">관심 매물 등록 5회</div>
+        <div className="itemaddress">
+          {' '}
+          경기 {DetailData?.post?.region_2depth}{' '}
+          {DetailData?.post?.region_3depth}
+        </div>
+        <div className="itemprice">
+          {' '}
+          {TitleString(DetailData?.post?.transactionType, DetailData?.post)}
+        </div>
+        <div className="itemmanage">
+          {' '}
+          관리비
+          {DetailData?.post?.itemManagement ?? 0}만원
+        </div>
+        <div className="itemfavor">
+          관심 매물 등록 {DetailData?.post?.itemFavorCount}회
+        </div>
       </PostTable1>
       <PostTable2>
         <div className="detailinfo">상세정보</div>
         <div className="iteminfo">
           <MdAspectRatio size={24} />
-          <p>연 146.05m2 / 대지 244m2</p>
+          <p>{itemSpacem2(DetailData?.post?.itemType, DetailData?.post)}</p>
         </div>
         <div className="iteminfo">
           <MdOutlineSpaceDashboard size={24} />
-          <p> 쓰리룸 / 화장실 2개</p>
+          <p> {itemRoomString(DetailData?.post?.itemType, DetailData?.post)}</p>
         </div>
         <div className="iteminfo">
           <MdOutlineGarage size={24} />
-          <p>세대당 3대 주차가능</p>
+          <p>
+            {itemParkingString(DetailData?.post?.itemType, DetailData?.post)}
+          </p>
         </div>
         <div className="iteminfo">
-          <MdOutlineCalendarToday size={24} />
-          <p>1 ~ 3층 / 3층</p>
+          {itemFloorString(DetailData?.post?.itemType, DetailData?.post)}
         </div>
         <div className="iteminfo">
-          <HomeIcon />
-          <p> 즉시 입주 가능</p>
+          {itemMoveinString(DetailData?.post?.itemType, DetailData?.post)}
         </div>
         <div className="iteminfo">
           <DebtIcon />
-          <p>융자 / 무</p>
+          <p>
+            융자 /{' '}
+            {DetailData?.post?.itemLoan !== '' &&
+            DetailData?.post?.itemLoan !== null
+              ? `${DetailData?.post?.itemLoan}`
+              : '(문의)'}
+          </p>
         </div>
-        <p className="moreinfo">
+        <p
+          className="moreinfo"
+          onClick={() => {
+            Swal.fire({
+              title: '준비중입니다.',
+              text: '더 많은 정보는 준비중입니다.',
+              icon: 'info',
+              confirmButtonText: '확인',
+            });
+          }}
+        >
           <span>더보기</span>
           <MdOutlineArrowForwardIos size={18} />
         </p>
@@ -259,29 +342,121 @@ const DetailPage = () => {
       <PostTable3>
         <div className="detailinfo">가격정보</div>
         <div className="iteminfo">
-          <div>매매</div>
-          <div style={{ fontWeight: '400' }}> 3억 9000만원</div>
+          <div>
+            {itemtransactionTypeString(
+              DetailData?.post?.transactionType,
+              DetailData?.post,
+            )}
+          </div>
+          <div style={{ fontWeight: '400' }}>
+            {itemPriceString(
+              DetailData?.post?.transactionType,
+              DetailData?.post,
+            )}
+          </div>
         </div>
         <div className="iteminfo">
           <div>관리비</div>
           <div className="itemmanage" style={{ fontWeight: '400' }}>
             <div style={{ border: '1px solid #f5f5f5', paddingBottom: '8px' }}>
-              매월 3만원
+              매월 {DetailData?.post?.itemManagement ?? 0}만원
               <br />
-              <span>(청소비 포함)</span>
+              <span>
+                (
+                {DetailData?.post?.itemManagementInfo !== '' &&
+                DetailData?.post?.itemManagementInfo !== undefined &&
+                DetailData?.post?.itemManagementInfo !== null
+                  ? `${DetailData?.post?.itemManagementInfo} 포함`
+                  : '문의'}
+                )
+              </span>
             </div>
             <div>
               별도 금액으로 부과되는 사용료
               <br />
-              <span>난방비, 전기료, 수도료, 가스사용료</span>
+              <span>
+                {DetailData?.post?.itemManagementException !== ''
+                  ? DetailData?.post?.itemManagementException
+                  : '(문의)'}
+              </span>
             </div>
           </div>
         </div>
         <div className="iteminfo">
           <div>주차</div>
-          <div style={{ fontWeight: '400' }}> 가능 (무료)</div>
+          <div style={{ fontWeight: '400' }}>
+            {DetailData?.post?.itemParking}
+            (주차비{' '}
+            {DetailData?.post?.itemParkingFee !== '' &&
+            DetailData?.post?.itemParkingFee !== undefined &&
+            DetailData?.post?.itemParkingFee !== null
+              ? `${DetailData?.post?.itemParkingFee}원`
+              : '문의'}
+            )
+          </div>
         </div>
       </PostTable3>
+      <PostTable4>
+        <div className="detailinfo">옵션</div>
+        <div className="optionlist">
+          {OptiobnString?.map((element: string, idx: number) => {
+            return (
+              <div className="optiondiv" key={idx}>
+                {' '}
+                {element}
+              </div>
+            );
+          })}
+        </div>
+      </PostTable4>
+      <PostTable4>
+        <div className="detailinfo">
+          보안/안전시설 {SecurityString?.length ?? 0}개
+        </div>
+        <div> {SecurityString}</div>
+      </PostTable4>
+      <PostTable3>
+        <div className="detailinfo">위치 </div>
+        <FixedMap positionprops={DetailData?.post?.itemGeoLocation} />
+      </PostTable3>
+      <PostTable5>
+        <div className="detailinfo">상세설명 </div>
+        <div className="moreinfolist">
+          {itemMoreInfoString?.map((element: string, idx: number) => {
+            return <div key={idx}>{element}</div>;
+          })}
+        </div>
+      </PostTable5>
+      <PostTable6>
+        <div className="detailinfo">담당 공인중개사 </div>
+        <div className="chargeinfo">
+          <div>
+            <span>담당</span> : {DetailData?.post?.itemCharge}
+          </div>
+          <div>
+            <span>연락처</span> : 031-953-6300
+          </div>
+          <div>
+            <span>부동산 중개 허가번호</span> : 가3632-4166
+          </div>
+          <div>
+            <span>주소</span> : 경기도 파주시 문산읍 우계로 493
+          </div>
+        </div>
+      </PostTable6>
+
+      <FooterBox>
+        <div className="buttonbox">
+          <button type="button" className="snsButton" onClick={sendSMS}>
+            <MdOutlineMailOutline size={28} />
+          </button>
+          <CommonButton>
+            <a href="tel:01067887335">
+              <span className="callherf">전화하기</span>
+            </a>
+          </CommonButton>
+        </div>
+      </FooterBox>
     </Wrap>
   );
 };
@@ -312,7 +487,20 @@ const Wrap = styled.div`
     }
   }
 `;
+const OwnerBox = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: row;
+  gap: 10px;
+  background: #ffffff;
+  padding: 20px;
 
+  width: 100%;
+  height: 50x;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  position: relative;
+`;
 const TopbarBox = styled.div`
   position: absolute;
   top: 0;
@@ -351,8 +539,8 @@ const SlideNumber = styled.div`
   position: absolute;
   width: 40px;
   height: 22px;
-  left: 330px;
-  top: 258px;
+  right: 3vw;
+  top: calc(170px + 10vh);
   color: white;
   font-weight: 400;
   font-size: 14px;
@@ -520,5 +708,161 @@ const PostTable3 = styled.div`
     display: flex;
     flex-direction: column;
     gap: 8px;
+  }
+  .moreinfolist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+`;
+
+const PostTable4 = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: #ffffff;
+  padding: 20px;
+
+  width: 100%;
+  height: 130px;
+  margin-bottom: 8px;
+  position: relative;
+  .detailinfo {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #000000;
+    margin-bottom: 20px;
+  }
+  .optionlist {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    overflow-x: auto;
+    width: 100%;
+    height: 100%;
+  }
+  .optiondiv {
+    display: flex;
+    width: 300px;
+    height: 100%;
+  }
+`;
+const PostTable5 = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: #ffffff;
+  padding: 20px;
+
+  width: 100%;
+  height: 270px;
+  overflow-y: auto;
+  margin-bottom: 8px;
+  position: relative;
+  .detailinfo {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #000000;
+    margin-bottom: 20px;
+  }
+  .moreinfolist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+`;
+const PostTable6 = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: #ffffff;
+  padding: 20px;
+
+  width: 100%;
+  height: 196px;
+  overflow-y: auto;
+  margin-bottom: 8px;
+  position: relative;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  .detailinfo {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #000000;
+    margin-bottom: 20px;
+  }
+  .chargeinfo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  span {
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+  }
+`;
+
+const FooterBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 102px;
+  background: #f5f5f5;
+  box-sizing: border-box;
+  border: 1px solid #f5f5f5;
+
+  z-index: 100;
+  .buttonbox {
+    background: #f5f5f5;
+    border: none;
+    font-size: 14px;
+    position: fixed;
+    padding: 10px;
+    bottom: 40px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .snsButton {
+    outline: none;
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    background-color: ${({ theme }) => theme.mainColor.blue500};
+  }
+  .callherf {
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
   }
 `;

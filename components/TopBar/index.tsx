@@ -1,3 +1,4 @@
+/* eslint-disable react/self-closing-comp */
 import styled from '@emotion/styled';
 import { MdArrowBackIos } from 'react-icons/md';
 
@@ -10,6 +11,7 @@ const TopBar = ({ mainTitle, ArrowFn }: Props) => {
     <TopbarBox>
       <MdArrowBackIos size={28} onClick={ArrowFn} />
       <div className="maintitle">{mainTitle}</div>
+      <div></div>
     </TopbarBox>
   );
 };
@@ -20,7 +22,7 @@ const TopbarBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100vw;
+  width: 100%;
   height: 45px;
   margin-top: 43px;
   font-weight: 600;

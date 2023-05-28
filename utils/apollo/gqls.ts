@@ -20,14 +20,64 @@ export const GET_CLUSTER_DATA = gql`
     allpost {
       posts {
         _id
-        itemAddress
-        itemType
         itemUniqueID
-        itemTitleimg
         itemGeoLocation {
           lat
           lng
         }
+        itemAddress
+        itemLoadAddress
+        itemType
+        itemExclusiveArea
+        itemSupplyArea
+        transactionType
+        itemDeposit
+        itemMonthly
+        itemJense
+        itemSale
+        itemManagement
+        itemTotalAreaLand
+        itemAreaLand
+        itemAreaBuilding
+        itemFloor
+        itemElevator
+        itemHeating
+        itemParking
+        itemBalcony
+        itemPurpose
+        itemRooms
+        itemStatus
+        itemLandNumber
+        itemMovein
+        itemApproval
+        itemSubway
+        itemFloorHeight
+        itemTitleimg
+        itemDetailimg
+        itemTag
+        itemTruck
+        itemControlLine
+        itemElectricity
+        itemLandCategory
+        itemOption
+        itemSecurity
+        itemAreaTotal
+        itemLandType
+        itemLandNumber
+        createdAt
+        updatedAt
+        region_1depth
+        region_2depth
+        region_3depth
+        itemWaterMark
+        itemMoreInfo
+        itemTotalFloor
+        itemManagementInfo
+        itemManagementException
+        itemDirection
+        itemBathroom
+        itemLoan
+        itemFavorCount
       }
       totalPosts
     }
@@ -39,9 +89,16 @@ export const GET_DETAIL_POST = gql`
     post(id: $postId) {
       _id
       itemUniqueID
+      itemGeoLocation {
+        lat
+        lng
+      }
       itemAddress
       itemLoadAddress
       itemType
+      transactionType
+      itemExclusiveArea
+      itemSupplyArea
       itemDeposit
       itemMonthly
       itemJense
@@ -68,7 +125,11 @@ export const GET_DETAIL_POST = gql`
       itemTruck
       itemElectricity
       itemOption
+      itemSecurity
       itemAreaTotal
+      itemTotalAreaLand
+      itemLandCategory
+      itemControlLine
       itemLandType
       itemLandNumber
       createdAt
@@ -77,6 +138,20 @@ export const GET_DETAIL_POST = gql`
       region_2depth
       region_3depth
       itemWaterMark
+      itemMoreInfo
+      itemFavorCount
+      itemTotalFloor
+      itemManagementInfo
+      itemManagementException
+      itemDirection
+      itemBathroom
+      itemLoan
+      itemCharge
+      creator {
+        _id
+        email
+        name
+      }
     }
   }
 `;
@@ -91,6 +166,14 @@ export const Creat_POST = gql`
         lat
         lng
       }
+    }
+  }
+`;
+export const UPDATE_POST = gql`
+  mutation Mutation($updatePostId: ID!, $postInput: PostInputData, $geo: Geo) {
+    updatePost(id: $updatePostId, postInput: $postInput, geo: $geo) {
+      _id
+      itemAddress
     }
   }
 `;
