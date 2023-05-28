@@ -23,6 +23,7 @@ const UpdatePage = () => {
     variables: {
       postId: detailID,
     },
+    fetchPolicy: 'cache-first',
   });
 
   const [map, setMap] = useState<kakao.maps.Map>();

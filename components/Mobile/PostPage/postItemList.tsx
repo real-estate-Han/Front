@@ -219,9 +219,9 @@ const PostItemList = ({
       {postType1 === 'land' && (
         <>
           <Inputs
-            type="number"
+            type="float"
             text="토지합계면적"
-            {...(register('itemTotalAreaLand'), { valueAsNumber: true })}
+            {...register('itemTotalAreaLand', { valueAsNumber: true })}
           />
           <span>{errors?.itemTotalAreaLand?.message}</span>
 

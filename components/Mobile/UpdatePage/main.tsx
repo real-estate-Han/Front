@@ -262,6 +262,7 @@ const UpdateMain = ({
           <span>워터마크 적용하기</span>
           <div>
             <SelectedButton
+              type="button"
               value="on"
               onClick={handleWaterMarkChange}
               selected={waterMark}
@@ -269,6 +270,7 @@ const UpdateMain = ({
               적용
             </SelectedButton>
             <SelectedButton
+              type="button"
               value="off"
               onClick={handleWaterMarkChange}
               selected={waterMark}
@@ -280,6 +282,7 @@ const UpdateMain = ({
           <span>거래 종류</span>
           <div>
             <SelectedButton
+              type="button"
               value="monthly"
               name="monthly"
               onClick={handleTransactionTypeChange}
@@ -288,6 +291,7 @@ const UpdateMain = ({
               월세
             </SelectedButton>
             <SelectedButton
+              type="button"
               value="jense"
               name="jense"
               onClick={handleTransactionTypeChange}
@@ -296,6 +300,7 @@ const UpdateMain = ({
               전세
             </SelectedButton>
             <SelectedButton
+              type="button"
               value="sale"
               name="sale"
               onClick={handleTransactionTypeChange}
@@ -310,6 +315,7 @@ const UpdateMain = ({
           <span>매물 종류</span>
           <div>
             <SelectedButton
+              type="button"
               value="oneroom"
               onClick={handleItemTypeChange}
               selected={itemType}
@@ -318,6 +324,7 @@ const UpdateMain = ({
             </SelectedButton>
 
             <SelectedButton
+              type="button"
               value="tworoom"
               onClick={handleItemTypeChange}
               selected={itemType}
@@ -325,6 +332,7 @@ const UpdateMain = ({
               투-쓰리룸
             </SelectedButton>
             <SelectedButton
+              type="button"
               value="office"
               onClick={handleItemTypeChange}
               selected={itemType}
@@ -332,6 +340,7 @@ const UpdateMain = ({
               오피스텔
             </SelectedButton>
             <SelectedButton
+              type="button"
               value="house"
               onClick={handleItemTypeChange}
               selected={itemType}
@@ -339,6 +348,7 @@ const UpdateMain = ({
               주택
             </SelectedButton>
             <SelectedButton
+              type="button"
               value="apartment"
               onClick={handleItemTypeChange}
               selected={itemType}
@@ -346,6 +356,7 @@ const UpdateMain = ({
               아파트
             </SelectedButton>
             <SelectedButton
+              type="button"
               value="land"
               onClick={handleItemTypeChange}
               selected={itemType}
@@ -353,6 +364,7 @@ const UpdateMain = ({
               토지
             </SelectedButton>
             <SelectedButton
+              type="button"
               value="factory"
               onClick={handleItemTypeChange}
               selected={itemType}
@@ -360,6 +372,7 @@ const UpdateMain = ({
               공장-창고
             </SelectedButton>
             <SelectedButton
+              type="button"
               value="shop"
               onClick={handleItemTypeChange}
               selected={itemType}

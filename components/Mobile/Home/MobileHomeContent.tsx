@@ -49,10 +49,18 @@ const MobileHomeContent = () => {
       </SearchBar>
       <div className="filtertitle">조건별 매물 검색</div>
       <div className="itemcategorylist ">
-        <div className="itemcategory">원룸 / 빌라</div>
-        <div className="itemcategory">아파트</div>
-        <div className="itemcategory">상가</div>
-        <div className="itemcategory">토지</div>
+        <div className="itemcategory filterone">
+          <span className="oneroomText">원룸 / 빌라</span>
+        </div>
+        <div className="itemcategory filtertwo">
+          <span className="oneroomText">아파트</span>
+        </div>
+        <div className="itemcategory filterfour">
+          <span className="oneroomText">상가</span>
+        </div>
+        <div className="itemcategory filterthrid">
+          <span className="oneroomText">토지</span>
+        </div>
       </div>
       <div className="filtertitle">문산읍 추천매물</div>
       <div className="recommandItem">
@@ -134,6 +142,46 @@ const Wrap = styled.div`
     text-align: center;
     letter-spacing: -0.02em;
     color: #ffffff;
+  }
+  .filterone {
+    background-image: url('/oneroom.jpg');
+    background-size: cover;
+    .oneroomText {
+      color: #ffffff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 4px;
+    }
+  }
+  .filtertwo {
+    background-image: url('/apartmentimage.jpg');
+    background-size: cover;
+    .oneroomText {
+      color: #ffffff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 4px;
+    }
+  }
+  .filterthrid {
+    background-image: url('/landimage.jpg');
+    background-size: cover;
+    .oneroomText {
+      color: #ffffff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 4px;
+    }
+  }
+  .filterfour {
+    background-image: url('/shopimage.jpg');
+    background-size: cover;
+    .oneroomText {
+      color: #ffffff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 4px;
+    }
   }
   .recommandItem {
     display: flex;

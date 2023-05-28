@@ -20,14 +20,56 @@ export const GET_CLUSTER_DATA = gql`
     allpost {
       posts {
         _id
-        itemAddress
-        itemType
         itemUniqueID
-        itemTitleimg
         itemGeoLocation {
           lat
           lng
         }
+        itemAddress
+        itemLoadAddress
+        itemType
+        itemExclusiveArea
+        itemSupplyArea
+        transactionType
+        itemDeposit
+        itemMonthly
+        itemJense
+        itemSale
+        itemManagement
+        itemTotalAreaLand
+        itemAreaLand
+        itemAreaBuilding
+        itemFloor
+        itemElevator
+        itemHeating
+        itemParking
+        itemBalcony
+        itemPurpose
+        itemRooms
+        itemStatus
+        itemLandNumber
+        itemMovein
+        itemApproval
+        itemSubway
+        itemFloorHeight
+        itemTitleimg
+        itemDetailimg
+        itemTag
+        itemTruck
+        itemControlLine
+        itemElectricity
+        itemLandCategory
+        itemOption
+        itemAreaTotal
+        itemLandType
+        itemLandNumber
+        createdAt
+        updatedAt
+        region_1depth
+        region_2depth
+        region_3depth
+        itemWaterMark
+        itemMoreInfo
       }
       totalPosts
     }
@@ -47,6 +89,8 @@ export const GET_DETAIL_POST = gql`
       itemLoadAddress
       itemType
       transactionType
+      itemExclusiveArea
+      itemSupplyArea
       itemDeposit
       itemMonthly
       itemJense
@@ -74,6 +118,9 @@ export const GET_DETAIL_POST = gql`
       itemElectricity
       itemOption
       itemAreaTotal
+      itemTotalAreaLand
+      itemLandCategory
+      itemControlLine
       itemLandType
       itemLandNumber
       createdAt

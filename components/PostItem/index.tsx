@@ -18,6 +18,7 @@ const PostItems = ({ postData, widthPercent, wide }: PostItemProps) => {
   const openDetail = (id: string) => {
     router.push(`/detail/${id}`);
   };
+  console.log(postData);
   useEffect(() => {
     if (likePostState.includes(postData._id!)) {
       setIsFavor(true);
@@ -25,6 +26,94 @@ const PostItems = ({ postData, widthPercent, wide }: PostItemProps) => {
       setIsFavor(false);
     }
   }, [likePostState]);
+
+  const changeCash = (value: number) => {
+    const billion = Math.floor(value / 10000);
+    const million = Math.floor(value % 10000);
+
+    let formattedValue = '';
+    if (billion > 0) {
+      formattedValue += `${billion}억 `;
+    }
+    if (million > 0) {
+      formattedValue += `${million}만원`;
+    }
+
+    return formattedValue;
+  };
+
+  const TitleString = (transactionType: string, postData: postType) => {
+    switch (transactionType) {
+      case 'monthly':
+        if (postData.itemMonthly && postData.itemDeposit) {
+          return `월세 ${changeCash(postData.itemMonthly)} / 보증금${changeCash(
+            postData.itemDeposit,
+          )}`;
+        }
+        break;
+      case 'jense':
+        if (postData.itemJense) {
+          return `전세 ${changeCash(postData.itemJense)}`;
+        }
+        break;
+      case 'sale':
+        if (postData.itemSale) {
+          return `매매 ${changeCash(postData.itemSale)}`;
+        }
+        break;
+      default:
+        return '';
+    }
+  };
+
+  const itemTypeString = (itemType: string, postData: postType) => {
+    switch (itemType) {
+      case 'land':
+        return `토지 `;
+
+      case 'apartment':
+        return `아파트 `;
+
+      case 'oneroom':
+        return `원룸 `;
+
+      case 'tworoom':
+        return `투-쓰리룸 `;
+
+      case 'office':
+        return `오피스텔 `;
+
+      case 'house':
+        return `주택 `;
+
+      case 'factory':
+        return `공장-창고 `;
+
+      case 'shop':
+        return `상가 `;
+      default:
+        return '';
+    }
+  };
+
+  const itemSpace = (itemType: string, postData: postType) => {
+    if (
+      itemType === 'house' ||
+      itemType === 'shop' ||
+      itemType === 'oneroom' ||
+      itemType === 'tworoom' ||
+      itemType === 'office' ||
+      itemType === 'apartment'
+    ) {
+      return `${postData.itemSupplyArea}m2`;
+    }
+    if (itemType === 'land') {
+      return `${postData.itemTotalAreaLand}m2`;
+    }
+    if (itemType === 'factory') {
+      return `${postData.itemAreaLand}m2`;
+    }
+  };
 
   return (
     <Wrapper
@@ -50,10 +139,20 @@ const PostItems = ({ postData, widthPercent, wide }: PostItemProps) => {
         </div>
       </div>
       <div className="detailbox">
-        <div className="itemType">월세 4000</div>
-        <div className="itemDetail">원룸</div>
-        <div className="itemDetail">2층, 33.05m2, 관리비 없음</div>
-        <div className="itemExtra">깨끗하고 조용해서 생활하기 편리</div>
+        <div className="itemType">
+          {TitleString(postData?.transactionType, postData)}
+        </div>
+        <div className="itemDetail">
+          {itemTypeString(postData?.itemType, postData)}
+        </div>
+        <div className="itemDetail">
+          {postData?.itemFloor
+            ? `${postData?.itemFloor}층`
+            : `${postData?.itemLandNumber}필지`}
+          , {itemSpace(postData?.itemType, postData)}, 관리비{' '}
+          {postData?.itemManagement ?? 0}만원
+        </div>
+        <div className="itemExtra">{postData?.itemOption}</div>
       </div>
     </Wrapper>
   );
@@ -64,7 +163,7 @@ const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
   display: flex;
   flex-direction: ${({ wide }) => (wide ? 'row' : 'column')};
   width: ${({ wide }) => (wide ? '350px' : '167px')};
-  height: ${({ wide }) => (wide ? '211px' : '311px')};
+  height: ${({ wide }) => (wide ? '211px' : '331px')};
   align-items: flex-start;
   padding: 0px;
   gap: 4px;
