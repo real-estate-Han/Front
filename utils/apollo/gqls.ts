@@ -60,6 +60,7 @@ export const GET_CLUSTER_DATA = gql`
         itemElectricity
         itemLandCategory
         itemOption
+        itemSecurity
         itemAreaTotal
         itemLandType
         itemLandNumber
@@ -70,6 +71,13 @@ export const GET_CLUSTER_DATA = gql`
         region_3depth
         itemWaterMark
         itemMoreInfo
+        itemTotalFloor
+        itemManagementInfo
+        itemManagementException
+        itemDirection
+        itemBathroom
+        itemLoan
+        itemFavorCount
       }
       totalPosts
     }
@@ -117,6 +125,7 @@ export const GET_DETAIL_POST = gql`
       itemTruck
       itemElectricity
       itemOption
+      itemSecurity
       itemAreaTotal
       itemTotalAreaLand
       itemLandCategory
@@ -130,6 +139,19 @@ export const GET_DETAIL_POST = gql`
       region_3depth
       itemWaterMark
       itemMoreInfo
+      itemFavorCount
+      itemTotalFloor
+      itemManagementInfo
+      itemManagementException
+      itemDirection
+      itemBathroom
+      itemLoan
+      itemCharge
+      creator {
+        _id
+        email
+        name
+      }
     }
   }
 `;

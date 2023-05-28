@@ -68,10 +68,10 @@ const MenuBar = () => {
       clearState();
     });
   };
-
+  console.log(router);
   const { changeLoginState, changeSignUpState } = useStore(state => state);
   useEffect(() => {
-    if (router.asPath === '/search') {
+    if (router.asPath === '/search' || router.pathname === '/detail/[id]') {
       setHiddenBar(true);
     } else {
       setHiddenBar(false);

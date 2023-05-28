@@ -121,7 +121,6 @@ const PostMain = ({
 
   const onSubmit: SubmitHandler<postInputType> = data => {
     checkLogin().then(async res => {
-      console.log(res, isLogined);
       if (res.data?.checklogin.status === 'owner') {
         const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
         let detailS3URL: string[] = [];
@@ -165,7 +164,7 @@ const PostMain = ({
             icon: 'success',
             confirmButtonText: '확인',
           });
-        console.log(PostInputData);
+
         router.push('/main');
       }
       if (

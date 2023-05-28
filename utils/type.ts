@@ -27,8 +27,8 @@ export interface postInputType {
   itemBalcony?: string;
   itemElevator?: string;
   itemDirection?: string;
-  itemSupplyArea?: string;
-  itemExclusiveArea?: string;
+  itemSupplyArea?: number;
+  itemExclusiveArea?: number;
   itemTruck?: string;
   itemLandCategory?: string;
   itemTotalAreaLand?: number;
@@ -44,6 +44,9 @@ export interface postInputType {
   itemManagementException?: string;
   itemFavorCount?: number;
   itemSecurity?: string;
+  itemTotalFloor: number;
+  itemParkingFee?: number;
+  itemCharge?: string;
 }
 
 export interface postType extends postInputType {

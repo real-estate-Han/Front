@@ -38,6 +38,14 @@ const PostItemList = ({
         })}
       />
       <span>{errors?.itemUniqueID?.message}</span>
+      <Inputs
+        type="text"
+        text="담당자"
+        {...register('itemCharge', {
+          required: '필수입력사항입니다.',
+        })}
+      />
+      <span>{errors?.itemUniqueID?.message}</span>
       {sellType === 'monthly' && (
         <>
           <Inputs
@@ -107,6 +115,12 @@ const PostItemList = ({
             반지하 0, 옥탑방 99로 입력해주세요
           </DetailDescription>
           <span>{errors?.itemFloor?.message}</span>
+          <Inputs
+            type="nu,ber"
+            text="매물 최고층수"
+            {...register('itemTotalFloor', { valueAsNumber: true })}
+          />
+          <span>{errors?.itemTotalFloor?.message}</span>
         </>
       )}
 
@@ -154,7 +168,12 @@ const PostItemList = ({
 
           <Inputs type="string" text="주차" {...register('itemParking')} />
           <span>{errors?.itemParking?.message}</span>
-
+          <Inputs
+            type="number"
+            text="주차비"
+            {...register('itemParkingFee', { valueAsNumber: true })}
+          />
+          <span>{errors?.itemParkingFee?.message}</span>
           <Inputs
             type="string"
             text="발코니/배란다"
@@ -243,6 +262,8 @@ const PostItemList = ({
             </datalist>
           </>
           <span>{errors?.itemControlLine?.message}</span>
+          <Inputs type="text" text="화물차량 진입" {...register('itemTruck')} />
+          <span>{errors?.itemTruck?.message}</span>
         </>
       )}
       <Inputs type="text" text="융자 여부" {...register('itemLoan')} />

@@ -30,7 +30,6 @@ const PostItem = () => {
     let geocoder = new kakao.maps.services.Geocoder();
     geocoder.coord2Address(lng, lat, function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
-        console.log(result);
         setKakaoLoadAddress(result[0]?.road_address?.address_name as string);
         setKakaoAddress(result[0]?.address?.address_name as string);
         setRegion_1depth(result[0]?.address?.region_1depth_name as string);
@@ -84,13 +83,6 @@ const PostItem = () => {
   });
 
   const router = useRouter();
-  const sendSMS = () => {
-    const encodedPhoneNumber = encodeURIComponent('010-6788-7335');
-    const encodedMessage = encodeURIComponent('안녕하세요. 메시지 내용입니다.');
-    const url = `sms:${encodedPhoneNumber}?body=${encodedMessage}`;
-
-    window.location.href = url;
-  };
 
   return (
     <Wrap>
@@ -121,11 +113,9 @@ const PostItem = () => {
         )}
         <KakaoMapUtil />
       </Kakomap>
-      <a href="tel:01067887335">01067887335</a>
+
       <CommonButton onClick={findGeoLocation}>주소 검색</CommonButton>
-      <button type="button" onClick={sendSMS}>
-        전화번호
-      </button>
+
       <Hr />
       <PostMain
         position={position}

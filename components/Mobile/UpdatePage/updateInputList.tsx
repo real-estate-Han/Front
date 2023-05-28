@@ -43,6 +43,15 @@ const UpdateItemList = ({
             })}
           />
           <span>{errors?.itemUniqueID?.message}</span>
+          <Inputs
+            type="text"
+            text="담당자"
+            defaultValue={prvdata?.itemCharge}
+            {...register('itemCharge', {
+              required: '필수입력사항입니다.',
+            })}
+          />
+          <span>{errors?.itemUniqueID?.message}</span>
           {sellType === 'monthly' && (
             <>
               <Inputs
@@ -120,6 +129,13 @@ const UpdateItemList = ({
                 반지하 0, 옥탑방 99로 입력해주세요
               </DetailDescription>
               <span>{errors?.itemFloor?.message}</span>
+              <Inputs
+                type="number"
+                text="매물 최고층수"
+                defaultValue={prvdata?.itemTotalFloor}
+                {...register('itemTotalFloor', { valueAsNumber: true })}
+              />
+              <span>{errors?.itemTotalFloor?.message}</span>
             </>
           )}
 
@@ -182,6 +198,14 @@ const UpdateItemList = ({
                 {...register('itemParking')}
               />
               <span>{errors?.itemParking?.message}</span>
+
+              <Inputs
+                type="number"
+                text="주차비"
+                defaultValue={prvdata?.itemParkingFee}
+                {...register('itemParkingFee', { valueAsNumber: true })}
+              />
+              <span>{errors?.itemParkingFee?.message}</span>
 
               <Inputs
                 type="string"
@@ -309,6 +333,13 @@ const UpdateItemList = ({
                 </datalist>
               </>
               <span>{errors?.itemControlLine?.message}</span>
+              <Inputs
+                type="text"
+                text="화물차량 진입"
+                defaultValue={prvdata?.itemTruck}
+                {...register('itemTruck')}
+              />
+              <span>{errors?.itemTruck?.message}</span>
             </>
           )}
           <Inputs

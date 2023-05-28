@@ -19,7 +19,7 @@ const MainPage = () => {
 
   // clusterData?.allpost?.posts
   const { filterdData, setFilterdData } = useStore(state => state);
-  console.log(filterdData);
+
   useEffect(() => {
     setFilterdData(clusterData?.allpost?.posts);
   }, [clusterData]);
@@ -84,7 +84,7 @@ const MainPage = () => {
             <div className="graybar" />
             <ItemTabBar barFixed={barFixed}>
               <div>전체매물 {clusterData?.allpost?.totalPosts}</div>
-              <div>단지 매물 {filterdData.length}</div>
+              <div>단지 매물 {filterdData?.length}</div>
             </ItemTabBar>
             <ItemBox barFixed={barFixed}>
               {filterdData?.map((p: any, idx: number) => {
