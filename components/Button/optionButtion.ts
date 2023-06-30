@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-const OptionButton = styled.div<{
+const OptionButton = styled.button<{
   selected: string | number | undefined;
   value: string | number | undefined;
 }>`

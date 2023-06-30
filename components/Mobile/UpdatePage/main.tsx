@@ -140,7 +140,7 @@ const UpdateMain = ({
 
   const onSubmit: SubmitHandler<postInputType> = data => {
     checkLogin().then(async res => {
-      if (res.data?.checklogin.status === 'owner') {
+      if (res?.data?.checklogin?.status === 'owner') {
         const titleS3URL = titleFile && (await S3UpLoadFile(titleFile));
         const filterTitleImage = () => {
           if (!titleFile) {
@@ -204,8 +204,8 @@ const UpdateMain = ({
         router.push('/main');
       }
       if (
-        res.data?.checklogin.checklogin === 'failed' ||
-        res.data?.checklogin.status === 'geust'
+        res?.data?.checklogin?.checklogin === 'failed' ||
+        res?.data?.checklogin?.status === 'geust'
       ) {
         Swal.fire({
           title: '관리자자격이 필요합니다',

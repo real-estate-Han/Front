@@ -1,6 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import { useQuery } from '@apollo/client';
 import OptionButton from '@components/Button/optionButtion';
+import ItemAreaFilter from '@components/Filter/itemAera';
+import ItemManageFilter from '@components/Filter/itemManage';
+import ItemSaleTypeFilter from '@components/Filter/itemSaletype';
+import ItemTypeFilter from '@components/Filter/itemType';
 import Hr from '@components/Hr';
 import ClusterMap from '@components/KakaoMap/clusterMap';
 import PostItems from '@components/PostItem';
@@ -8,9 +12,9 @@ import PostItems from '@components/PostItem';
 import styled from '@emotion/styled';
 
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
-import useStore from '@zustand/store';
+import useStoreFilter from '@zustand/filter';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { MdOutlineSearch } from 'react-icons/md';
 import { MdOutlineSettingsInputComponent } from 'react-icons/md';
 
@@ -18,8 +22,12 @@ const MainPage = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
 
   // clusterData?.allpost?.posts
-  const { filterdData, setFilterdData } = useStore(state => state);
+  const { filtercondition, setFilterCondition, filterdData, setFilterdData } =
+    useStoreFilter(state => state);
 
+  const filerOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setFilterCondition('id', parseInt(event?.currentTarget?.value, 10));
+  };
   useEffect(() => {
     setFilterdData(clusterData?.allpost?.posts);
   }, [clusterData]);
@@ -63,19 +71,39 @@ const MainPage = () => {
             <OptionButton selected="1" value="">
               <MdOutlineSettingsInputComponent size={24} />
             </OptionButton>
-            <OptionButton selected="1" value="">
+            <OptionButton
+              selected={filtercondition?.id}
+              value={1}
+              onClick={filerOpen}
+            >
               매물종류
             </OptionButton>
-            <OptionButton selected="1" value="">
+            <OptionButton
+              selected={filtercondition?.id}
+              value={2}
+              onClick={filerOpen}
+            >
               거래유형/가격
             </OptionButton>
-            <OptionButton selected="1" value="">
+            <OptionButton
+              selected={filtercondition?.id}
+              value={3}
+              onClick={filerOpen}
+            >
               관리비
             </OptionButton>
-            <OptionButton selected="1" value="">
+            <OptionButton
+              selected={filtercondition?.id}
+              value={4}
+              onClick={filerOpen}
+            >
               면적
             </OptionButton>
           </OptionBar>
+          {filtercondition?.id === 1 && <ItemTypeFilter />}
+          {filtercondition?.id === 2 && <ItemSaleTypeFilter />}
+          {filtercondition?.id === 3 && <ItemManageFilter />}
+          {filtercondition?.id === 4 && <ItemAreaFilter />}
         </UtilBox>
 
         <ClusterMap />
@@ -190,24 +218,12 @@ const OptionBar = styled.div`
     left: calc(50% - 500px);
   }
 `;
-const ItemListBox = styled.div`
-  position: absolute;;
-  width:300px;
-  height: 300px;
-  left: 0;
-  top: 0;
-  background-color: red
-  z-index: 2;
-`;
-const ItemList = styled.div<{ barFixed: boolean }>`
-  width: 100vw;
-  max-width: 1000px;
 
-  box-sizing: border-box;
-  min-height: 350px;
+const ItemList = styled.div<{ barFixed: boolean }>`
+  width: 100%;
+  min-height: 310px;
   height: 70vh;
-  margin-top: 83vh;
-  overflow: auto;
+  margin-top: 78vh;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -228,9 +244,13 @@ const ItemList = styled.div<{ barFixed: boolean }>`
       `
       z-index: 6;
     position: fixed;
+    
     top: 132px;
     transition: all 2s ease;
     left: calc(50% -24px);
+    @media (min-width: 1000px) {
+      max-width: 1000px;
+  }
   `}
   }
 `;
@@ -252,7 +272,10 @@ const ItemTabBar = styled.div<{ barFixed: boolean }>`
       background-color: white;
     position: fixed;
     top: 139px;
-    left: 0;
+    @media (min-width: 1000px) {
+      max-width: 1000px;
+      left: calc(50% - 500px);
+  }
   `}
 `;
 
@@ -280,6 +303,9 @@ const ItemBox = styled.div<{ barFixed: boolean }>`
     background-color: white;
     position: fixed;
     top: 182px;
-    left: 0;
+    @media (min-width: 1000px) {
+      max-width: 1000px;
+      left: calc(50% - 500px);
+  }
   `}
 `;

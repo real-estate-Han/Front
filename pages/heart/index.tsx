@@ -1,11 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 import { useQuery } from '@apollo/client';
 import OptionButton from '@components/Button/optionButtion';
-import Hr from '@components/Hr';
 import ClusterMap from '@components/KakaoMap/clusterMap';
 import PostItems from '@components/PostItem';
 import styled from '@emotion/styled';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
+import useStoreFilter from '@zustand/filter';
 import useStore from '@zustand/store';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -22,10 +22,10 @@ const HeartPage = () => {
     });
   });
 
-  const { filterdData, setFilterdData } = useStore(state => state);
-  useEffect(() => {
-    setFilterdData(clusterData?.allpost?.posts);
-  }, [clusterData]);
+  const { filterdData, setFilterdData } = useStoreFilter(state => state);
+  // useEffect(() => {
+  //   setFilterdData(clusterData?.allpost?.posts);
+  // }, [clusterData]);
   const baseRef = useRef<HTMLDivElement>(null);
   // console.log(baseRef);
   const router = useRouter();
@@ -84,11 +84,10 @@ const HeartPage = () => {
       <ItemList barFixed={barFixed}>
         <div className="graybar" />
         <ItemTabBar barFixed={barFixed}>
-          <div>전체매물 23</div>
-          <div>단지 2</div>
+          <div>찜한 매물 {likedData?.length}</div>
         </ItemTabBar>
         <ItemBox barFixed={barFixed}>
-          {likedData?.map((p: any, idx: number) => {
+          {filterdData?.map((p: any, idx: number) => {
             return (
               <>
                 <PostItems wide key={idx} widthPercent={40} postData={p} />
@@ -184,7 +183,7 @@ const ItemList = styled.div<{ barFixed: boolean }>`
   width: 100%;
   min-height: 350px;
   height: 70vh;
-  margin-top: 83vh;
+  margin-top: 78vh;
   z-index: 2;
   display: flex;
   flex-direction: column;
