@@ -2,7 +2,7 @@ import { MdOutlineCalendarToday } from 'react-icons/md';
 import HomeIcon from 'public/icon/homeicon';
 import { postType } from './type';
 
-const changeCash = (value: number) => {
+export const changeCash = (value: number) => {
   const billion = Math.floor(value / 10000);
   const million = Math.floor(value % 10000);
 
@@ -13,7 +13,9 @@ const changeCash = (value: number) => {
   if (million > 0) {
     formattedValue += `${million}만원`;
   }
-
+  if (value === 0) {
+    formattedValue += `0원`;
+  }
   return formattedValue;
 };
 

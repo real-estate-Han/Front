@@ -80,7 +80,7 @@ const MenuBar = () => {
   }, [router]);
   const licktoLikepage = () => {
     checkLogined().then(res => {
-      if (res.data.checklogin.checklogin === 'success') {
+      if (res?.data?.checklogin?.checklogin === 'success') {
         router.push('/heart');
       } else {
         Swal.fire({
@@ -96,7 +96,7 @@ const MenuBar = () => {
   const linktoPostpage = () => {
     checkLogined().then(res => {
       console.log(res);
-      if (res.data.checklogin.status === 'owner') {
+      if (res?.data?.checklogin?.status === 'owner') {
         router.push('/post');
       } else {
         const localdata = localStorage.getItem('token');

@@ -52,6 +52,10 @@ export interface LoginContentType {
   password: string;
 }
 
+interface CustomWindow extends Window {
+  MSStream?: any;
+}
+
 const DetailPage = () => {
   const router = useRouter();
   const detailID = router.query.id;
@@ -72,7 +76,7 @@ const DetailPage = () => {
 
   const DeletePost = () => {
     checkLogin().then(res => {
-      if (res.data.checklogin.status === 'owner') {
+      if (res?.data?.checklogin?.status === 'owner') {
         Swal.fire({
           title: '정말 삭제하시겠습니까?',
           text: '삭제된 데이터는 복구되지 않습니다.',
@@ -117,7 +121,7 @@ const DetailPage = () => {
 
   const IsOwnerLogin = async () => {
     await checkLogin().then(res => {
-      if (res.data.checklogin.status === 'owner') {
+      if (res?.data?.checklogin?.status === 'owner') {
         setIsOwner(true);
       } else {
         setIsOwner(false);
@@ -131,7 +135,7 @@ const DetailPage = () => {
 
   const FavorToggle = () => {
     checkLogin().then(res => {
-      if (res.data.checklogin.checklogin === 'success') {
+      if (res?.data?.checklogin?.checklogin === 'success') {
         if (!favorErr) {
           favorMutate({
             variables: { PostId: detailID },
@@ -148,7 +152,7 @@ const DetailPage = () => {
         }
       }
       if (
-        res.data.checklogin.checklogin === 'failed' ||
+        res?.data?.checklogin?.checklogin === 'failed' ||
         isLogined === undefined
       ) {
         Swal.fire({
@@ -175,19 +179,18 @@ const DetailPage = () => {
 
   const ShareClick = () => {
     const shareUrl = window && window.location.href;
-    if (navigator.share) {
-      navigator.share({
-        title: document.title,
-        url: shareUrl,
-      });
-    } else {
-      alert(`Share this link: ${shareUrl}`);
+    const shareData = {
+      title: '123', // 공유될 제목
+      text: 'qwe', // 공유될 설명
+      url: shareUrl, // 공유될 URL
+      files: [], // 공유할 파일 배열
+    };
+
+    if (navigator.canShare && navigator.canShare(shareData)) {
+      navigator.share(shareData);
     }
   };
 
-  const openDetail = (id: string) => {
-    router.push(`/detail/${id}`);
-  };
   useEffect(() => {
     if (likePostState.includes(detailID as string)) {
       setIsFavor(true);
@@ -199,12 +202,28 @@ const DetailPage = () => {
   const SecurityString = DetailData?.post?.itemSecurity?.split(',');
   const itemMoreInfoString = DetailData?.post?.itemMoreInfo?.split('/');
 
-  const sendSMS = () => {
-    const encodedPhoneNumber = encodeURIComponent('010-6788-7335');
-    const encodedMessage = encodeURIComponent('안녕하세요. 메시지 내용입니다.');
-    const url = `sms:${encodedPhoneNumber}?body=${encodedMessage}`;
+  const sendSMS = (uniqueID: number) => {
+    if (window) {
+      const { userAgent } = window.navigator;
+      const customWindow: CustomWindow = window;
+      const isIOS =
+        (/iPad|iPhone|iPod/.test(userAgent) && !customWindow?.MSStream) ||
+        false;
+      const isAndroid = /Android/.test(userAgent);
+      const encodedPhoneNumber = encodeURIComponent('010-6788-7335');
+      const encodedMessage = encodeURIComponent(
+        `매물번호 ${uniqueID} 보고 연락드립니다.`,
+      );
 
-    window.location.href = url;
+      if (isIOS) {
+        const url = `sms:${encodedPhoneNumber}&body=${encodedMessage}`;
+        window.location.href = url;
+      }
+      if (isAndroid) {
+        const url = `sms:${encodedPhoneNumber}?body=${encodedMessage}`;
+        window.location.href = url;
+      }
+    }
   };
 
   return (
@@ -447,11 +466,17 @@ const DetailPage = () => {
 
       <FooterBox>
         <div className="buttonbox">
-          <button type="button" className="snsButton" onClick={sendSMS}>
+          <button
+            type="button"
+            className="snsButton"
+            onClick={() => {
+              sendSMS(DetailData?.post?.itemUniqueID);
+            }}
+          >
             <MdOutlineMailOutline size={28} />
           </button>
           <CommonButton>
-            <a href="tel:01067887335">
+            <a href="tel:0319536300">
               <span className="callherf">전화하기</span>
             </a>
           </CommonButton>
@@ -500,6 +525,9 @@ const OwnerBox = styled.div`
   margin-top: 8px;
   margin-bottom: 8px;
   position: relative;
+  @media (min-width: 1000px) {
+    width: 1000px;
+  }
 `;
 const TopbarBox = styled.div`
   position: absolute;
@@ -830,6 +858,10 @@ const FooterBox = styled.div`
   border: 1px solid #f5f5f5;
 
   z-index: 100;
+  @media (min-width: 1000px) {
+    width: 1000px;
+    left: calc(50% - 500px);
+  }
   .buttonbox {
     background: #f5f5f5;
     border: none;
@@ -844,6 +876,11 @@ const FooterBox = styled.div`
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    @media (min-width: 1000px) {
+      width: 900px;
+      left: calc(50% - 500px);
+      padding-left: 50px;
+    }
   }
   .snsButton {
     outline: none;

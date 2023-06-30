@@ -14,21 +14,6 @@ const MobileHomeContent = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
   const postData = clusterData?.allpost?.posts;
   const inputBoxRef = useRef<HTMLDivElement>(null);
-  const inputBoxScroll = inputBoxRef.current?.scrollHeight;
-
-  // const handleScroll = () => {
-  //   const scrollHeight = document.documentElement.scrollHeight;
-  //   const scrollTop = document.documentElement.scrollTop;
-  //   const clientHeight = document.documentElement.clientHeight;
-  //   console.log(scrollHeight, scrollTop, clientHeight);
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-  // });
 
   return (
     <Wrap>
