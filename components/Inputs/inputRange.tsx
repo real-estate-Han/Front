@@ -35,14 +35,8 @@ const InputRange = ({
   const twoRangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (filterData[maxRangeName] - filterData[minRangeName] < priceGap) {
-      setFilterData((prevFilterData: any) => ({
-        ...prevFilterData,
-        [minRangeName]: parseInt(value, 10) - priceGap,
-      }));
-      setFilterData((prevFilterData: any) => ({
-        ...prevFilterData,
-        [maxRangeName]: parseInt(value, 10) + priceGap,
-      }));
+      setFilterData(minRangeName, parseInt(value, 10) - priceGap);
+      setFilterData(maxRangeName, parseInt(value, 10) + priceGap);
     } else {
       setRangeMinPercent(
         (filterData[minRangeName] / initialData[maxRangeName]) * 100,
