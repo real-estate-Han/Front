@@ -5,7 +5,7 @@ import { devtools } from 'zustand/middleware';
 interface State {
   loginState: boolean;
   signupState: boolean;
-  likePostState?: string[];
+  likePostState: string[];
   detailID: string;
   detailType: string;
   sideMenu: boolean;
