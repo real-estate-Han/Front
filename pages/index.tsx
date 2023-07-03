@@ -30,7 +30,7 @@ const Warp = styled.div`
   position: relative;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   justify-content: center;
   align-items: center;
   /* background-color: ${({ theme }) => theme.mainColor.blue200}; */
