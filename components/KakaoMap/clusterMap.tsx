@@ -155,27 +155,35 @@ const ClusterMap = ({ initialData }: Iprops) => {
   );
 };
 export default ClusterMap;
+
 const MapPostList = styled.div`
-  box-sizing: border-box;
-  padding-top: 100px;
-  display: flex;
-  width: 100%;
-  height: 60%;
-  /* margin: 0 auto; */
-  justify-content: center;
-  align-items: center;
-  transition: 0.5s;
-  position: fixed;
-  top: 135px;
-  left: 0;
-  /* height: 528px; */
-  /* @media (max-width: 800px) {
+  @media (max-width: 999px) {
+    box-sizing: border-box;
+    padding-top: 100px;
     display: flex;
-    flex-direction: column;
-  } */
+    width: 100%;
+    height: 60%;
+
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+    position: fixed;
+    top: 135px;
+    left: 0;
+  }
+
   @media (min-width: 1000px) {
-    margin-top: 190px;
-    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 60%;
+    position: fixed;
+    top: 227px;
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: 60%;
+    justify-content: center;
+    align-items: center;
   }
 `;
 const Kakomap = styled(Map)`

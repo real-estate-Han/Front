@@ -151,12 +151,12 @@ const UtilBox = styled.div<{ barFixed: boolean }>`
   background-color:  background-color: ${({ theme }) =>
     theme.mainColor.blue200};;
   width: 100%;
-
   height: ${({ barFixed }) => (barFixed ? '140px' : '135px')};
   position: fixed;
   top: 0;
   left: 0;
   z-index: 3;
+  
 `;
 const UtilContainer = styled.div<{ barFixed: boolean }>`
   background-color: white;
@@ -164,6 +164,9 @@ const UtilContainer = styled.div<{ barFixed: boolean }>`
   margin: auto;
   height: ${({ barFixed }) => (barFixed ? '140px' : '135px')};
   z-index: 3;
+  @media (min-width: 1000px) {
+    width: 1000px;
+  }
 `;
 const SearchBar = styled.div`
   background-color: white;
@@ -183,7 +186,8 @@ const SearchBar = styled.div`
   margin-bottom: 8px;
   margin-top: 10px;
   @media (min-width: 1000px) {
-    left: calc(50% - 500px);
+    left: calc(50% - 400px);
+    width: 800px;
   }
   .searchicon {
     margin-left: 10px;
@@ -227,7 +231,8 @@ const OptionBar = styled.div`
   align-items: center;
   justify-content: flex-start;
   @media (min-width: 1000px) {
-    left: calc(50% - 500px);
+    left: calc(50% - 400px);
+    width: 800px;
   }
 `;
 
@@ -241,19 +246,26 @@ const ContentBox = styled.div`
 `;
 
 const ItemList = styled.div<{ barFixed: boolean }>`
-  width: 100%;
-  min-height: 380px;
-  height: 70vh;
-  margin-top: 80vh;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: white;
-  transition: all 2s ease;
-
   @media (max-width: 999px) {
+    width: 100%;
+    min-height: 380px;
+    height: 70vh;
+    margin-top: 80vh;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: white;
+    transition: all 2s ease;
+  }
+  @media (min-width: 1000px) {
+    width: 400px;
+    height: 600px;
+    background-color: white;
+    position: fixed;
+    top: 135px;
+    left: calc(80% - 150px);
   }
 `;
 const GrayBarbox = styled.div<{ barFixed: boolean }>`
@@ -275,6 +287,9 @@ const GrayBarbox = styled.div<{ barFixed: boolean }>`
       display : none;
   }
   `}
+  @media (min-width: 1000px) {
+    display: none;
+  }
   .graybar {
     z-index: 2;
     width: 48px;
@@ -309,28 +324,36 @@ const ItemTabBar = styled.div<{ barFixed: boolean }>`
       left: calc(50% - 500px);
   }
   `}
+  @media (min-width: 1000px) {
+    display: flex;
+  }
 `;
 
 const ItemBox = styled.div<{ barFixed: boolean }>`
-  z-index: 3;
-  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
   overflow-y: auto;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-bottom: 290px;
-  transition: all 2s ease;
   background-color: white;
   @media (max-width: 699px) {
     justify-content: center;
   }
-  ${({ barFixed }) =>
-    barFixed &&
-    `
+  @media (min-width: 1000px) {
+    display: flex;
+  }
+  @media (max-width: 999px) {
+    z-index: 3;
+    box-sizing: border-box;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 290px;
+    transition: all 2s ease;
+
+    ${({ barFixed }) =>
+      barFixed &&
+      `
     min-height: 700px;
     transition: all 2s ease;
     z-index: 2;
@@ -342,4 +365,5 @@ const ItemBox = styled.div<{ barFixed: boolean }>`
       left: calc(50% - 500px);
   }
   `}
+  }
 `;
