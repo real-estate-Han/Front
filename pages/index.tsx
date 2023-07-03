@@ -33,4 +33,5 @@ const Warp = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
+  /* background-color: ${({ theme }) => theme.mainColor.blue200}; */
 `;

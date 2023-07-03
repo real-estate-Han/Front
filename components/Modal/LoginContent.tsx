@@ -67,7 +67,7 @@ const LoginContent = () => {
           timer: 1500,
         });
         closeLogin();
-        setSideMemu();
+        // setSideMemu();
       }
     });
   };

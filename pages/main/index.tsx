@@ -63,53 +63,57 @@ const MainPage = () => {
     <div>
       <Wrap>
         <UtilBox className="whiteback" barFixed={barFixed}>
-          <SearchBar>
-            <MdOutlineSearch className="searchicon" size={28} />
-            <input className="searchinput" placeholder="지역을 입력하세요" />
-          </SearchBar>
-          <OptionBar ref={baseRef}>
-            <OptionButton selected="1" value="">
-              <MdOutlineSettingsInputComponent size={24} />
-            </OptionButton>
-            <OptionButton
-              selected={filtercondition?.id}
-              value={1}
-              onClick={filerOpen}
-            >
-              매물종류
-            </OptionButton>
-            <OptionButton
-              selected={filtercondition?.id}
-              value={2}
-              onClick={filerOpen}
-            >
-              거래유형/가격
-            </OptionButton>
-            <OptionButton
-              selected={filtercondition?.id}
-              value={3}
-              onClick={filerOpen}
-            >
-              관리비
-            </OptionButton>
-            <OptionButton
-              selected={filtercondition?.id}
-              value={4}
-              onClick={filerOpen}
-            >
-              면적
-            </OptionButton>
-          </OptionBar>
-          {filtercondition?.id === 1 && <ItemTypeFilter />}
-          {filtercondition?.id === 2 && <ItemSaleTypeFilter />}
-          {filtercondition?.id === 3 && <ItemManageFilter />}
-          {filtercondition?.id === 4 && <ItemAreaFilter />}
+          <UtilContainer barFixed={barFixed}>
+            <SearchBar>
+              <MdOutlineSearch className="searchicon" size={28} />
+              <input className="searchinput" placeholder="지역을 입력하세요" />
+            </SearchBar>
+            <OptionBar ref={baseRef}>
+              <OptionButton selected="1" value="">
+                <MdOutlineSettingsInputComponent size={24} />
+              </OptionButton>
+              <OptionButton
+                selected={filtercondition?.id}
+                value={1}
+                onClick={filerOpen}
+              >
+                매물종류
+              </OptionButton>
+              <OptionButton
+                selected={filtercondition?.id}
+                value={2}
+                onClick={filerOpen}
+              >
+                거래유형/가격
+              </OptionButton>
+              <OptionButton
+                selected={filtercondition?.id}
+                value={3}
+                onClick={filerOpen}
+              >
+                관리비
+              </OptionButton>
+              <OptionButton
+                selected={filtercondition?.id}
+                value={4}
+                onClick={filerOpen}
+              >
+                면적
+              </OptionButton>
+            </OptionBar>
+          </UtilContainer>
         </UtilBox>
+        {filtercondition?.id === 1 && <ItemTypeFilter />}
+        {filtercondition?.id === 2 && <ItemSaleTypeFilter />}
+        {filtercondition?.id === 3 && <ItemManageFilter />}
+        {filtercondition?.id === 4 && <ItemAreaFilter />}
+        <ContentBox>
+          <ClusterMap />
 
-        <ClusterMap />
-        <>
           <ItemList barFixed={barFixed}>
-            <div className="graybar" />
+            <GrayBarbox barFixed={barFixed}>
+              <div className="graybar" />
+            </GrayBarbox>
             <ItemTabBar barFixed={barFixed}>
               <div>전체매물 {clusterData?.allpost?.totalPosts}</div>
               <div>단지 매물 {filterdData?.length}</div>
@@ -124,7 +128,7 @@ const MainPage = () => {
               })}
             </ItemBox>
           </ItemList>
-        </>
+        </ContentBox>
       </Wrap>
     </div>
   );
@@ -134,7 +138,7 @@ export default MainPage;
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
-
+  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -144,13 +148,21 @@ const Wrap = styled.div`
   overflow-x: hidden;
 `;
 const UtilBox = styled.div<{ barFixed: boolean }>`
-  background-color: white;
+  background-color:  background-color: ${({ theme }) =>
+    theme.mainColor.blue200};;
   width: 100%;
 
   height: ${({ barFixed }) => (barFixed ? '140px' : '135px')};
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 3;
+`;
+const UtilContainer = styled.div<{ barFixed: boolean }>`
+  background-color: white;
+  width: 82%;
+  margin: auto;
+  height: ${({ barFixed }) => (barFixed ? '140px' : '135px')};
   z-index: 3;
 `;
 const SearchBar = styled.div`
@@ -219,30 +231,40 @@ const OptionBar = styled.div`
   }
 `;
 
+const ContentBox = styled.div`
+  @media (max-width: 999px) {
+    width: 100%;
+  }
+  @media (min-width: 1000px) {
+    display: flex;
+  }
+`;
+
 const ItemList = styled.div<{ barFixed: boolean }>`
   width: 100%;
-  min-height: 310px;
+  min-height: 380px;
   height: 70vh;
-  margin-top: 78vh;
-  z-index: 2;
+  margin-top: 80vh;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   background-color: white;
   transition: all 2s ease;
-  .graybar {
-    width: 48px;
-    /* left: calc(50% -24px); */
-    height: 4px;
-    background: #d9d9d9;
-    border-radius: 4px;
-    margin-top: 8px;
-    margin-bottom: 12px;
-    ${({ barFixed }) =>
-      barFixed &&
-      `
-      z-index: 6;
+
+  @media (max-width: 999px) {
+  }
+`;
+const GrayBarbox = styled.div<{ barFixed: boolean }>`
+  width: 100%;
+  height: 15px;
+  z-index: 4;
+  background-color: white;
+  border: 1px solid white;
+  ${({ barFixed }) =>
+    barFixed &&
+    `
     position: fixed;
     
     top: 132px;
@@ -250,12 +272,21 @@ const ItemList = styled.div<{ barFixed: boolean }>`
     left: calc(50% -24px);
     @media (min-width: 1000px) {
       max-width: 1000px;
+      display : none;
   }
   `}
+  .graybar {
+    z-index: 2;
+    width: 48px;
+    /* left: calc(50% -24px); */
+    height: 4px;
+    background: #d9d9d9;
+    border-radius: 4px;
+    margin: 10px auto;
   }
 `;
-
 const ItemTabBar = styled.div<{ barFixed: boolean }>`
+  z-index: 3;
   transition: all 2s ease;
   width: 100%;
   height: 41px;
@@ -264,11 +295,12 @@ const ItemTabBar = styled.div<{ barFixed: boolean }>`
   justify-content: space-around;
   border-bottom: 2px solid #f5f5f5;
   background-color: white;
+  padding-bottom: 5px;
   ${({ barFixed }) =>
     barFixed &&
     `
     transition: all 2s ease;
-    z-index: 4;
+    z-index: 3;
       background-color: white;
     position: fixed;
     top: 139px;
@@ -280,6 +312,7 @@ const ItemTabBar = styled.div<{ barFixed: boolean }>`
 `;
 
 const ItemBox = styled.div<{ barFixed: boolean }>`
+  z-index: 3;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
@@ -298,11 +331,12 @@ const ItemBox = styled.div<{ barFixed: boolean }>`
   ${({ barFixed }) =>
     barFixed &&
     `
+    min-height: 700px;
     transition: all 2s ease;
     z-index: 2;
     background-color: white;
     position: fixed;
-    top: 182px;
+    top: 181px;
     @media (min-width: 1000px) {
       max-width: 1000px;
       left: calc(50% - 500px);

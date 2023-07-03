@@ -11,7 +11,6 @@ const OptionButton = styled.button<{
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 9px 8px 8px;
   font-size: 14px;
   background-color: ${props =>
@@ -22,9 +21,12 @@ const OptionButton = styled.button<{
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 600;
-  font-size: 14px;
+
   line-height: 17px;
   letter-spacing: -0.02em;
+  @media (max-width: 420px) {
+    font-size: 12px;
+  }
 `;
 
 export default OptionButton;

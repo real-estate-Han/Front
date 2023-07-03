@@ -161,7 +161,7 @@ const MapPostList = styled.div`
   display: flex;
   width: 100%;
   height: 60%;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   justify-content: center;
   align-items: center;
   transition: 0.5s;
@@ -173,6 +173,10 @@ const MapPostList = styled.div`
     display: flex;
     flex-direction: column;
   } */
+  @media (min-width: 1000px) {
+    margin-top: 190px;
+    position: relative;
+  }
 `;
 const Kakomap = styled(Map)`
   box-sizing: border-box;

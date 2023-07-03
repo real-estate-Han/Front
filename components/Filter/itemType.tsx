@@ -114,14 +114,13 @@ export default ItemTypeFilter;
 const Wrap = styled.div`
   position: fixed;
   background-color: white;
-
+  z-index: 9;
   top: 134px;
   left: 0;
   width: 100%;
   max-width: 1000px;
   overflow-x: auto;
   box-sizing: border-box;
-  z-index: 3;
   gap: 6px;
   display: flex;
   flex-direction: column;
@@ -153,7 +152,7 @@ const CloseOptionBar = styled.div`
   padding: 0 20px;
   width: 100%;
   height: 60px;
-
+  z-index: 9;
   background: #f5f5f5;
 
   flex: none;

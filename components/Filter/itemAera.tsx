@@ -126,7 +126,7 @@ const Wrap = styled.div`
   max-width: 1000px;
   overflow-x: auto;
   box-sizing: border-box;
-  z-index: 3;
+  z-index: 9;
   gap: 6px;
   display: flex;
   flex-direction: column;

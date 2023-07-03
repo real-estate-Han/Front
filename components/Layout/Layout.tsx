@@ -78,7 +78,8 @@ const Wrapper = styled.div`
   width: 100vw;
   min-height: 100vh;
   color: ${({ theme }) => theme.font.regular};
-  background-color: ${({ theme }) => theme.background};
+  /* background-color: ${({ theme }) => theme.background}; */
+  background-color: ${({ theme }) => theme.mainColor.blue200};
 `;
 export const Content = styled.main`
   width: 100%;
@@ -87,7 +88,7 @@ export const Content = styled.main`
 
   min-height: 82vh;
   box-sizing: border-box;
-  padding-bottom: 150px;
+  /* padding-bottom: 130px; */
   overflow-y: auto;
   box-sizing: border-box;
 `;
@@ -109,7 +110,7 @@ export const Header = styled.div`
 
 export const Footer = styled.footer`
   display: flex;
-  width: 100vw;
+  width: 100%;
   background-color: ${({ theme }) => theme.components.shadow1};
   color: ${({ theme }) => theme.font.button};
   flex-direction: row;

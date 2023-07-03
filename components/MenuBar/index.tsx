@@ -175,7 +175,16 @@ const MenuBar = () => {
           지도
         </span>
       </div>
-      <div className="MenuButton">
+      <div
+        className="MenuButton"
+        onClick={() => {
+          Swal.fire({
+            title: '준비중입니다.',
+            icon: 'warning',
+            confirmButtonText: '확인',
+          });
+        }}
+      >
         <MdOutlineMapsHomeWork
           size={28}
           color={currentUrl === '/quest' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
