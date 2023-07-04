@@ -74,23 +74,23 @@ export const Layout = ({ children }: childeren) => {
 };
 
 const Wrapper = styled.div`
-  position: relative;
   width: 100vw;
   min-height: 100vh;
   color: ${({ theme }) => theme.font.regular};
-  /* background-color: ${({ theme }) => theme.background}; */
   background-color: ${({ theme }) => theme.mainColor.blue200};
+  z-index: 1;
 `;
 export const Content = styled.main`
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
-
   min-height: 82vh;
   box-sizing: border-box;
-  /* padding-bottom: 130px; */
-  overflow-y: auto;
+  overflow: hidden;
   box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3), 0 0 5px rgba(0, 0, 0, 0.3);
 `;
 
 export const StyledLogo = styled(Logo)`

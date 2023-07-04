@@ -2,15 +2,26 @@ import CommonButton from '@components/Button';
 import SelectedButton from '@components/Button/selectedButton';
 import InputRange from '@components/Inputs/inputRange';
 import styled from '@emotion/styled';
-import useStoreFilter from '@zustand/filter';
+import useStoreFilter, { selectedDataFn } from '@zustand/filter';
 import { useState } from 'react';
 
 const ItemManageFilter = () => {
-  const { filtercondition, setFilterCondition } = useStoreFilter(
-    state => state,
-  );
+  const {
+    filtercondition,
+    setFilterCondition,
+    filterdData,
+    setSelectedData,
+    setIsFiltered,
+  } = useStoreFilter(state => state);
   const handleItemTypeChange = (event: any) => {
     setFilterCondition('transactionType', event?.target.value);
+  };
+
+  const filterButton = () => {
+    const selected = selectedDataFn(filterdData, filtercondition);
+    setSelectedData(selected);
+    setFilterCondition('id', 0);
+    setIsFiltered(true);
   };
 
   const closeButton = () => {
@@ -62,7 +73,7 @@ const ItemManageFilter = () => {
         </CommonButton>
         <CommonButton
           onClick={() => {
-            console.log(filtercondition);
+            filterButton();
           }}
         >
           적용

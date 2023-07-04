@@ -68,7 +68,7 @@ const MenuBar = () => {
       clearState();
     });
   };
-  console.log(router);
+
   const { changeLoginState, changeSignUpState } = useStore(state => state);
   useEffect(() => {
     if (router.asPath === '/search' || router.pathname === '/detail/[id]') {
@@ -244,8 +244,8 @@ const MenuDiv = styled.div<{ hiddenBar: boolean }>`
   color: rgba(0, 0, 0, 0.54);
   box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
   @media (min-width: 1000px) {
-    width: 1000px;
-    left: calc(50% - 500px);
+    width: 1200px;
+    left: calc(50% - 600px);
   }
   .MenuButton {
     display: flex;

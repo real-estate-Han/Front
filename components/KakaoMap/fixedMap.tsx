@@ -57,7 +57,7 @@ const Kakomap = styled(Map)`
   border-radius: 10px;
   transition: 0.5s;
   @media (min-width: 1000px) {
-    width: 1000px;
+    width: 100%
     height: 600px;
   }
 `;

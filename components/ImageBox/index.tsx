@@ -26,7 +26,7 @@ export default ImageBox;
 const ImageWrap = styled.div`
   width: 100%;
   height: 40vh;
-  max-height: 300px;
+  max-height: 600px;
 
   position: relative;
 `;

@@ -16,7 +16,7 @@ interface makerType {
   content: postType;
 }
 interface Iprops {
-  initialData?: [postType];
+  initialData?: postType[];
 }
 const ClusterMap = ({ initialData }: Iprops) => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
@@ -29,7 +29,7 @@ const ClusterMap = ({ initialData }: Iprops) => {
     } else {
       setClusterDataState(clusterData?.allpost?.posts);
     }
-  }, [clusterData]);
+  }, [clusterData, initialData]);
   const [map, setMap] = useState<kakao.maps.Map>();
   const [mapState, setMapState] = useState<any>();
   // useMediaQuery
@@ -57,7 +57,6 @@ const ClusterMap = ({ initialData }: Iprops) => {
         return contain;
       });
       setFilterdData(filterdata);
-      setSelectedData(filterdata);
     } else {
       const filterdata = clusterData?.allpost?.posts.filter((p: any) => {
         const contain = bounds.contain(
@@ -67,7 +66,6 @@ const ClusterMap = ({ initialData }: Iprops) => {
         return contain;
       });
       setFilterdData(filterdata);
-      setSelectedData(filterdata);
     }
   };
 
@@ -115,41 +113,39 @@ const ClusterMap = ({ initialData }: Iprops) => {
   return (
     <>
       <MapPostList>
-        <>
-          <Kakomap
-            center={{ lat: 37.854572222429134, lng: 126.78755348011892 }}
-            level={8}
-            isPanto
-            onCreate={setMap}
-            ref={mapRef}
-            onBoundsChanged={map =>
-              setMapState({
-                sw: map.getBounds().getSouthWest(),
-                ne: map.getBounds().getNorthEast(),
-              })
-            }
+        <Kakomap
+          center={{ lat: 37.854572222429134, lng: 126.78755348011892 }}
+          level={8}
+          isPanto
+          onCreate={setMap}
+          ref={mapRef}
+          onBoundsChanged={map =>
+            setMapState({
+              sw: map.getBounds().getSouthWest(),
+              ne: map.getBounds().getNorthEast(),
+            })
+          }
+        >
+          <MarkerClusterer
+            averageCenter // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+            minLevel={2} // 클러스터 할 최소 지도 레벨
+            disableClickZoom // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+            calculator={[4, 8, 16, 32]} // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
+            onClusterclick={onClusterclick}
           >
-            <MarkerClusterer
-              averageCenter // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-              minLevel={2} // 클러스터 할 최소 지도 레벨
-              disableClickZoom // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
-              calculator={[4, 8, 16, 32]} // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
-              onClusterclick={onClusterclick}
-            >
-              {clusterDataState?.map((pos: any) => (
-                <MarkerContainer
-                  key={`${pos.itemGeoLocation.lat}-${pos.itemGeoLocation.lng}`}
-                  position={{
-                    lat: pos.itemGeoLocation.lat,
-                    lng: pos.itemGeoLocation.lng,
-                  }}
-                  content={pos}
-                />
-              ))}
-            </MarkerClusterer>
-            <KakaoMapUtils />
-          </Kakomap>
-        </>
+            {clusterDataState?.map((pos: any) => (
+              <MarkerContainer
+                key={`${pos.itemGeoLocation.lat}-${pos.itemGeoLocation.lng}`}
+                position={{
+                  lat: pos.itemGeoLocation.lat,
+                  lng: pos.itemGeoLocation.lng,
+                }}
+                content={pos}
+              />
+            ))}
+          </MarkerClusterer>
+          <KakaoMapUtils />
+        </Kakomap>
       </MapPostList>
     </>
   );
@@ -174,43 +170,30 @@ const MapPostList = styled.div`
 
   @media (min-width: 1000px) {
     box-sizing: border-box;
-    width: 100%;
-    height: 60%;
     position: fixed;
-    top: 227px;
+    top: 225px;
     left: 0;
     display: flex;
     width: 100%;
     height: 60%;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    /* border: 2px solid red; */
   }
 `;
 const Kakomap = styled(Map)`
-  box-sizing: border-box;
-  width: 100%;
-  height: 70vh;
-  border-top: 2px solid #f5f5f5;
+  @media (max-width: 999px) {
+    box-sizing: border-box;
+    width: 100%;
+    height: 70vh;
+    border-top: 2px solid #f5f5f5;
+  }
   @media (min-width: 1000px) {
-    width: 1000px;
-    height: 700px;
+    border-top: 2px solid #f5f5f5;
+    width: 770px;
+    height: 78vh;
   }
 `;
-/* border: 1px solid black; */
-/* transition: 0.5s; */
-/* padding: 5px; */
-/* @media (max-width: 600px) {
-    width: 100%;
-    height: 60vh;
-  }
-  @media (min-width: 800px) {
-    width: 400px;
-    height: 400px;
-  }
-  @media (min-width: 1200px) {
-    width: 600px;
-    height: 600px;
-  } */
 
 const PostList = styled.div`
   /* background-color: red; */

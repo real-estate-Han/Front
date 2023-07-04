@@ -1,18 +1,22 @@
 import CommonButton from '@components/Button';
 import SelectedButton from '@components/Button/selectedButton';
 import styled from '@emotion/styled';
-import useStoreFilter, { selectedData } from '@zustand/filter';
+import useStoreFilter, { selectedDataFn } from '@zustand/filter';
 import { useState } from 'react';
 
 const ItemTypeFilter = () => {
-  const { filtercondition, setFilterCondition, filterdData } = useStoreFilter(
-    state => state,
-  );
+  const {
+    filtercondition,
+    setFilterCondition,
+    filterdData,
+    setSelectedData,
+    setIsFiltered,
+  } = useStoreFilter(state => state);
   const filterButton = () => {
-    const selected = selectedData(filterdData, filtercondition);
-    // console.log(filterdData);
-    // console.log(filtercondition);
-    // console.log(selected);
+    const selected = selectedDataFn(filterdData, filtercondition);
+    setSelectedData(selected);
+    setFilterCondition('id', 0);
+    setIsFiltered(true);
   };
 
   const handleItemTypeChange = (event: any) => {

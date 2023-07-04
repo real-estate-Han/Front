@@ -12,6 +12,7 @@ import PostItems from '@components/PostItem';
 import styled from '@emotion/styled';
 
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
+import { postType } from '@utils/type';
 import useStoreFilter from '@zustand/filter';
 import { useRouter } from 'next/router';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
@@ -22,9 +23,15 @@ const MainPage = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
 
   // clusterData?.allpost?.posts
-  const { filtercondition, setFilterCondition, filterdData, setFilterdData } =
-    useStoreFilter(state => state);
-
+  const {
+    filtercondition,
+    setFilterCondition,
+    filterdData,
+    setFilterdData,
+    selectedData,
+    isFiltered,
+  } = useStoreFilter(state => state);
+  const [initialDatas, setInitialDatas] = useState<postType[]>(filterdData);
   const filerOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setFilterCondition('id', parseInt(event?.currentTarget?.value, 10));
   };
@@ -59,6 +66,19 @@ const MainPage = () => {
       document.removeEventListener('scroll', handleScroll);
     };
   }, [throttle]);
+
+  useEffect(() => {
+    if (selectedData && selectedData?.length > 0) {
+      setInitialDatas(selectedData);
+    }
+    if (isFiltered && selectedData?.length === 0) {
+      setInitialDatas([]);
+    }
+    if (!isFiltered && selectedData?.length === 0) {
+      setInitialDatas(clusterData?.allpost?.posts);
+    }
+  }, [selectedData, filterdData]);
+
   return (
     <div>
       <Wrap>
@@ -108,7 +128,7 @@ const MainPage = () => {
         {filtercondition?.id === 3 && <ItemManageFilter />}
         {filtercondition?.id === 4 && <ItemAreaFilter />}
         <ContentBox>
-          <ClusterMap />
+          <ClusterMap initialData={initialDatas} />
 
           <ItemList barFixed={barFixed}>
             <GrayBarbox barFixed={barFixed}>
@@ -119,7 +139,7 @@ const MainPage = () => {
               <div>단지 매물 {filterdData?.length}</div>
             </ItemTabBar>
             <ItemBox barFixed={barFixed}>
-              {filterdData?.map((p: any, idx: number) => {
+              {initialDatas?.map((p: any, idx: number) => {
                 return (
                   <>
                     <PostItems wide key={idx} widthPercent={40} postData={p} />
@@ -241,7 +261,10 @@ const ContentBox = styled.div`
     width: 100%;
   }
   @media (min-width: 1000px) {
-    display: flex;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    perspective: 10px;
   }
 `;
 
@@ -261,11 +284,14 @@ const ItemList = styled.div<{ barFixed: boolean }>`
   }
   @media (min-width: 1000px) {
     width: 400px;
-    height: 600px;
+    height: 700px;
     background-color: white;
-    position: fixed;
-    top: 135px;
-    left: calc(80% - 150px);
+    position: absolute;
+    top: 140px;
+    right: calc(20% - 210px);
+    z-index: 5;
+    box-sizing: border-box;
+    padding-left: 5px;
   }
 `;
 const GrayBarbox = styled.div<{ barFixed: boolean }>`
@@ -326,6 +352,7 @@ const ItemTabBar = styled.div<{ barFixed: boolean }>`
   `}
   @media (min-width: 1000px) {
     display: flex;
+    z-index: 5;
   }
 `;
 
