@@ -24,6 +24,12 @@ const OptionButton = styled.button<{
 
   line-height: 17px;
   letter-spacing: -0.02em;
+  &:hover {
+    cursor: pointer;
+    background-color: ${props => props.theme.mainColor.blue200};
+    color: white;
+    border: 0.4px solid transparent;
+  }
   @media (max-width: 420px) {
     font-size: 12px;
   }

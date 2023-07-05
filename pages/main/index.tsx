@@ -12,11 +12,15 @@ import PostItems from '@components/PostItem';
 import styled from '@emotion/styled';
 
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
+import { itemTypeString } from '@utils/postString';
 import { postType } from '@utils/type';
-import useStoreFilter from '@zustand/filter';
+import useStoreFilter, {
+  filterInitialData,
+  selectedDataFn,
+} from '@zustand/filter';
 import { useRouter } from 'next/router';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
-import { MdOutlineSearch } from 'react-icons/md';
+import { MdOutlineSearch, MdRestartAlt } from 'react-icons/md';
 import { MdOutlineSettingsInputComponent } from 'react-icons/md';
 
 const MainPage = () => {
@@ -30,6 +34,9 @@ const MainPage = () => {
     setFilterdData,
     selectedData,
     isFiltered,
+    resetFilterCondition,
+    setSelectedData,
+    setIsFiltered,
   } = useStoreFilter(state => state);
   const [initialDatas, setInitialDatas] = useState<postType[]>(filterdData);
   const filerOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -79,6 +86,55 @@ const MainPage = () => {
     }
   }, [selectedData, filterdData]);
 
+  const isSelected = (value: number, x: string, y: string) => {
+    if (filtercondition?.id === value) {
+      return value;
+    }
+    if (x !== y) {
+      return value;
+    }
+    return 0;
+  };
+
+  const isSelected2 = (value: number) => {
+    if (filtercondition?.id === value) {
+      return value;
+    }
+    if (
+      filtercondition.areaMax !== filterInitialData.areaMax ||
+      filtercondition.areaMin !== filterInitialData.areaMin ||
+      filtercondition.buildingMax !== filterInitialData.buildingMax ||
+      filtercondition.buildingMin !== filterInitialData.buildingMin ||
+      filtercondition.landMax !== filterInitialData.landMax ||
+      filtercondition.landMin !== filterInitialData.landMin
+    ) {
+      return value;
+    }
+  };
+
+  const isSelected3 = (value: number) => {
+    if (filtercondition?.id === value) {
+      return value;
+    }
+    if (
+      filtercondition.manageMax !== filterInitialData.manageMax ||
+      filtercondition.manageMin !== filterInitialData.manageMin
+    ) {
+      return value;
+    }
+  };
+
+  const prevResetData = async () => {
+    await resetFilterCondition(filterInitialData);
+    return true;
+  };
+
+  const resetButtonHandler = () => {
+    setIsFiltered(false);
+    prevResetData();
+    const selected = selectedDataFn(filterdData, filterInitialData);
+    setSelectedData(selected);
+  };
   return (
     <div>
       <Wrap>
@@ -93,32 +149,37 @@ const MainPage = () => {
                 <MdOutlineSettingsInputComponent size={24} />
               </OptionButton>
               <OptionButton
-                selected={filtercondition?.id}
+                selected={isSelected(1, filtercondition?.type, 'none')}
                 value={1}
                 onClick={filerOpen}
               >
-                매물종류
+                {filtercondition.type !== 'none'
+                  ? itemTypeString(filtercondition?.type)
+                  : '매물종류'}
               </OptionButton>
               <OptionButton
-                selected={filtercondition?.id}
+                selected={isSelected(2, filtercondition?.transaction, 'none')}
                 value={2}
                 onClick={filerOpen}
               >
                 거래유형/가격
               </OptionButton>
               <OptionButton
-                selected={filtercondition?.id}
+                selected={isSelected3(3)}
                 value={3}
                 onClick={filerOpen}
               >
                 관리비
               </OptionButton>
               <OptionButton
-                selected={filtercondition?.id}
+                selected={isSelected2(4)}
                 value={4}
                 onClick={filerOpen}
               >
                 면적
+              </OptionButton>
+              <OptionButton selected={0} value={5} onClick={resetButtonHandler}>
+                <MdRestartAlt size={24} />
               </OptionButton>
             </OptionBar>
           </UtilContainer>
@@ -291,7 +352,7 @@ const ItemList = styled.div<{ barFixed: boolean }>`
     right: calc(20% - 210px);
     z-index: 5;
     box-sizing: border-box;
-    padding-left: 5px;
+    padding-left: 10px;
   }
 `;
 const GrayBarbox = styled.div<{ barFixed: boolean }>`

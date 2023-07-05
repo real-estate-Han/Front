@@ -35,13 +35,25 @@ const MobileHomeContent = () => {
       <div className="filtertitle">조건별 매물 검색</div>
       <div className="itemcategorylist ">
         <div className="itemcategory filterone">
-          <span className="oneroomText">원룸 / 빌라</span>
+          <span className="oneroomText">원룸</span>
+        </div>
+        <div className="itemcategory filterone">
+          <span className="oneroomText">투-쓰리룸</span>
+        </div>
+        <div className="itemcategory filterone">
+          <span className="oneroomText">오피스텔</span>
         </div>
         <div className="itemcategory filtertwo">
           <span className="oneroomText">아파트</span>
         </div>
+        <div className="itemcategory filtertwo">
+          <span className="oneroomText">주택</span>
+        </div>
         <div className="itemcategory filterfour">
           <span className="oneroomText">상가</span>
+        </div>
+        <div className="itemcategory filterthrid">
+          <span className="oneroomText">공장-창고</span>
         </div>
         <div className="itemcategory filterthrid">
           <span className="oneroomText">토지</span>
@@ -72,6 +84,7 @@ const Wrap = styled.div`
   box-sizing: border-box;
   padding: 0 20px;
   /* border: 1px solid black; */
+
   .titleLogo {
     color: #0059f9;
     font-size: 20px;
@@ -106,8 +119,15 @@ const Wrap = styled.div`
 
     min-width: 100%;
     overflow: auto;
-    height: 150px;
+    height: 180px;
     margin-bottom: 30px;
+
+    .oneroomText {
+      color: #ffffff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 4px;
+    }
   }
   .itemcategory {
     /* float: left; */
@@ -128,46 +148,19 @@ const Wrap = styled.div`
     text-align: center;
     letter-spacing: -0.02em;
     color: #ffffff;
+    background-size: cover;
   }
   .filterone {
     background-image: url('/oneroom.jpg');
-    background-size: cover;
-    .oneroomText {
-      color: #ffffff;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 5px;
-      border-radius: 4px;
-    }
   }
   .filtertwo {
     background-image: url('/apartmentimage.jpg');
-    background-size: cover;
-    .oneroomText {
-      color: #ffffff;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 5px;
-      border-radius: 4px;
-    }
   }
   .filterthrid {
     background-image: url('/landimage.jpg');
-    background-size: cover;
-    .oneroomText {
-      color: #ffffff;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 5px;
-      border-radius: 4px;
-    }
   }
   .filterfour {
     background-image: url('/shopimage.jpg');
-    background-size: cover;
-    .oneroomText {
-      color: #ffffff;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 5px;
-      border-radius: 4px;
-    }
   }
   .recommandItem {
     display: flex;

@@ -43,7 +43,7 @@ export const TitleString = (transactionType: string, postData: postType) => {
   }
 };
 
-export const itemTypeString = (itemType: string, postData: postType) => {
+export const itemTypeString = (itemType: string, postData?: postType) => {
   switch (itemType) {
     case 'land':
       return `토지 `;

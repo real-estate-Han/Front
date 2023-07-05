@@ -23,7 +23,7 @@ export type FilterData = {
   landMax: number;
 };
 
-const initialData = {
+export const filterInitialData = {
   id: 0,
   type: 'none',
   transaction: 'none',
@@ -54,17 +54,20 @@ interface State {
   setFilterdData: (data?: postType[]) => void;
   setFilterCondition: (key: string, data: any) => void;
   setSelectedData: (data?: postType[]) => void;
+  resetFilterCondition: (data: FilterData) => void;
 }
 
 // 모달창 상태 관리 및 매물 상태관리
 const useStoreFilter = create<State>(set => ({
   isFiltered: false,
-  filtercondition: initialData,
+  filtercondition: filterInitialData,
   setFilterCondition: (key: string, data: any) =>
     set(state => ({
       filtercondition: { ...state.filtercondition, [key]: data },
     })),
   filterdData: [],
+  resetFilterCondition: (data: FilterData) =>
+    set(state => ({ filtercondition: data })),
   setIsFiltered: (data: boolean) => set(state => ({ isFiltered: data })),
   setFilterdData: (data?: postType[]) => set(state => ({ filterdData: data })),
   selectedData: [],
@@ -78,7 +81,6 @@ export const selectedDataFn = (data: postType[], filters: FilterData) => {
   const filteredData = data.filter(item => {
     // type 필터링
     if (filters.type !== 'none' && item.itemType !== filters.type) {
-      console.log('타입');
       return false;
     }
 
@@ -87,7 +89,6 @@ export const selectedDataFn = (data: postType[], filters: FilterData) => {
       filters.transaction !== 'none' &&
       item.transactionType !== filters.transaction
     ) {
-      console.log('종류');
       return false;
     }
 
@@ -96,7 +97,6 @@ export const selectedDataFn = (data: postType[], filters: FilterData) => {
       item.itemSale &&
       (item.itemSale < filters.saleMin || item.itemSale > filters.saleMax)
     ) {
-      console.log('매매');
       return false;
     }
 
@@ -106,7 +106,6 @@ export const selectedDataFn = (data: postType[], filters: FilterData) => {
       (item.itemMonthly < filters.monthlyMin ||
         item.itemMonthly > filters.monthlyMax)
     ) {
-      console.log('월세');
       return false;
     }
 
@@ -115,7 +114,6 @@ export const selectedDataFn = (data: postType[], filters: FilterData) => {
       item.itemJense &&
       (item.itemJense < filters.jenseMin || item.itemJense > filters.jenseMax)
     ) {
-      console.log('전세');
       return false;
     }
 
@@ -125,7 +123,6 @@ export const selectedDataFn = (data: postType[], filters: FilterData) => {
       (item.itemDeposit < filters.depositMin ||
         item.itemDeposit > filters.depositMax)
     ) {
-      console.log('보증금');
       return false;
     }
 
