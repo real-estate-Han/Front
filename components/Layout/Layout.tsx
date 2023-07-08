@@ -1,15 +1,24 @@
+/* eslint-disable react/no-array-index-key */
 import { Logo } from '@components/Logo';
 import Modal from '@components/Modal';
 import styled from '@emotion/styled';
 import LoginContent from '@components/Modal/LoginContent';
 import useStore from '@zustand/store';
 import SignupContent from '@components/Modal/SignupContent';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 import MenuBar from '@components/MenuBar';
 import { useMediaQuery } from 'react-responsive';
+import { Poppins } from '@next/font/google';
+import Slider from 'react-slick';
+import ImageBox from '@components/ImageBox';
+import Image from 'next/image';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { Banner } from '@components/Banner';
 
+const poppins = Poppins({ weight: '400', subsets: ['latin'] });
 type childeren = { children?: React.ReactNode };
 export const Layout = ({ children }: childeren) => {
   const {
@@ -18,6 +27,8 @@ export const Layout = ({ children }: childeren) => {
     changeLikeState,
     changeSignUpState,
     changeLoginState,
+    bannerState,
+    bannerToggle,
   } = useStore(state => state);
   const param = useRouter();
   const isMobile: boolean = useMediaQuery({ query: '(max-width:768px)' });
@@ -34,7 +45,7 @@ export const Layout = ({ children }: childeren) => {
     }
   }, []);
   return (
-    <Wrapper>
+    <Wrapper className={poppins.className}>
       <>
         {loginState ? (
           <Modal
@@ -54,8 +65,20 @@ export const Layout = ({ children }: childeren) => {
             <SignupContent />
           </Modal>
         ) : null}
+        {bannerState ? (
+          <Modal
+            customHeight="445px"
+            modalState={bannerState}
+            closeModal={bannerToggle}
+          >
+            <Banner wide />
+          </Modal>
+        ) : null}
       </>
       {/* <Header></Header> */}
+      <BannerSite>
+        <Banner />
+      </BannerSite>
       <Content>{children}</Content>
       {/* {isMobile ? (
         <Footer>
@@ -79,6 +102,15 @@ const Wrapper = styled.div`
   color: ${({ theme }) => theme.font.regular};
   background-color: ${({ theme }) => theme.mainColor.blue200};
   z-index: 1;
+`;
+const BannerSite = styled.div`
+  display: none;
+  @media (min-width: 1600px) {
+    display: block;
+    position: fixed;
+    top: calc(50% - 200px);
+    left: 0;
+  }
 `;
 export const Content = styled.main`
   width: 100%;

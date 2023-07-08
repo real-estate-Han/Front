@@ -124,15 +124,14 @@ const MainPage = () => {
     }
   };
 
-  const prevResetData = async () => {
-    await resetFilterCondition(filterInitialData);
-    return true;
+  const prevResetData = () => {
+    resetFilterCondition(filterInitialData);
   };
 
-  const resetButtonHandler = () => {
+  const resetButtonHandler = async () => {
     setIsFiltered(false);
     prevResetData();
-    const selected = selectedDataFn(filterdData, filterInitialData);
+    const selected = await selectedDataFn(filterdData, filterInitialData);
     setSelectedData(selected);
   };
   return (

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
@@ -9,11 +10,65 @@ import PostItems from '@components/PostItem';
 import { useQuery } from '@apollo/client';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import { MdOutlineSearch } from 'react-icons/md';
+import useStoreFilter, {
+  filterInitialData,
+  selectedDataFn,
+} from '@zustand/filter';
+import { useRouter } from 'next/router';
 
 const MobileHomeContent = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
   const postData = clusterData?.allpost?.posts;
   const inputBoxRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const {
+    filtercondition,
+    setFilterCondition,
+    filterdData,
+    setSelectedData,
+    setIsFiltered,
+  } = useStoreFilter(state => state);
+
+  const prefilter = async (type: string) => {
+    await setFilterCondition('type', type);
+    console.log(filtercondition);
+    setTimeout(() => {
+      setFilterCondition('type', type);
+      console.log(filtercondition);
+    }, 1000);
+  };
+
+  const filterButton = async (type: string) => {
+    const res = await prefilter(type);
+
+    setTimeout(() => {
+      const selected = selectedDataFn(postData, filtercondition);
+      setSelectedData(selected);
+      setIsFiltered(true);
+    }, 0);
+
+    // await prefilter(type).then(res => {
+    //   if (res.type === type) {
+    //     const selected = selectedDataFn(postData, filtercondition);
+    //     setSelectedData(selected);
+    //     setIsFiltered(true);
+    //     router.push('/main');
+    //   } else {
+    //     prefilter(type).then(res => {
+    //       if (res.type === type) {
+    //         const selected = selectedDataFn(postData, filtercondition);
+    //         setSelectedData(selected);
+    //         setIsFiltered(true);
+    //         router.push('/main');
+    //       }
+    //     });
+    //   }
+    // });
+  };
+
+  // useEffect(() => {
+  //   console.log(filtercondition);
+  // }, [filtercondition]);
 
   return (
     <Wrap>
@@ -34,28 +89,68 @@ const MobileHomeContent = () => {
       </SearchBar>
       <div className="filtertitle">조건별 매물 검색</div>
       <div className="itemcategorylist ">
-        <div className="itemcategory filterone">
+        <div
+          className="itemcategory filterone"
+          onClick={() => {
+            filterButton('oneroom');
+          }}
+        >
           <span className="oneroomText">원룸</span>
         </div>
-        <div className="itemcategory filterone">
+        <div
+          className="itemcategory filterone"
+          onClick={() => {
+            filterButton('tworoom');
+          }}
+        >
           <span className="oneroomText">투-쓰리룸</span>
         </div>
-        <div className="itemcategory filterone">
+        <div
+          className="itemcategory filterone"
+          onClick={() => {
+            filterButton('office');
+          }}
+        >
           <span className="oneroomText">오피스텔</span>
         </div>
-        <div className="itemcategory filtertwo">
+        <div
+          className="itemcategory filtertwo"
+          onClick={() => {
+            filterButton('apartment');
+          }}
+        >
           <span className="oneroomText">아파트</span>
         </div>
-        <div className="itemcategory filtertwo">
+        <div
+          className="itemcategory filtertwo"
+          onClick={() => {
+            filterButton('house');
+          }}
+        >
           <span className="oneroomText">주택</span>
         </div>
-        <div className="itemcategory filterfour">
+        <div
+          className="itemcategory filterfour"
+          onClick={() => {
+            filterButton('shop');
+          }}
+        >
           <span className="oneroomText">상가</span>
         </div>
-        <div className="itemcategory filterthrid">
+        <div
+          className="itemcategory filterthrid"
+          onClick={() => {
+            filterButton('factory');
+          }}
+        >
           <span className="oneroomText">공장-창고</span>
         </div>
-        <div className="itemcategory filterthrid">
+        <div
+          className="itemcategory filterthrid"
+          onClick={() => {
+            filterButton('land');
+          }}
+        >
           <span className="oneroomText">토지</span>
         </div>
       </div>
@@ -149,6 +244,10 @@ const Wrap = styled.div`
     letter-spacing: -0.02em;
     color: #ffffff;
     background-size: cover;
+    &:hover {
+      cursor: pointer;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    }
   }
   .filterone {
     background-image: url('/oneroom.jpg');

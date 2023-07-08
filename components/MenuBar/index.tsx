@@ -23,7 +23,9 @@ const MenuBar = () => {
   const [hiddenBar, setHiddenBar] = useState<boolean>(false);
   const [currentUrl, setCurrentUrl] = useState<string>('/');
   const [isLogined, setIsLogined] = useState<string>('');
-  const { sideMenu, setSideMenu, clearState } = useStore(state => state);
+  const { sideMenu, setSideMenu, clearState, bannerToggle } = useStore(
+    state => state,
+  );
   const [checkLogined, { data, error: loginErr }] = useLazyQuery(IS_LOGINED, {
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'no-cache',
@@ -213,7 +215,7 @@ const MenuBar = () => {
         ) : (
           <div onClick={changeLoginState}> 로그인 및 회원가입 </div>
         )}
-
+        <div onClick={bannerToggle}> 공공사이트 보기</div>
         <div onClick={linktoPostpage}> 매물 올리기</div>
       </SideMenu>
     </MenuDiv>
