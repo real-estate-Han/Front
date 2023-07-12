@@ -189,7 +189,7 @@ const Wrap = styled.div`
   .itemcategorylist {
     width: 100%;
     display: flex;
-    /* flex: none; */
+    flex: none;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
