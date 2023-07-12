@@ -49,12 +49,14 @@ interface State {
   isFiltered: boolean;
   filtercondition: FilterData;
   filterdData: postType[];
-  selectedData?: postType[];
+  selectedData: postType[];
   setIsFiltered: (data: boolean) => void;
   setFilterdData: (data?: postType[]) => void;
   setFilterCondition: (key: string, data: any) => void;
   setSelectedData: (data?: postType[]) => void;
   resetFilterCondition: (data: FilterData) => void;
+  initialDatas: postType[];
+  setInitialDatas: (data: postType[]) => void;
 }
 
 // 모달창 상태 관리 및 매물 상태관리
@@ -66,6 +68,8 @@ const useStoreFilter = create<State>(set => ({
       filtercondition: { ...state.filtercondition, [key]: data },
     })),
   filterdData: [],
+  initialDatas: [],
+  setInitialDatas: (data: postType[]) => set(state => ({ initialDatas: data })),
   resetFilterCondition: (data: FilterData) =>
     set(state => ({ filtercondition: data })),
   setIsFiltered: (data: boolean) => set(state => ({ isFiltered: data })),

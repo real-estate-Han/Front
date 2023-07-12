@@ -15,6 +15,7 @@ import useStoreFilter, {
   selectedDataFn,
 } from '@zustand/filter';
 import { useRouter } from 'next/router';
+import { postType } from '@utils/type';
 
 const MobileHomeContent = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
@@ -27,48 +28,29 @@ const MobileHomeContent = () => {
     filterdData,
     setSelectedData,
     setIsFiltered,
+    isFiltered,
   } = useStoreFilter(state => state);
 
   const prefilter = async (type: string) => {
     await setFilterCondition('type', type);
-    console.log(filtercondition);
-    setTimeout(() => {
-      setFilterCondition('type', type);
-      console.log(filtercondition);
-    }, 1000);
+    return type;
   };
 
-  const filterButton = async (type: string) => {
-    const res = await prefilter(type);
-
-    setTimeout(() => {
-      const selected = selectedDataFn(postData, filtercondition);
-      setSelectedData(selected);
-      setIsFiltered(true);
-    }, 0);
-
-    // await prefilter(type).then(res => {
-    //   if (res.type === type) {
-    //     const selected = selectedDataFn(postData, filtercondition);
-    //     setSelectedData(selected);
-    //     setIsFiltered(true);
-    //     router.push('/main');
-    //   } else {
-    //     prefilter(type).then(res => {
-    //       if (res.type === type) {
-    //         const selected = selectedDataFn(postData, filtercondition);
-    //         setSelectedData(selected);
-    //         setIsFiltered(true);
-    //         router.push('/main');
-    //       }
-    //     });
-    //   }
-    // });
+  const filterButton = () => {
+    const selected = selectedDataFn(postData, filtercondition);
+    setSelectedData(selected);
+    setIsFiltered(true);
+    router.push('/main');
   };
 
-  // useEffect(() => {
-  //   console.log(filtercondition);
-  // }, [filtercondition]);
+  useEffect(() => {
+    if (router.asPath === '/') {
+      setIsFiltered(false);
+    }
+    if (filtercondition.type !== 'none' && !isFiltered) {
+      filterButton();
+    }
+  }, [filtercondition]);
 
   return (
     <Wrap>
@@ -92,23 +74,23 @@ const MobileHomeContent = () => {
         <div
           className="itemcategory filterone"
           onClick={() => {
-            filterButton('oneroom');
+            prefilter('oneroom');
           }}
         >
           <span className="oneroomText">원룸</span>
         </div>
         <div
-          className="itemcategory filterone"
+          className="itemcategory filtertworoom"
           onClick={() => {
-            filterButton('tworoom');
+            prefilter('tworoom');
           }}
         >
           <span className="oneroomText">투-쓰리룸</span>
         </div>
         <div
-          className="itemcategory filterone"
+          className="itemcategory filteroffice"
           onClick={() => {
-            filterButton('office');
+            prefilter('office');
           }}
         >
           <span className="oneroomText">오피스텔</span>
@@ -116,15 +98,15 @@ const MobileHomeContent = () => {
         <div
           className="itemcategory filtertwo"
           onClick={() => {
-            filterButton('apartment');
+            prefilter('apartment');
           }}
         >
           <span className="oneroomText">아파트</span>
         </div>
         <div
-          className="itemcategory filtertwo"
+          className="itemcategory filterhouse"
           onClick={() => {
-            filterButton('house');
+            prefilter('house');
           }}
         >
           <span className="oneroomText">주택</span>
@@ -132,15 +114,15 @@ const MobileHomeContent = () => {
         <div
           className="itemcategory filterfour"
           onClick={() => {
-            filterButton('shop');
+            prefilter('shop');
           }}
         >
           <span className="oneroomText">상가</span>
         </div>
         <div
-          className="itemcategory filterthrid"
+          className="itemcategory filterfactory"
           onClick={() => {
-            filterButton('factory');
+            prefilter('factory');
           }}
         >
           <span className="oneroomText">공장-창고</span>
@@ -148,7 +130,7 @@ const MobileHomeContent = () => {
         <div
           className="itemcategory filterthrid"
           onClick={() => {
-            filterButton('land');
+            prefilter('land');
           }}
         >
           <span className="oneroomText">토지</span>
@@ -156,9 +138,9 @@ const MobileHomeContent = () => {
       </div>
       <div className="filtertitle">문산읍 추천매물</div>
       <div className="recommandItem">
-        {postData.map((p: any, idx: number) => {
+        {postData.map((p: postType, idx: number) => {
           // eslint-disable-next-line react/no-array-index-key
-          return <PostItems key={idx} widthPercent={40} postData={p} />;
+          return <PostItems key={p._id} widthPercent={40} postData={p} />;
         })}
       </div>
     </Wrap>
@@ -175,7 +157,7 @@ const Wrap = styled.div`
   width: 100%;
   height: 100%;
   background-color: #ffffff;
-
+  overflow-y: auto;
   box-sizing: border-box;
   padding: 0 20px;
   /* border: 1px solid black; */
@@ -260,6 +242,18 @@ const Wrap = styled.div`
   }
   .filterfour {
     background-image: url('/shopimage.jpg');
+  }
+  .filtertworoom {
+    background-image: url('/tworoom.jpg');
+  }
+  .filteroffice {
+    background-image: url('/officetel.jpg');
+  }
+  .filterhouse {
+    background-image: url('/house.jpg');
+  }
+  .filterfactory {
+    background-image: url('/factory.jpg');
   }
   .recommandItem {
     display: flex;

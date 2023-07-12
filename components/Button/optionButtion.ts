@@ -12,7 +12,7 @@ const OptionButton = styled.button<{
   align-items: center;
   justify-content: center;
   padding: 9px 8px 8px;
-  font-size: 14px;
+
   background-color: ${props =>
     props.selected === props.value
       ? props.theme.mainColor.blue500
@@ -21,7 +21,7 @@ const OptionButton = styled.button<{
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 600;
-
+  font-size: 15px;
   line-height: 17px;
   letter-spacing: -0.02em;
   &:hover {
@@ -31,7 +31,13 @@ const OptionButton = styled.button<{
     border: 0.4px solid transparent;
   }
   @media (max-width: 420px) {
-    font-size: 12px;
+    font-size: 11px;
+  }
+  @media (max-width: 380px) {
+    font-size: 10px;
+  }
+  @media (max-width: 300px) {
+    font-size: 1vw;
   }
 `;
 

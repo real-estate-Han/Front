@@ -21,15 +21,9 @@ interface Iprops {
 const ClusterMap = ({ initialData }: Iprops) => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
   const { setDetailID, setDetailType } = useStore(state => state);
-  const { setFilterdData } = useStoreFilter(state => state);
+  const { setFilterdData, setInitialDatas } = useStoreFilter(state => state);
   const [clusterDataState, setClusterDataState] = useState<any>();
-  useEffect(() => {
-    if (initialData) {
-      setClusterDataState(initialData);
-    } else {
-      setClusterDataState(clusterData?.allpost?.posts);
-    }
-  }, [clusterData, initialData]);
+
   const [map, setMap] = useState<kakao.maps.Map>();
   const [mapState, setMapState] = useState<any>();
   // useMediaQuery
@@ -57,6 +51,7 @@ const ClusterMap = ({ initialData }: Iprops) => {
         return contain;
       });
       setFilterdData(filterdata);
+      // setClusterDataState(filterdata);
     } else {
       const filterdata = clusterData?.allpost?.posts.filter((p: any) => {
         const contain = bounds.contain(
@@ -65,10 +60,23 @@ const ClusterMap = ({ initialData }: Iprops) => {
 
         return contain;
       });
+      // setFilterdData(filterdata);
       setFilterdData(filterdata);
+    }
+    if (initialData && initialData.length === 0) {
+      console.log('hi');
+      setFilterdData(initialData);
     }
   };
 
+  useEffect(() => {
+    if (initialData && initialData !== undefined) {
+      setClusterDataState(initialData);
+      // setFilterdData(initialData);
+    } else {
+      setClusterDataState(clusterData?.allpost?.posts);
+    }
+  }, [clusterData, initialData]);
   // 맨처음 경계값에 대한 자료가 안들어가 있어 초기값을 설정해줌
   // map이 아직 그려지지 않아서 경계값을 받아올 수 없음 그래서 처음에는 ssr로 데이터 받아와야함
   useEffect(() => {
