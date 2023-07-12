@@ -41,35 +41,46 @@ export const Banner = ({ wide }: BannerProps) => {
     arrows: false,
   };
   const sideBannerSite = [
-    { url: 'https://rtms.molit.go.kr/index.do', img: '/trademanage.png' },
-    { url: 'https://www.nts.go.kr/', img: '/taxhome.png' },
+    {
+      url: 'https://rtms.molit.go.kr/index.do',
+      img: '/trademanage.png',
+      id: 1,
+    },
+    { url: 'https://www.nts.go.kr/', img: '/taxhome.png', id: 2 },
     {
       url: 'https://kras.go.kr:444/cmmmain/goMainPage.do',
       img: '/workconfotable.png',
+      id: 3,
     },
-    { url: 'https://www.lh.or.kr/', img: '/lh.png' },
+    { url: 'https://www.lh.or.kr/', img: '/lh.png', id: 4 },
     {
       url: 'https://www.gov.kr/portal/main/nologin',
       img: '/minone24.png',
+      id: 5,
     },
-    { url: 'http://www.molit.go.kr/portal.do', img: '/landtraffic.png' },
-    { url: 'http://www.iros.go.kr/PMainJ.jsp', img: '/internetD.png' },
-    { url: 'https://seereal.lh.or.kr/main.do', img: '/seereal.png' },
-    { url: 'http://rt.molit.go.kr/', img: '/realtimetrade.png' },
-    { url: 'https://www.wetax.go.kr/main/', img: '/wetax.png' },
-    { url: 'https://www.reb.or.kr/r-one/main.do', img: '/estatetotal.png' },
-    { url: 'https://www.eais.go.kr/', img: '/seumta.png' },
+    { url: 'http://www.molit.go.kr/portal.do', img: '/landtraffic.png', id: 6 },
+    { url: 'http://www.iros.go.kr/PMainJ.jsp', img: '/internetD.png', id: 7 },
+    { url: 'https://seereal.lh.or.kr/main.do', img: '/seereal.png', id: 8 },
+    { url: 'http://rt.molit.go.kr/', img: '/realtimetrade.png', id: 9 },
+    { url: 'https://www.wetax.go.kr/main/', img: '/wetax.png', id: 10 },
+    {
+      url: 'https://www.reb.or.kr/r-one/main.do',
+      img: '/estatetotal.png',
+      id: 11,
+    },
+    { url: 'https://www.eais.go.kr/', img: '/seumta.png', id: 12 },
   ];
   const router = useRouter();
   return (
     <>
       {wide ? (
-        <SideBanner border>
+        <SideBanner border wide>
           <Slider {...widesettings}>
-            {sideBannerSite.map((site, index) => {
+            {sideBannerSite.map(site => {
               return (
                 <BannerSite
-                  key={index}
+                  wide
+                  key={site.id}
                   img={site.img}
                   onClick={() => {
                     router.push(site.url);
@@ -82,10 +93,10 @@ export const Banner = ({ wide }: BannerProps) => {
       ) : (
         <SideBanner border>
           <Slider {...settings}>
-            {sideBannerSite.map((site, index) => {
+            {sideBannerSite.map(site => {
               return (
                 <BannerSite
-                  key={index}
+                  key={site.id}
                   img={site.img}
                   onClick={() => {
                     router.push(site.url);
@@ -100,17 +111,27 @@ export const Banner = ({ wide }: BannerProps) => {
   );
 };
 
-const SideBanner = styled.div<{ border: boolean }>`
-  width: 200px;
-  height: 440px;
+const SideBanner = styled.div<{ border: boolean; wide?: boolean }>`
+  ${({ wide }) =>
+    wide
+      ? ` width: 1000px;
+  height: 80px;`
+      : `  width: 200px;
+  height: 440px;`};
+
   background-color: white;
   /* border: 1px solid ${({ theme }) => theme.mainColor.blue200}; */
   border-radius: 20px;
 `;
 
-const BannerSite = styled.div<{ img: string }>`
-  width: 50px;
-  height: 80px;
+const BannerSite = styled.div<{ img: string; wide?: boolean }>`
+  ${({ wide }) =>
+    wide
+      ? ` width: 600px;
+  height: 100px;`
+      : ` width: 50px;
+  height: 80px;`};
+
   border: 1px solid ${({ theme }) => theme.mainColor.blue200};
   border-radius: 20px;
   box-sizing: border-box;

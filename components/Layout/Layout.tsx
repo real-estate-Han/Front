@@ -67,28 +67,19 @@ export const Layout = ({ children }: childeren) => {
         ) : null}
         {bannerState ? (
           <Modal
-            customHeight="445px"
+            customHeight="105px"
             modalState={bannerState}
             closeModal={bannerToggle}
+            WideModal
           >
             <Banner wide />
           </Modal>
         ) : null}
       </>
-      {/* <Header></Header> */}
-      <BannerSite>
+      {/* <BannerSite>
         <Banner />
-      </BannerSite>
+      </BannerSite> */}
       <Content>{children}</Content>
-      {/* {isMobile ? (
-        <Footer>
-          <MenuBar></MenuBar>
-        </Footer>
-      ) : (
-        <Footer>
-          <FooterContent />
-        </Footer>
-      )} */}
       <Footer>
         <MenuBar />
       </Footer>

@@ -244,7 +244,7 @@ const UpdateMain = ({
               return (
                 <Image
                   // eslint-disable-next-line react/no-array-index-key
-                  key={idx}
+                  key={img}
                   src={img}
                   alt="titleImg"
                   width={150}

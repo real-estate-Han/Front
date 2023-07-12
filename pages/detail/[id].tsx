@@ -263,7 +263,7 @@ const DetailPage = () => {
         />
         {DetailData?.post.itemDetailimg.map((pic: string, index: number) => {
           return (
-            <React.Fragment key={index}>
+            <React.Fragment key={pic}>
               <ImageBox src={pic} alt="titleImage" />
             </React.Fragment>
           );

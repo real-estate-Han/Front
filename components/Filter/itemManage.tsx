@@ -2,14 +2,19 @@ import CommonButton from '@components/Button';
 import SelectedButton from '@components/Button/selectedButton';
 import InputRange from '@components/Inputs/inputRange';
 import styled from '@emotion/styled';
+import { postType } from '@utils/type';
 import useStoreFilter, { selectedDataFn } from '@zustand/filter';
 import { useState } from 'react';
 
-const ItemManageFilter = () => {
+interface IProps {
+  clusterData: postType[];
+}
+const ItemManageFilter = ({ clusterData }: IProps) => {
   const {
     filtercondition,
     setFilterCondition,
     filterdData,
+    setFilterdData,
     setSelectedData,
     setIsFiltered,
   } = useStoreFilter(state => state);
@@ -18,9 +23,10 @@ const ItemManageFilter = () => {
   };
 
   const filterButton = () => {
-    const selected = selectedDataFn(filterdData, filtercondition);
+    const selected = selectedDataFn(clusterData, filtercondition);
     setSelectedData(selected);
     setFilterCondition('id', 0);
+    setFilterdData(selected);
     setIsFiltered(true);
   };
 
