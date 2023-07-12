@@ -23,7 +23,9 @@ const MenuBar = () => {
   const [hiddenBar, setHiddenBar] = useState<boolean>(false);
   const [currentUrl, setCurrentUrl] = useState<string>('/');
   const [isLogined, setIsLogined] = useState<string>('');
-  const { sideMenu, setSideMenu, clearState } = useStore(state => state);
+  const { sideMenu, setSideMenu, clearState, bannerToggle } = useStore(
+    state => state,
+  );
   const [checkLogined, { data, error: loginErr }] = useLazyQuery(IS_LOGINED, {
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'no-cache',
@@ -68,7 +70,7 @@ const MenuBar = () => {
       clearState();
     });
   };
-  console.log(router);
+
   const { changeLoginState, changeSignUpState } = useStore(state => state);
   useEffect(() => {
     if (router.asPath === '/search' || router.pathname === '/detail/[id]') {
@@ -175,7 +177,16 @@ const MenuBar = () => {
           지도
         </span>
       </div>
-      <div className="MenuButton">
+      <div
+        className="MenuButton"
+        onClick={() => {
+          Swal.fire({
+            title: '준비중입니다.',
+            icon: 'warning',
+            confirmButtonText: '확인',
+          });
+        }}
+      >
         <MdOutlineMapsHomeWork
           size={28}
           color={currentUrl === '/quest' ? '#0059F9' : 'rgba(0, 0, 0, 0.54)'}
@@ -204,7 +215,7 @@ const MenuBar = () => {
         ) : (
           <div onClick={changeLoginState}> 로그인 및 회원가입 </div>
         )}
-
+        <div onClick={bannerToggle}> 공공사이트 보기</div>
         <div onClick={linktoPostpage}> 매물 올리기</div>
       </SideMenu>
     </MenuDiv>
@@ -235,8 +246,8 @@ const MenuDiv = styled.div<{ hiddenBar: boolean }>`
   color: rgba(0, 0, 0, 0.54);
   box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.25);
   @media (min-width: 1000px) {
-    width: 1000px;
-    left: calc(50% - 500px);
+    width: 1200px;
+    left: calc(50% - 600px);
   }
   .MenuButton {
     display: flex;

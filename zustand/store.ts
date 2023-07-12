@@ -9,6 +9,8 @@ interface State {
   detailID: string;
   detailType: string;
   sideMenu: boolean;
+  bannerState: boolean;
+  bannerToggle: () => void;
   setSideMenu: () => void;
   setDetailType: (type: string) => void;
   setDetailID: (id: string) => void;
@@ -27,6 +29,8 @@ const useStore = create<State>(set => ({
   detailID: '',
   detailType: '',
   sideMenu: false,
+  bannerState: false,
+  bannerToggle: () => set(state => ({ bannerState: !state.bannerState })),
   setSideMenu: () => set(state => ({ sideMenu: !state.sideMenu })),
   setDetailType: (type: string) => set(state => ({ detailType: type })),
   setDetailID: (id: string) => set(state => ({ detailID: id })),

@@ -489,7 +489,7 @@ const DetailPage = () => {
 export default DetailPage;
 const Wrap = styled.div`
   box-sizing: border-box;
-  width: 100vw;
+  width: 100%;
   height: 100%;
   position: relative;
   background-color: #f5f5f5;
@@ -861,6 +861,7 @@ const FooterBox = styled.div`
   @media (min-width: 1000px) {
     width: 1000px;
     left: calc(50% - 500px);
+    display: none;
   }
   .buttonbox {
     background: #f5f5f5;

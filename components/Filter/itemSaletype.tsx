@@ -2,15 +2,26 @@ import CommonButton from '@components/Button';
 import SelectedButton from '@components/Button/selectedButton';
 import InputRange from '@components/Inputs/inputRange';
 import styled from '@emotion/styled';
-import useStoreFilter from '@zustand/filter';
+import useStoreFilter, { selectedDataFn } from '@zustand/filter';
 import { useState } from 'react';
 
 const ItemSaleTypeFilter = () => {
-  const { filtercondition, setFilterCondition } = useStoreFilter(
-    state => state,
-  );
+  const {
+    filtercondition,
+    setFilterCondition,
+    filterdData,
+    setSelectedData,
+    setIsFiltered,
+  } = useStoreFilter(state => state);
   const handleItemTypeChange = (event: any) => {
     setFilterCondition('transaction', event?.target.value);
+  };
+
+  const filterButton = () => {
+    const selected = selectedDataFn(filterdData, filtercondition);
+    setSelectedData(selected);
+    setFilterCondition('id', 0);
+    setIsFiltered(true);
   };
 
   const closeButton = () => {
@@ -64,54 +75,65 @@ const ItemSaleTypeFilter = () => {
         </div>
         <div className="optionTitle">가격</div>
         <div>
-          <InputRange
-            inputMaxtitle="300만원"
-            inputTitle="월세"
-            setFilterData={setFilterCondition}
-            minRangeName="monthlyMin"
-            maxRangeName="monthlyMax"
-            priceStep={5}
-            priceGap={5}
-            filterData={filtercondition}
-            rangeHandler={rangeHandler}
-            initialData={initialData}
-          />
-          <InputRange
-            inputMaxtitle="10억"
-            inputTitle="보증금"
-            setFilterData={setFilterCondition}
-            minRangeName="depositMin"
-            maxRangeName="depositMax"
-            priceStep={500}
-            priceGap={500}
-            filterData={filtercondition}
-            rangeHandler={rangeHandler}
-            initialData={initialData}
-          />
-          <InputRange
-            inputMaxtitle="10억"
-            inputTitle="전세"
-            setFilterData={setFilterCondition}
-            minRangeName="jenseMin"
-            maxRangeName="jenseMax"
-            priceStep={1000}
-            priceGap={1000}
-            filterData={filtercondition}
-            rangeHandler={rangeHandler}
-            initialData={initialData}
-          />
-          <InputRange
-            inputMaxtitle="10억"
-            inputTitle="매매"
-            setFilterData={setFilterCondition}
-            minRangeName="saleMin"
-            maxRangeName="saleMax"
-            priceStep={1000}
-            priceGap={1000}
-            filterData={filtercondition}
-            rangeHandler={rangeHandler}
-            initialData={initialData}
-          />
+          {filtercondition?.transaction === 'none' ? (
+            <div className="optiondesc">거래 유형을 정해주세요</div>
+          ) : null}
+          {filtercondition?.transaction === 'monthly' ? (
+            <InputRange
+              inputMaxtitle="300만원"
+              inputTitle="월세"
+              setFilterData={setFilterCondition}
+              minRangeName="monthlyMin"
+              maxRangeName="monthlyMax"
+              priceStep={5}
+              priceGap={5}
+              filterData={filtercondition}
+              rangeHandler={rangeHandler}
+              initialData={initialData}
+            />
+          ) : null}
+          {filtercondition?.transaction === 'monthly' ? (
+            <InputRange
+              inputMaxtitle="10억"
+              inputTitle="보증금"
+              setFilterData={setFilterCondition}
+              minRangeName="depositMin"
+              maxRangeName="depositMax"
+              priceStep={500}
+              priceGap={500}
+              filterData={filtercondition}
+              rangeHandler={rangeHandler}
+              initialData={initialData}
+            />
+          ) : null}
+          {filtercondition?.transaction === 'jense' ? (
+            <InputRange
+              inputMaxtitle="10억"
+              inputTitle="전세"
+              setFilterData={setFilterCondition}
+              minRangeName="jenseMin"
+              maxRangeName="jenseMax"
+              priceStep={1000}
+              priceGap={1000}
+              filterData={filtercondition}
+              rangeHandler={rangeHandler}
+              initialData={initialData}
+            />
+          ) : null}
+          {filtercondition?.transaction === 'sale' ? (
+            <InputRange
+              inputMaxtitle="10억"
+              inputTitle="매매"
+              setFilterData={setFilterCondition}
+              minRangeName="saleMin"
+              maxRangeName="saleMax"
+              priceStep={1000}
+              priceGap={1000}
+              filterData={filtercondition}
+              rangeHandler={rangeHandler}
+              initialData={initialData}
+            />
+          ) : null}
         </div>
       </OptionBar>
       <CloseOptionBar>
@@ -120,7 +142,7 @@ const ItemSaleTypeFilter = () => {
         </CommonButton>
         <CommonButton
           onClick={() => {
-            console.log(filtercondition);
+            filterButton();
           }}
         >
           적용
@@ -135,14 +157,13 @@ export default ItemSaleTypeFilter;
 const Wrap = styled.div`
   position: fixed;
   background-color: white;
-
+  z-index: 9;
   top: 134px;
   left: 0;
   width: 100%;
   max-width: 1000px;
   overflow-x: auto;
   box-sizing: border-box;
-  z-index: 3;
   gap: 6px;
   display: flex;
   flex-direction: column;
@@ -162,6 +183,12 @@ const OptionBar = styled.div`
     width: 100%;
     font-size: 16px;
     font-weight: 600;
+  }
+  .optiondesc {
+    width: 100%;
+    font-size: 13px;
+    font-weight: 400;
+    text-align: center;
   }
 `;
 const CloseOptionBar = styled.div`

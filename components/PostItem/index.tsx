@@ -87,6 +87,10 @@ const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
   letter-spacing: -0.02em;
   border-bottom: 1px solid #e0e0e0;
   margin-top: 5px;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+  }
   @media (max-width: 403px) {
     flex-direction: row;
     width: 400px;

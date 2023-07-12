@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
@@ -9,11 +10,65 @@ import PostItems from '@components/PostItem';
 import { useQuery } from '@apollo/client';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import { MdOutlineSearch } from 'react-icons/md';
+import useStoreFilter, {
+  filterInitialData,
+  selectedDataFn,
+} from '@zustand/filter';
+import { useRouter } from 'next/router';
 
 const MobileHomeContent = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
   const postData = clusterData?.allpost?.posts;
   const inputBoxRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const {
+    filtercondition,
+    setFilterCondition,
+    filterdData,
+    setSelectedData,
+    setIsFiltered,
+  } = useStoreFilter(state => state);
+
+  const prefilter = async (type: string) => {
+    await setFilterCondition('type', type);
+    console.log(filtercondition);
+    setTimeout(() => {
+      setFilterCondition('type', type);
+      console.log(filtercondition);
+    }, 1000);
+  };
+
+  const filterButton = async (type: string) => {
+    const res = await prefilter(type);
+
+    setTimeout(() => {
+      const selected = selectedDataFn(postData, filtercondition);
+      setSelectedData(selected);
+      setIsFiltered(true);
+    }, 0);
+
+    // await prefilter(type).then(res => {
+    //   if (res.type === type) {
+    //     const selected = selectedDataFn(postData, filtercondition);
+    //     setSelectedData(selected);
+    //     setIsFiltered(true);
+    //     router.push('/main');
+    //   } else {
+    //     prefilter(type).then(res => {
+    //       if (res.type === type) {
+    //         const selected = selectedDataFn(postData, filtercondition);
+    //         setSelectedData(selected);
+    //         setIsFiltered(true);
+    //         router.push('/main');
+    //       }
+    //     });
+    //   }
+    // });
+  };
+
+  // useEffect(() => {
+  //   console.log(filtercondition);
+  // }, [filtercondition]);
 
   return (
     <Wrap>
@@ -34,16 +89,68 @@ const MobileHomeContent = () => {
       </SearchBar>
       <div className="filtertitle">조건별 매물 검색</div>
       <div className="itemcategorylist ">
-        <div className="itemcategory filterone">
-          <span className="oneroomText">원룸 / 빌라</span>
+        <div
+          className="itemcategory filterone"
+          onClick={() => {
+            filterButton('oneroom');
+          }}
+        >
+          <span className="oneroomText">원룸</span>
         </div>
-        <div className="itemcategory filtertwo">
+        <div
+          className="itemcategory filterone"
+          onClick={() => {
+            filterButton('tworoom');
+          }}
+        >
+          <span className="oneroomText">투-쓰리룸</span>
+        </div>
+        <div
+          className="itemcategory filterone"
+          onClick={() => {
+            filterButton('office');
+          }}
+        >
+          <span className="oneroomText">오피스텔</span>
+        </div>
+        <div
+          className="itemcategory filtertwo"
+          onClick={() => {
+            filterButton('apartment');
+          }}
+        >
           <span className="oneroomText">아파트</span>
         </div>
-        <div className="itemcategory filterfour">
+        <div
+          className="itemcategory filtertwo"
+          onClick={() => {
+            filterButton('house');
+          }}
+        >
+          <span className="oneroomText">주택</span>
+        </div>
+        <div
+          className="itemcategory filterfour"
+          onClick={() => {
+            filterButton('shop');
+          }}
+        >
           <span className="oneroomText">상가</span>
         </div>
-        <div className="itemcategory filterthrid">
+        <div
+          className="itemcategory filterthrid"
+          onClick={() => {
+            filterButton('factory');
+          }}
+        >
+          <span className="oneroomText">공장-창고</span>
+        </div>
+        <div
+          className="itemcategory filterthrid"
+          onClick={() => {
+            filterButton('land');
+          }}
+        >
           <span className="oneroomText">토지</span>
         </div>
       </div>
@@ -63,14 +170,16 @@ export default MobileHomeContent;
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   height: 100%;
   background-color: #ffffff;
+
   box-sizing: border-box;
   padding: 0 20px;
   /* border: 1px solid black; */
+
   .titleLogo {
     color: #0059f9;
     font-size: 20px;
@@ -105,8 +214,15 @@ const Wrap = styled.div`
 
     min-width: 100%;
     overflow: auto;
-    height: 150px;
+    height: 180px;
     margin-bottom: 30px;
+
+    .oneroomText {
+      color: #ffffff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 4px;
+    }
   }
   .itemcategory {
     /* float: left; */
@@ -127,46 +243,23 @@ const Wrap = styled.div`
     text-align: center;
     letter-spacing: -0.02em;
     color: #ffffff;
+    background-size: cover;
+    &:hover {
+      cursor: pointer;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    }
   }
   .filterone {
     background-image: url('/oneroom.jpg');
-    background-size: cover;
-    .oneroomText {
-      color: #ffffff;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 5px;
-      border-radius: 4px;
-    }
   }
   .filtertwo {
     background-image: url('/apartmentimage.jpg');
-    background-size: cover;
-    .oneroomText {
-      color: #ffffff;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 5px;
-      border-radius: 4px;
-    }
   }
   .filterthrid {
     background-image: url('/landimage.jpg');
-    background-size: cover;
-    .oneroomText {
-      color: #ffffff;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 5px;
-      border-radius: 4px;
-    }
   }
   .filterfour {
     background-image: url('/shopimage.jpg');
-    background-size: cover;
-    .oneroomText {
-      color: #ffffff;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 5px;
-      border-radius: 4px;
-    }
   }
   .recommandItem {
     display: flex;

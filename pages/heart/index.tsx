@@ -87,7 +87,7 @@ const HeartPage = () => {
           <div>찜한 매물 {likedData?.length}</div>
         </ItemTabBar>
         <ItemBox barFixed={barFixed}>
-          {filterdData?.map((p: any, idx: number) => {
+          {likedData?.map((p: any, idx: number) => {
             return (
               <>
                 <PostItems wide key={idx} widthPercent={40} postData={p} />
@@ -110,6 +110,7 @@ const Wrap = styled.div`
   justify-content: center;
   position: relative;
   transition: all 2s ease;
+  background-color: white;
 `;
 const UtilBox = styled.div<{ barFixed: boolean }>`
   background-color: white;
@@ -181,7 +182,7 @@ const OptionBar = styled.div`
 
 const ItemList = styled.div<{ barFixed: boolean }>`
   width: 100%;
-  min-height: 350px;
+  min-height: 380px;
   height: 70vh;
   margin-top: 78vh;
   z-index: 2;
