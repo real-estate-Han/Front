@@ -16,9 +16,7 @@ import { postType } from '@utils/type';
 import PostItems from '@components/PostItem';
 
 const MobileHomeContent = () => {
-  const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA, {
-    fetchPolicy: 'network-only',
-  });
+  const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
   const postData = clusterData?.allpost?.posts;
   const inputBoxRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -138,7 +136,7 @@ const MobileHomeContent = () => {
       </div>
       <div className="filtertitle">문산읍 추천매물</div>
       <div className="recommandItem">
-        {postData.map((p: postType, idx: number) => {
+        {postData?.map((p: postType, idx: number) => {
           // eslint-disable-next-line react/no-array-index-key
           return <PostItems key={p._id} widthPercent={40} postData={p} />;
         })}
