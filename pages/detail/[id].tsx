@@ -456,7 +456,7 @@ const DetailPage = () => {
             <span>연락처</span> : 031-953-6300
           </div>
           <div>
-            <span>부동산 중개 허가번호</span> : 가3632-4166
+            <span>부동산 중개 등록번호</span> : 41480-2023-00100
           </div>
           <div>
             <span>주소</span> : 경기도 파주시 문산읍 우계로 493
@@ -637,6 +637,9 @@ const PostTable1 = styled.div`
     font-size: 24px;
     line-height: 29px;
     color: #000000;
+    @media (max-width: 430px) {
+      font-size: 20px;
+    }
   }
   .itemaddress {
     margin-top: 8px;

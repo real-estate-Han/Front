@@ -18,7 +18,9 @@ import { useRouter } from 'next/router';
 import { postType } from '@utils/type';
 
 const MobileHomeContent = () => {
-  const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
+  const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA, {
+    fetchPolicy: 'network-only',
+  });
   const postData = clusterData?.allpost?.posts;
   const inputBoxRef = useRef<HTMLDivElement>(null);
   const router = useRouter();

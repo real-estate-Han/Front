@@ -131,6 +131,7 @@ const PostItem = () => {
 
 export default PostItem;
 const Wrap = styled.div`
+  background-color: #fff;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -139,7 +140,9 @@ const Wrap = styled.div`
   justify-content: center;
   align-items: center;
   /* border: 1px solid red; */
-
+  @media (min-width: 999px) {
+    margin-bottom: 80px;
+  }
   form {
     width: 90%;
   }

@@ -19,7 +19,9 @@ interface Iprops {
   initialData?: postType[];
 }
 const ClusterMap = ({ initialData }: Iprops) => {
-  const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
+  const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA, {
+    fetchPolicy: 'network-only',
+  });
   const { setDetailID, setDetailType } = useStore(state => state);
   const { setFilterdData, setInitialDatas } = useStoreFilter(state => state);
   const [clusterDataState, setClusterDataState] = useState<any>();
@@ -51,7 +53,6 @@ const ClusterMap = ({ initialData }: Iprops) => {
         return contain;
       });
       setFilterdData(filterdata);
-      // setClusterDataState(filterdata);
     } else {
       const filterdata = clusterData?.allpost?.posts.filter((p: any) => {
         const contain = bounds.contain(
@@ -60,11 +61,9 @@ const ClusterMap = ({ initialData }: Iprops) => {
 
         return contain;
       });
-      // setFilterdData(filterdata);
       setFilterdData(filterdata);
     }
     if (initialData && initialData.length === 0) {
-      console.log('hi');
       setFilterdData(initialData);
     }
   };
