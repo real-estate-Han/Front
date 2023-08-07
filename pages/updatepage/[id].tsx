@@ -2,13 +2,13 @@ import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import dynamic from 'next/dynamic';
-import { GeoLocation } from '@utils/type';
 import Swal from 'sweetalert2';
 import TopBar from '@components/TopBar';
 import CommonButton from '@components/Button';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { GET_DETAIL_POST } from '@utils/apollo/gqls';
+import { GeoLocation } from '@utils/type';
 
 import UpdateMain from '@components/Mobile/UpdatePage/main';
 

@@ -5,16 +5,9 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import {
-  DELETE_POST,
-  FAVOR_TOGGLE,
-  GET_DETAIL_POST,
-  IS_LOGINED,
-} from '@utils/apollo/gqls';
 import Swal from 'sweetalert2';
 import useStore from '@zustand/store';
 import { S3DeleteFile, S3DeleteFiles } from '@utils/S3util';
-import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -31,9 +24,15 @@ import {
   MdOutlineMailOutline,
 } from 'react-icons/md';
 import DebtIcon from 'public/icon/debt';
-import HomeIcon from 'public/icon/homeicon';
 import ImageBox from '@components/ImageBox';
 import CommonButton from '@components/Button';
+import {
+  DELETE_POST,
+  FAVOR_TOGGLE,
+  GET_DETAIL_POST,
+  IS_LOGINED,
+  GET_CLUSTER_DATA,
+} from '@utils/apollo/gqls';
 import {
   TitleString,
   formatDate,

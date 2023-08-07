@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import Swal from 'sweetalert2';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { Inputs } from '@components/Inputs';
 import { useForm } from 'react-hook-form';
-import { useLazyQuery, useQuery } from '@apollo/client';
 import { GET_USER } from '@utils/apollo/gqls';
 import useStore from '@zustand/store';
 

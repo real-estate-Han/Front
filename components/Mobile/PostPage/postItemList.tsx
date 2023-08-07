@@ -3,8 +3,8 @@ import {
   UseFormGetValues,
   UseFormRegister,
 } from 'react-hook-form';
-import { postType } from '@utils/type';
 import styled from '@emotion/styled';
+import { postType } from '@utils/type';
 import { Inputs } from '@components/Inputs';
 
 interface InputProps {

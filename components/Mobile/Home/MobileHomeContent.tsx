@@ -1,21 +1,19 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Slider from 'react-slick';
 import { MdArrowForwardIos } from 'react-icons/md';
-import PostItems from '@components/PostItem';
 import { useQuery } from '@apollo/client';
-import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import { MdOutlineSearch } from 'react-icons/md';
+import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import useStoreFilter, {
   filterInitialData,
   selectedDataFn,
 } from '@zustand/filter';
-import { useRouter } from 'next/router';
 import { postType } from '@utils/type';
+import PostItems from '@components/PostItem';
 
 const MobileHomeContent = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA, {

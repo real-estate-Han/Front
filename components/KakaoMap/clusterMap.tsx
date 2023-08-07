@@ -1,13 +1,13 @@
 import styled from '@emotion/styled';
 import { Map, MarkerClusterer, MapMarker } from 'react-kakao-maps-sdk';
 import { useEffect, useRef, useState } from 'react';
-import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import PostItem from '@components/PostItem';
 import { useQuery } from '@apollo/client';
 import KakaoMapUtil from '@components/kakaoMapUtils';
 import { postType } from '@utils/type';
 import { useMediaQuery } from 'react-responsive';
 import { useRouter } from 'next/router';
+import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import useStoreFilter from '@zustand/filter';
 import useStore from '@zustand/store';
 

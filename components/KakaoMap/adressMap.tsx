@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import {
   Map,
@@ -6,15 +7,6 @@ import {
   ZoomControl,
 } from 'react-kakao-maps-sdk';
 
-import KakaomapUtil from '@components/kakaoMapUtils';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
 import { GeoLocation } from '@utils/type';
 
 interface KakaoMapProps {

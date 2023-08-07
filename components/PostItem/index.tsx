@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { postType } from '@utils/type';
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import useStore from '@zustand/store';
 import { MdFavoriteBorder, MdOutlineFavorite } from 'react-icons/md';
+import useStore from '@zustand/store';
+import { postType } from '@utils/type';
 import { TitleString, itemSpace, itemTypeString } from '@utils/postString';
 
 interface PostItemProps {

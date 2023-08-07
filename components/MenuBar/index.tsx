@@ -1,14 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useLazyQuery } from '@apollo/client';
-import { css } from '@emotion/react';
-import { keyframes } from '@emotion/react';
-import styled from '@emotion/styled';
-import { IS_LOGINED } from '@utils/apollo/gqls';
-import useStore from '@zustand/store';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import react, { useEffect, useState } from 'react';
-import { set } from 'react-hook-form';
 import {
   MdOutlineHome,
   MdMoreHoriz,
@@ -17,6 +9,12 @@ import {
   MdOutlineFavoriteBorder,
 } from 'react-icons/md';
 import Swal from 'sweetalert2';
+import { useLazyQuery } from '@apollo/client';
+import { css } from '@emotion/react';
+import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
+import { IS_LOGINED } from '@utils/apollo/gqls';
+import useStore from '@zustand/store';
 
 const MenuBar = () => {
   const router = useRouter();

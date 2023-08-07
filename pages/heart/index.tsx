@@ -1,23 +1,20 @@
 /* eslint-disable react/no-array-index-key */
+import { useRouter } from 'next/router';
+import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import OptionButton from '@components/Button/optionButtion';
+import styled from '@emotion/styled';
+import { MdOutlineSearch } from 'react-icons/md';
 import ItemAreaFilter from '@components/Filter/itemAera';
 import ItemManageFilter from '@components/Filter/itemManage';
 import ItemSaleTypeFilter from '@components/Filter/itemSaletype';
 import ItemTypeFilter from '@components/Filter/itemType';
 import MapContents from '@components/MapContent';
-import styled from '@emotion/styled';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
-import { itemTypeString } from '@utils/postString';
 import useStoreFilter, {
   filterInitialData,
   selectedDataFn,
 } from '@zustand/filter';
 import useStore from '@zustand/store';
-import { useRouter } from 'next/router';
-import { MouseEventHandler, useEffect, useRef, useState } from 'react';
-import { MdOutlineSearch, MdRestartAlt } from 'react-icons/md';
-import { MdOutlineSettingsInputComponent } from 'react-icons/md';
 
 const HeartPage = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);

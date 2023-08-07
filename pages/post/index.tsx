@@ -2,11 +2,11 @@ import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import dynamic from 'next/dynamic';
-import { GeoLocation } from '@utils/type';
 import Swal from 'sweetalert2';
+import { useRouter } from 'next/router';
+import { GeoLocation } from '@utils/type';
 import TopBar from '@components/TopBar';
 import CommonButton from '@components/Button';
-import { useRouter } from 'next/router';
 import PostMain from '../../components/Mobile/PostPage/main';
 
 const PostItem = () => {

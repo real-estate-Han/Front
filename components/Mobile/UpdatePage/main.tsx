@@ -1,17 +1,12 @@
+import { useRouter } from 'next/router';
+import imageCompression from 'browser-image-compression';
 import styled from '@emotion/styled';
-
 import { SubmitHandler, useForm } from 'react-hook-form';
-import {
-  ChangeEvent,
-  MouseEventHandler,
-  useState,
-  useEffect,
-  SetStateAction,
-} from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { postInputType, postType } from '@utils/type';
 import Image from 'next/image';
-import PostItemList from '@components/Mobile/PostPage/postItemList';
+
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import {
   Creat_POST,
@@ -20,12 +15,10 @@ import {
   IS_LOGINED,
   UPDATE_POST,
 } from '@utils/apollo/gqls';
-import imageCompression from 'browser-image-compression';
 import CommonButton from '@components/Button';
 import CommonLabel from '@components/Label';
 import Hr from '@components/Hr';
 import SelectedButton from '@components/Button/selectedButton';
-import { useRouter } from 'next/router';
 import { S3UpLoadFile } from '../../../utils/S3util';
 import UpdateItemList from './updateInputList';
 

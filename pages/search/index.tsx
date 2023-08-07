@@ -1,13 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 import styled from '@emotion/styled';
-import Image from 'next/image';
+
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  MdOutlineLocationOn,
-  MdLocationCity,
-  MdDirectionsSubway,
-} from 'react-icons/md';
+import { useEffect, useRef, useState } from 'react';
+
 import { MdOutlineSearch, MdCancel, MdArrowBackIos } from 'react-icons/md';
 import SearchExample from './searchExample';
 import RecentSearch from './recentSearch';

@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect } from 'react';
-import Modal from '@components/Modal';
 import styled from '@emotion/styled';
 import LoginContent from '@components/Modal/LoginContent';
 import useStore from '@zustand/store';
@@ -13,6 +12,7 @@ import { Logo } from '@components/Logo';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Banner } from '@components/Banner';
+import Modal from '@components/Modal';
 
 const poppins = Poppins({ weight: '400', subsets: ['latin'] });
 type childeren = { children?: React.ReactNode };

@@ -1,34 +1,14 @@
 /* eslint-disable react/no-array-index-key */
+import { useRouter } from 'next/router';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import OptionButton from '@components/Button/optionButtion';
-import ItemAreaFilter from '@components/Filter/itemAera';
-import ItemManageFilter from '@components/Filter/itemManage';
-import ItemSaleTypeFilter from '@components/Filter/itemSaletype';
-import ItemTypeFilter from '@components/Filter/itemType';
-import Hr from '@components/Hr';
+import styled from '@emotion/styled';
 import ClusterMap from '@components/KakaoMap/clusterMap';
 import PostItems from '@components/PostItem';
-
-import styled from '@emotion/styled';
-
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
-import { itemTypeString } from '@utils/postString';
 import { postType } from '@utils/type';
-import useStoreFilter, {
-  filterInitialData,
-  selectedDataFn,
-} from '@zustand/filter';
+import useStoreFilter from '@zustand/filter';
 import useStore from '@zustand/store';
-import { useRouter } from 'next/router';
-import {
-  MouseEventHandler,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
-import { MdOutlineSearch, MdRestartAlt } from 'react-icons/md';
-import { MdOutlineSettingsInputComponent } from 'react-icons/md';
 
 const MapContents = () => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA, {
