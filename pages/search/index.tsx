@@ -96,12 +96,12 @@ const SearchPage = () => {
   };
 
   return (
-    <>
-      <BackBtn onClick={onClickBackBtn}>
-        {' '}
-        <MdArrowBackIos size={28} color="black" />
-      </BackBtn>
+    <SearchWrap>
       <Sale>
+        <BackBtn onClick={onClickBackBtn}>
+          {' '}
+          <MdArrowBackIos size={28} color="black" />
+        </BackBtn>
         <SaleItem
           selected={selected}
           onClick={() => {
@@ -123,7 +123,7 @@ const SearchPage = () => {
           매물번호
         </SaleNumber>
       </Sale>
-      <SearchWrap>
+      <div>
         <header>
           <SearchBar ref={inputBoxRef} onClick={onClickSearchBtn}>
             <MdOutlineSearch size={28} color="black" className="searchicon" />
@@ -182,7 +182,7 @@ const SearchPage = () => {
         <div>
           {record ? <RecentSearch /> : saleNumberEmpty ? '' : <SearchExample />}
         </div>
-      </SearchWrap>
+      </div>
       {/* <WholeBox> */}
       {/* <Title text="AutoComplete" /> */}
       {/* <InputBox> */}
@@ -207,13 +207,18 @@ const SearchPage = () => {
           </DropDownBox>
         )}
       </WholeBox> */}
-    </>
+    </SearchWrap>
   );
 };
 export default SearchPage;
 const BackBtn = styled.section`
-  margin-left: 20px;
-  margin-top: 5px;
+  width: 30px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-left: 5px;
 `;
 const Sale = styled.section`
   width: 100%;
@@ -303,7 +308,11 @@ const SearchBar = styled.div`
     margin-right: 20px;
   }
 `;
-const SearchWrap = styled.div``;
+const SearchWrap = styled.div`
+  background-color: #ffffff;
+  width: 100%;
+  height: 100%;
+`;
 const activeBorderRadius = '16px 16px 0 0';
 const inactiveBorderRadius = '16px 16px 16px 16px';
 

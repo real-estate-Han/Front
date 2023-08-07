@@ -18,14 +18,23 @@ import useStoreFilter, {
   filterInitialData,
   selectedDataFn,
 } from '@zustand/filter';
+import useStore from '@zustand/store';
 import { useRouter } from 'next/router';
-import { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import {
+  MouseEventHandler,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { MdOutlineSearch, MdRestartAlt } from 'react-icons/md';
 import { MdOutlineSettingsInputComponent } from 'react-icons/md';
 
 const MapContents = () => {
-  const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA);
-
+  const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA, {
+    fetchPolicy: 'network-only',
+  });
+  const router = useRouter();
   // clusterData?.allpost?.posts
   const {
     filterdData,
@@ -37,6 +46,13 @@ const MapContents = () => {
     setInitialDatas,
   } = useStoreFilter(state => state);
   // const [initialDatas, setInitialDatas] = useState<postType[]>(filterdData);
+
+  const { likePostState } = useStore(state => state);
+  const likedData = clusterData?.allpost?.posts?.filter((p: any) => {
+    return likePostState?.some((l: any) => {
+      return p?._id === l;
+    });
+  });
 
   useEffect(() => {
     setFilterdData(clusterData?.allpost?.posts);
@@ -60,7 +76,7 @@ const MapContents = () => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.addEventListener('scroll', handleScroll);
     return () => {
       document.removeEventListener('scroll', handleScroll);
@@ -68,17 +84,22 @@ const MapContents = () => {
   }, [throttle]);
 
   useEffect(() => {
-    if (selectedData && selectedData?.length > 0) {
-      setInitialDatas(selectedData);
+    if (router.asPath === '/heart') {
+      setInitialDatas(likedData);
     }
-    if (isFiltered && selectedData?.length === 0) {
-      setInitialDatas([]);
-    }
-    if (!isFiltered && selectedData?.length === 0) {
-      setInitialDatas(clusterData?.allpost?.posts);
-    }
-    if (!isFiltered && selectedData?.length > 0) {
-      setInitialDatas(selectedData);
+    if (router.asPath !== '/heart') {
+      if (selectedData && selectedData?.length > 0) {
+        setInitialDatas(selectedData);
+      }
+      if (isFiltered && selectedData?.length === 0) {
+        setInitialDatas([]);
+      }
+      if (!isFiltered && selectedData?.length === 0) {
+        setInitialDatas(clusterData?.allpost?.posts);
+      }
+      if (!isFiltered && selectedData?.length > 0) {
+        setInitialDatas(selectedData);
+      }
     }
   }, [selectedData, filterdData]);
 
@@ -216,7 +237,8 @@ const ItemBox = styled.div<{ barFixed: boolean }>`
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: scroll;
   background-color: white;
   @media (max-width: 699px) {
     justify-content: center;
