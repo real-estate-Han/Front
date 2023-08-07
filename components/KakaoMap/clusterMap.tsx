@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import useStore from '@zustand/store';
 import { Map, MarkerClusterer, MapMarker } from 'react-kakao-maps-sdk';
 import { useEffect, useRef, useState } from 'react';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
@@ -10,6 +9,7 @@ import { postType } from '@utils/type';
 import { useMediaQuery } from 'react-responsive';
 import { useRouter } from 'next/router';
 import useStoreFilter from '@zustand/filter';
+import useStore from '@zustand/store';
 
 interface makerType {
   position: { lat: number; lng: number };

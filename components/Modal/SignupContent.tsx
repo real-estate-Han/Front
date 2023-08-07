@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import Swal from 'sweetalert2';
 import { Inputs } from '@components/Inputs';
 import { useForm } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
-import Swal from 'sweetalert2';
 import useStore from '@zustand/store';
 
 export interface LoginContentType {

@@ -1,4 +1,3 @@
-import { Inputs } from '@components/Inputs';
 import {
   FieldErrors,
   UseFormGetValues,
@@ -7,6 +6,7 @@ import {
 
 import { postType } from '@utils/type';
 import styled from '@emotion/styled';
+import { Inputs } from '@components/Inputs';
 
 interface InputProps {
   register: UseFormRegister<postType>;

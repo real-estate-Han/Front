@@ -1,19 +1,15 @@
 /* eslint-disable react/no-array-index-key */
-import { Logo } from '@components/Logo';
+import React, { useEffect } from 'react';
 import Modal from '@components/Modal';
 import styled from '@emotion/styled';
 import LoginContent from '@components/Modal/LoginContent';
 import useStore from '@zustand/store';
 import SignupContent from '@components/Modal/SignupContent';
-import React, { useEffect } from 'react';
-
 import { useRouter } from 'next/router';
 import MenuBar from '@components/MenuBar';
 import { useMediaQuery } from 'react-responsive';
 import { Poppins } from '@next/font/google';
-import Slider from 'react-slick';
-import ImageBox from '@components/ImageBox';
-import Image from 'next/image';
+import { Logo } from '@components/Logo';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Banner } from '@components/Banner';

@@ -1,10 +1,9 @@
+import styled from '@emotion/styled';
 import CommonButton from '@components/Button';
 import SelectedButton from '@components/Button/selectedButton';
 import InputRange from '@components/Inputs/inputRange';
-import styled from '@emotion/styled';
 import { postType } from '@utils/type';
 import useStoreFilter, { selectedDataFn } from '@zustand/filter';
-import { useState } from 'react';
 
 interface IProps {
   clusterData: postType[];

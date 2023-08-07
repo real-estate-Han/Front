@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import Swal from 'sweetalert2';
 import { Inputs } from '@components/Inputs';
 import { useForm } from 'react-hook-form';
 import { useLazyQuery, useQuery } from '@apollo/client';
 import { GET_USER } from '@utils/apollo/gqls';
-import Swal from 'sweetalert2';
 import useStore from '@zustand/store';
 
 export interface LoginContentType {
