@@ -19,7 +19,7 @@ interface Iprops {
   initialData?: postType[];
   fixed?: boolean;
 }
-const ClusterMap = ({ initialData, fixed }: Iprops) => {
+const StaticMap = ({ initialData, fixed }: Iprops) => {
   const { data: clusterData, error } = useQuery(GET_CLUSTER_DATA, {
     fetchPolicy: 'network-only',
   });
@@ -156,7 +156,7 @@ const ClusterMap = ({ initialData, fixed }: Iprops) => {
     </MapPostList>
   );
 };
-export default ClusterMap;
+export default StaticMap;
 
 const MapPostList = styled.div<{ fixed: boolean | undefined }>`
   @media (max-width: 999px) {
@@ -176,20 +176,19 @@ const MapPostList = styled.div<{ fixed: boolean | undefined }>`
 
   @media (min-width: 1000px) {
     box-sizing: border-box;
-    display: flex;
-    width: 70%;
-    height: 65vh;
-    min-height: 380px;
-    justify-content: flex-start;
-    align-items: center;
-    /* border: 2px solid red; */
     ${props =>
       props.fixed &&
       `
     position: fixed;
-    top: 145px;
+    top: 225px;
     left: 0;
    `}
+    display: flex;
+    width: 75%;
+    height: 500px;
+    justify-content: flex-start;
+    align-items: center;
+    /* border: 2px solid red; */
   }
 `;
 const Kakomap = styled(Map)`

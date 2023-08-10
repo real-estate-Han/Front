@@ -38,7 +38,8 @@ export const Banner = ({ wide }: BannerProps) => {
     swipeToSlide: true,
     touchMove: true,
     touchThreshold: 100,
-    arrows: false,
+    arrows: true,
+    dots: true,
   };
   const sideBannerSite = [
     {
@@ -83,7 +84,7 @@ export const Banner = ({ wide }: BannerProps) => {
                   key={site.id}
                   img={site.img}
                   onClick={() => {
-                    router.push(site.url);
+                    window.open(site.url);
                   }}
                 />
               );
@@ -99,7 +100,7 @@ export const Banner = ({ wide }: BannerProps) => {
                   key={site.id}
                   img={site.img}
                   onClick={() => {
-                    router.push(site.url);
+                    window.open(site.url);
                   }}
                 />
               );
@@ -114,14 +115,16 @@ export const Banner = ({ wide }: BannerProps) => {
 const SideBanner = styled.div<{ border: boolean; wide?: boolean }>`
   ${({ wide }) =>
     wide
-      ? ` width: 1000px;
-  height: 80px;`
-      : `  width: 200px;
-  height: 440px;`};
+      ? ` width: 100%;
+  height: 100%;`
+      : `  width:100%;
+  height: 200px;`};
 
   background-color: white;
   /* border: 1px solid ${({ theme }) => theme.mainColor.blue200}; */
   border-radius: 20px;
+  box-sizing: border-box;
+  padding: 10px;
 `;
 
 const BannerSite = styled.div<{ img: string; wide?: boolean }>`
@@ -129,10 +132,9 @@ const BannerSite = styled.div<{ img: string; wide?: boolean }>`
     wide
       ? ` width: 600px;
   height: 100px;`
-      : ` width: 50px;
-  height: 80px;`};
+      : `width: 600px;
+  height: 100px;`};
 
-  border: 1px solid ${({ theme }) => theme.mainColor.blue200};
   border-radius: 20px;
   box-sizing: border-box;
   background-image: url(${({ img }) => img});
@@ -140,6 +142,6 @@ const BannerSite = styled.div<{ img: string; wide?: boolean }>`
   background-repeat: no-repeat;
   &:hover {
     cursor: pointer;
-    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+    /* box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5); */
   }
 `;

@@ -21,4 +21,12 @@ const FooterContent = () => {
 
 export default FooterContent;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  @media (max-width: 1000px) {
+    visibility: hidden;
+    display: none;
+  }
+  @media (min-width: 1000px) {
+    padding-top: 10px;
+  }
+`;

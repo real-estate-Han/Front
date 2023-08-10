@@ -7,6 +7,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { MdArrowForwardIos } from 'react-icons/md';
 import { useQuery } from '@apollo/client';
 import { MdOutlineSearch } from 'react-icons/md';
+import { useInView } from 'react-intersection-observer';
 import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
 import useStoreFilter, {
   filterInitialData,
@@ -50,23 +51,48 @@ const MobileHomeContent = () => {
     }
   }, [filtercondition]);
 
+  // intersection observer
+  const [ref, inView] = useInView({
+    threshold: 1,
+  });
+  const [postitem, setPostitem] = useState<postType[]>([]);
+  const [postCount, setpostCount] = useState<number>(0);
+  const totalCount = clusterData?.allpost?.posts?.length;
+  const scrollEvent = () => {
+    let predata = clusterData?.allpost?.posts;
+
+    let currentdata = [...predata].slice(postCount, postCount + 5);
+    setPostitem([...postitem, ...currentdata]);
+  };
+  useEffect(() => {
+    if (postCount === 0) {
+      setPostitem(clusterData?.allpost?.posts?.slice(0, 5));
+      setpostCount(postCount + 5);
+    }
+    if (inView && postCount <= totalCount) {
+      scrollEvent();
+      setpostCount(postCount + 5);
+    }
+  }, [inView]);
   return (
     <Wrap>
       <span className="titleLogo">한세일 부동산</span>
-      <BrandingBox>
-        <div>
-          고객 신뢰를 최우선시 하는
-          <br />
-          전문가가 당신을 도와드립니다.
-        </div>
-        <div className="rightarrow">
-          <MdArrowForwardIos size={20} />
-        </div>
-      </BrandingBox>
-      <SearchBar ref={inputBoxRef}>
-        <MdOutlineSearch className="searchicon" size={28} />
-        <input className="searchinput" placeholder="지역을 입력하세요" />
-      </SearchBar>
+      <TopBox>
+        <BrandingBox>
+          <div>
+            고객 신뢰를 최우선시 하는
+            <br />
+            전문가가 당신을 도와드립니다.
+          </div>
+          <div className="rightarrow">
+            <MdArrowForwardIos size={20} />
+          </div>
+        </BrandingBox>
+        <SearchBar ref={inputBoxRef}>
+          <MdOutlineSearch className="searchicon" size={28} />
+          <input className="searchinput" placeholder="지역을 입력하세요" />
+        </SearchBar>
+      </TopBox>
       <div className="filtertitle">조건별 매물 검색</div>
       <div className="itemcategorylist ">
         <div
@@ -136,9 +162,15 @@ const MobileHomeContent = () => {
       </div>
       <div className="filtertitle">문산읍 추천매물</div>
       <div className="recommandItem">
-        {postData?.map((p: postType, idx: number) => {
+        {postitem?.map((p: postType, idx: number) => {
           // eslint-disable-next-line react/no-array-index-key
-          return <PostItems key={p._id} widthPercent={40} postData={p} />;
+          return (
+            <>
+              <PostItems key={p._id} widthPercent={40} postData={p} />
+
+              <div className="scrollRef" ref={ref} />
+            </>
+          );
         })}
       </div>
     </Wrap>
@@ -148,6 +180,9 @@ const MobileHomeContent = () => {
 export default MobileHomeContent;
 
 const Wrap = styled.div`
+  @media (min-width: 1000px) {
+    display: none;
+  }
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -158,6 +193,7 @@ const Wrap = styled.div`
   overflow-y: auto;
   box-sizing: border-box;
   padding: 0 20px;
+
   /* border: 1px solid black; */
 
   .titleLogo {
@@ -258,12 +294,19 @@ const Wrap = styled.div`
     flex-wrap: wrap;
     justify-content: space-between; // 각 아이템을 자리에 맞게 배치
     width: 100%;
-    gap: 30px;
-
+    gap: 10px;
+    margin-bottom: 30px;
     /* & > * {
       flex-basis: 33%; // 한 줄에 4개 아이템이 들어가도록 설정
     } */
   }
+  .scrollRef {
+    width: 1px;
+    height: 1px;
+  }
+`;
+const TopBox = styled.div`
+  width: 100%;
 `;
 const BrandingBox = styled.div`
   width: 100%;
@@ -290,7 +333,7 @@ const BrandingBox = styled.div`
 `;
 const SearchBar = styled.div`
   width: 100%;
-  height: 58px;
+  height: 60px;
   border: 1px solid transparent;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   border-radius: 4px;

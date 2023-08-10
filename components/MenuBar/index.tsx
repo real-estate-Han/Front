@@ -223,6 +223,9 @@ const MenuBar = () => {
 export default MenuBar;
 
 const MenuDiv = styled.div<{ hiddenBar: boolean }>`
+  @media (min-width: 1000px) {
+    visibility: hidden;
+  }
   display: ${({ hiddenBar }) => (hiddenBar ? 'none' : 'flex')};
   z-index: 3;
   justify-content: space-around;

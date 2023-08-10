@@ -13,8 +13,9 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Banner } from '@components/Banner';
 import Modal from '@components/Modal';
+import FooterContent from '@components/Footer/content';
 
-const poppins = Poppins({ weight: '400', subsets: ['latin'] });
+const poppins = Poppins({ weight: '700', subsets: ['latin'] });
 type childeren = { children?: React.ReactNode };
 export const Layout = ({ children }: childeren) => {
   const {
@@ -63,53 +64,74 @@ export const Layout = ({ children }: childeren) => {
         ) : null}
         {bannerState ? (
           <Modal
-            customHeight="105px"
+            customHeight="500px"
             modalState={bannerState}
             closeModal={bannerToggle}
-            WideModal
           >
-            <Banner wide />
+            <Banner />
           </Modal>
         ) : null}
       </>
-      {/* <BannerSite>
-        <Banner />
-      </BannerSite> */}
       <Content>{children}</Content>
+      <BannerSite>
+        <Banner wide />
+      </BannerSite>
       <Footer>
         <MenuBar />
+        <FooterContent />
       </Footer>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  width: 100vw;
-  min-height: 100vh;
+  width: 100%;
+  /* height: 100%; */
   color: ${({ theme }) => theme.font.regular};
   background-color: ${({ theme }) => theme.mainColor.blue200};
+  /* background-color: #fff; */
+
   z-index: 1;
 `;
 const BannerSite = styled.div`
-  display: none;
-  @media (min-width: 1600px) {
+  @media (max-width: 999px) {
+    display: none;
+  }
+  @media (min-width: 1000px) {
+    box-sizing: border-box;
     display: block;
-    position: fixed;
-    top: calc(50% - 200px);
-    left: 0;
+    background-color: #fff;
+    width: 100%;
+    height: 145px;
+    margin: auto;
+    padding: 0 10px;
   }
 `;
 export const Content = styled.main`
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  min-height: 82vh;
-  box-sizing: border-box;
-  overflow: hidden;
-  box-sizing: border-box;
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3), 0 0 5px rgba(0, 0, 0, 0.3);
+  @media (max-width: 999px) {
+    width: 100%;
+    /* height: 100%; */
+    margin: 0 auto;
+    min-height: 82vh;
+    box-sizing: border-box;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+    /* margin-bottom: 60px; */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3), 0 0 5px rgba(0, 0, 0, 0.3);
+  }
+  @media (min-width: 1000px) {
+    width: 100%;
+
+    max-width: 1320px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow: visible;
+    position: relative;
+    z-index: 2;
+    /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.3), 0 0 5px rgba(0, 0, 0, 0.3); */
+  }
 `;
 
 export const StyledLogo = styled(Logo)`
@@ -135,7 +157,7 @@ export const Footer = styled.footer`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  @media (max-width: 768px) {
+  @media (max-width: 999px) {
     /* position: fixed;
     bottom: 0;
     left: 0; */

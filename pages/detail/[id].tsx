@@ -518,12 +518,11 @@ const OwnerBox = styled.div`
   gap: 10px;
   background: #ffffff;
   padding: 20px;
-
+  margin: 8px auto;
   width: 100%;
   height: 50x;
-  margin-top: 8px;
-  margin-bottom: 8px;
   position: relative;
+  border-radius: 10px;
   @media (min-width: 1000px) {
     width: 1000px;
   }

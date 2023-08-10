@@ -30,7 +30,7 @@ export const filterInitialData = {
   saleMin: 0,
   saleMax: 100000,
   monthlyMin: 0,
-  monthlyMax: 300,
+  monthlyMax: 500,
   jenseMin: 0,
   jenseMax: 100000,
   depositMin: 0,

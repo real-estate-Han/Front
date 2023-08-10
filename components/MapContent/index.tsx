@@ -84,29 +84,27 @@ const MapContents = () => {
   }, [selectedData, filterdData]);
 
   return (
-    <>
-      <ContentBox>
-        <ClusterMap initialData={initialDatas} />
-        <ItemList barFixed={barFixed}>
-          <GrayBarbox barFixed={barFixed}>
-            <div className="graybar" />
-          </GrayBarbox>
-          <ItemTabBar barFixed={barFixed}>
-            <div>전체매물 {clusterData?.allpost?.totalPosts}</div>
-            <div>단지 매물 {filterdData?.length}</div>
-          </ItemTabBar>
-          <ItemBox barFixed={barFixed}>
-            {filterdData?.map((p: postType) => {
-              return (
-                <>
-                  <PostItems wide key={p._id} widthPercent={40} postData={p} />
-                </>
-              );
-            })}
-          </ItemBox>
-        </ItemList>
-      </ContentBox>
-    </>
+    <ContentBox>
+      <ClusterMap fixed initialData={initialDatas} />
+      <ItemList barFixed={barFixed}>
+        <GrayBarbox barFixed={barFixed}>
+          <div className="graybar" />
+        </GrayBarbox>
+        <ItemTabBar barFixed={barFixed}>
+          <div>전체매물 {clusterData?.allpost?.totalPosts}</div>
+          <div>단지 매물 {filterdData?.length}</div>
+        </ItemTabBar>
+        <ItemBox barFixed={barFixed}>
+          {filterdData?.map((p: postType) => {
+            return (
+              <>
+                <PostItems wide key={p._id} widthPercent={40} postData={p} />
+              </>
+            );
+          })}
+        </ItemBox>
+      </ItemList>
+    </ContentBox>
   );
 };
 export default MapContents;
@@ -118,6 +116,7 @@ const ContentBox = styled.div`
   @media (min-width: 1000px) {
     width: 100%;
     height: 100vh;
+    max-height: 900px;
     background-color: white;
     perspective: 10px;
   }
