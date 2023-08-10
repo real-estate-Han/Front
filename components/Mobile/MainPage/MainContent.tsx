@@ -44,8 +44,6 @@ const MainContent = () => {
   }, [clusterData]);
   const baseRef = useRef<HTMLDivElement>(null);
 
-  const router = useRouter();
-
   useEffect(() => {
     if (selectedData && selectedData?.length > 0) {
       setInitialDatas(selectedData);
@@ -102,7 +100,7 @@ const MainContent = () => {
 
   const resetButtonHandler = async () => {
     setIsFiltered(false);
-    // prevResetData();
+    console.log(clusterData?.allpost?.posts);
     const selected = await selectedDataFn(
       clusterData?.allpost?.posts,
       filterInitialData,
@@ -198,15 +196,13 @@ const Wrap = styled.div`
   overflow-x: hidden;
 `;
 const UtilBox = styled.div<{ barFixed: boolean }>`
-  background-color:  background-color: ${({ theme }) =>
-    theme.mainColor.blue200};;
+  background-color: white;
   width: 100%;
   height: ${({ barFixed }) => (barFixed ? '140px' : '135px')};
   position: fixed;
   top: 0;
   left: 0;
   z-index: 3;
-  
 `;
 const UtilContainer = styled.div<{ barFixed: boolean }>`
   background-color: white;

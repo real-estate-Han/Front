@@ -99,7 +99,8 @@ const PostMain = ({
       setDetailFile(fileArr);
     }
   };
-  const [CreatPost, { data, loading, error }] = useMutation(Creat_POST);
+  const [CreatPost, { data, loading: postLoading, error }] =
+    useMutation(Creat_POST);
   const [checkLogin, { data: isLogined, error: loginErr }] = useLazyQuery(
     IS_LOGINED,
     {
@@ -350,7 +351,9 @@ const PostMain = ({
             getValues={getValues}
           />
         </section>
-        <CommonButton type="submit">제출</CommonButton>
+        <CommonButton disabled={postLoading} type="submit">
+          제출
+        </CommonButton>
       </form>
     </>
   );

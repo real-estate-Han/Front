@@ -94,6 +94,9 @@ export const itemSpace = (itemType: string, postData: postType) => {
 
 export const itemSpacem2 = (itemType: string, postData: postType) => {
   const m2ToPyong = (m2: number | undefined) => {
+    if (!m2 || m2 === 0) {
+      return 0;
+    }
     if (m2) {
       const pyong = Math.floor(m2 * 0.3025);
       return pyong;
@@ -222,8 +225,13 @@ export const itemMoveinString = (itemType: string, postData: postType) => {
     if (dateStr) {
       const date = new Date(dateStr);
       const today = new Date();
+      const agreement = new Date('2023-03-02');
 
+      if (date <= agreement) {
+        return '협의 입주';
+      }
       if (date <= today) {
+        console.log(date, agreement);
         return '즉시 입주 가능';
       }
       const year = date.getFullYear();

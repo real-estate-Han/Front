@@ -2,7 +2,7 @@
 import styled from '@emotion/styled';
 
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 import { MdOutlineSearch, MdCancel, MdArrowBackIos } from 'react-icons/md';
 import SearchExample from './searchExample';

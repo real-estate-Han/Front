@@ -153,7 +153,6 @@ const UpdatePage = () => {
         )}
         <KakaoMapUtil />
       </Kakomap>
-      <a href="tel:01067887335">01067887335</a>
       <CommonButton onClick={findGeoLocation}>주소 검색</CommonButton>
       <button type="button" onClick={sendSMS}>
         전화번호
@@ -174,6 +173,7 @@ const UpdatePage = () => {
 
 export default UpdatePage;
 const Wrap = styled.div`
+  background: #fff;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

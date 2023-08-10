@@ -85,7 +85,9 @@ const Wrapper = styled.div<{ widthPercent: number; wide: boolean | undefined }>`
   font-family: 'Pretendard';
   font-style: normal;
   letter-spacing: -0.02em;
-  border-bottom: 1px solid #e0e0e0;
+  @media (max-width: 999px) {
+    border-bottom: 1px solid #e0e0e0;
+  }
   margin-top: 5px;
   &:hover {
     cursor: pointer;

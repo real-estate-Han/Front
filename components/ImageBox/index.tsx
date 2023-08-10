@@ -27,8 +27,11 @@ const ImageWrap = styled.div`
   width: 100%;
   height: 40vh;
   max-height: 600px;
-
   position: relative;
+  @media (min-width: 1000px) {
+    height: 50vh;
+    max-height: 700px;
+  }
 `;
 const WaterMark = styled.div`
   position: absolute;
