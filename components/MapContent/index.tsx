@@ -92,7 +92,7 @@ const MapContents = () => {
         </GrayBarbox>
         <ItemTabBar barFixed={barFixed}>
           <div>전체매물 {clusterData?.allpost?.totalPosts}</div>
-          <div>단지 매물 {filterdData?.length}</div>
+          <div>지도 내 매물 {filterdData?.length}</div>
         </ItemTabBar>
         <ItemBox barFixed={barFixed}>
           {filterdData?.map((p: postType) => {
@@ -138,7 +138,7 @@ const ItemList = styled.div<{ barFixed: boolean }>`
   }
   @media (min-width: 1000px) {
     width: 400px;
-    height: 700px;
+    height: 75%;
     background-color: white;
     position: absolute;
     top: 140px;

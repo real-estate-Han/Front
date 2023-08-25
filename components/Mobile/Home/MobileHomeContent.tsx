@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { MdArrowForwardIos } from 'react-icons/md';
+import Swal from 'sweetalert2';
 import { useQuery } from '@apollo/client';
 import { MdOutlineSearch } from 'react-icons/md';
 import { useInView } from 'react-intersection-observer';
@@ -78,7 +79,15 @@ const MobileHomeContent = () => {
     <Wrap>
       <span className="titleLogo">한세일 부동산</span>
       <TopBox>
-        <BrandingBox>
+        <BrandingBox
+          onClick={() => {
+            Swal.fire({
+              title: '준비중입니다.',
+              icon: 'warning',
+              confirmButtonText: '확인',
+            });
+          }}
+        >
           <div>
             고객 신뢰를 최우선시 하는
             <br />

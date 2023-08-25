@@ -16,6 +16,7 @@ const ItemAreaFilter = ({ clusterData }: IProps) => {
     setSelectedData,
     setIsFiltered,
   } = useStoreFilter(state => state);
+
   const filterButton = () => {
     const selected = selectedDataFn(clusterData, filtercondition);
     setSelectedData(selected);

@@ -178,7 +178,7 @@ const MapPostList = styled.div<{ fixed: boolean | undefined }>`
     box-sizing: border-box;
     display: flex;
     width: 70%;
-    height: 65vh;
+    height: 80%;
     min-height: 380px;
     justify-content: flex-start;
     align-items: center;
