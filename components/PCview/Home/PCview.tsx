@@ -152,7 +152,15 @@ const PCviewContent = () => {
         )}
       </TopBanner>
       <TopBox>
-        <BrandingBox>
+        <BrandingBox
+          onClick={() => {
+            Swal.fire({
+              title: '준비중입니다.',
+              icon: 'warning',
+              confirmButtonText: '확인',
+            });
+          }}
+        >
           <div>
             고객 신뢰를 최우선시 하는
             <br />
@@ -174,7 +182,7 @@ const PCviewContent = () => {
             {filterdData?.map((p: postType) => {
               return (
                 <>
-                  <PostItems wide key={p._id} widthPercent={40} postData={p} />
+                  <PostItems key={p._id} widthPercent={40} postData={p} />
                 </>
               );
             })}
@@ -258,7 +266,9 @@ const Wrap = styled.div`
     overflow: auto;
     height: 180px;
     margin-bottom: 30px;
-
+    @media (min-width: 1300px) {
+      justify-content: center;
+    }
     .oneroomText {
       color: #ffffff;
       background-color: rgba(0, 0, 0, 0.5);
@@ -392,16 +402,16 @@ const BrandingBox = styled.div`
   }
 `;
 const ItemList = styled.div`
-  width: 50%;
+  width: 70%;
   height: 500px;
   overflow-y: auto;
   box-sizing: border-box;
-  padding-left: 50px;
+  padding-left: 10px;
   /* position: relative; */
   padding-top: 30px;
 `;
 const ItemTabBar = styled.div`
-  width: 40%;
+  width: 50%;
   height: 30px;
   background-color: #fff;
   z-index: 3;
@@ -409,10 +419,19 @@ const ItemTabBar = styled.div`
   justify-content: center;
   gap: 50px;
   position: absolute;
-  left: 60%;
+  left: 52%;
   top: 0;
 `;
-const ItemBoxs = styled.div``;
+const ItemBoxs = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; // 각 아이템을 자리에 맞게 배치
+  width: 100%;
+  height: 100%;
+  gap: 10px;
+  margin-bottom: 30px;
+  background-color: #ffffff;
+`;
 
 export const filerImage = [
   { key: 0, imageData: '/oneroom.jpg', title: '원룸', filtername: 'oneroom' },

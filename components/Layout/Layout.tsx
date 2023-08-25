@@ -124,7 +124,7 @@ export const Content = styled.main`
   @media (min-width: 1000px) {
     width: 100%;
 
-    max-width: 1320px;
+    /* max-width: 1320px; */
     margin: 0 auto;
     box-sizing: border-box;
     overflow: visible;
