@@ -15,6 +15,7 @@ const Document = () => {
           type="text/javascript"
           src={srcURL}
         />
+
         <Global styles={GlobalStyles} />
       </Head>
       <body>

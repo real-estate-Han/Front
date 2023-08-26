@@ -32,6 +32,7 @@ import {
   GET_DETAIL_POST,
   IS_LOGINED,
   GET_CLUSTER_DATA,
+  VIEW_POST_UP,
 } from '@utils/apollo/gqls';
 import {
   TitleString,
@@ -116,6 +117,7 @@ const DetailPage = () => {
   );
   const [isFavor, setIsFavor] = useState(false);
   const [favorMutate, { error: favorErr }] = useMutation(FAVOR_TOGGLE);
+  const [viewMutate, { error: viewErr }] = useMutation(VIEW_POST_UP);
   const [isOwner, setIsOwner] = useState(false);
 
   const IsOwnerLogin = async () => {
@@ -131,6 +133,12 @@ const DetailPage = () => {
   useEffect(() => {
     IsOwnerLogin();
   }, [isOwner]);
+
+  useEffect(() => {
+    viewMutate({
+      variables: { PostId: detailID },
+    });
+  }, []);
 
   const FavorToggle = () => {
     checkLogin().then(res => {

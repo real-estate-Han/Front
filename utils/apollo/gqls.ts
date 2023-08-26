@@ -190,6 +190,12 @@ export const FAVOR_TOGGLE = gql`
   }
 `;
 
+export const VIEW_POST_UP = gql`
+  mutation Mutation($PostId: ID!) {
+    viewPost(id: $PostId)
+  }
+`;
+
 export const IS_LOGINED = gql`
   query Query {
     checklogin {
