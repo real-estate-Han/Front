@@ -107,7 +107,6 @@ const PCviewContent = () => {
   };
   useEffect(() => {
     checkLogin();
-    console.log(isLogined);
   }, [isLogined]);
 
   const { clearState } = useStore(state => state);

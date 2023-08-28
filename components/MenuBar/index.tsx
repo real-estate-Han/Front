@@ -95,7 +95,6 @@ const MenuBar = () => {
   };
   const linktoPostpage = () => {
     checkLogined().then(res => {
-      console.log(res);
       if (res?.data?.checklogin?.status === 'owner') {
         router.push('/post');
       } else {

@@ -13,9 +13,9 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const httpLink = createHttpLink({
   uri:
-    // process.env.NODE_ENV === 'production' ?
-    process.env.NEXT_PUBLIC_API_URL,
-  // : 'http://localhost:8080/graphql',
+    process.env.NODE_ENV === 'production'
+      ? process.env.NEXT_PUBLIC_API_URL
+      : 'http://localhost:8081/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {

@@ -135,9 +135,14 @@ const DetailPage = () => {
   }, [isOwner]);
 
   useEffect(() => {
-    viewMutate({
-      variables: { PostId: detailID },
-    });
+    const viewUP = setTimeout(() => {
+      viewMutate({
+        variables: { PostId: detailID },
+      });
+    }, 3000);
+    return () => {
+      clearTimeout(viewUP);
+    };
   }, []);
 
   const FavorToggle = () => {

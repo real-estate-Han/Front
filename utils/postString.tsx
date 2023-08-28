@@ -231,7 +231,6 @@ export const itemMoveinString = (itemType: string, postData: postType) => {
         return '협의 입주';
       }
       if (date <= today) {
-        console.log(date, agreement);
         return '즉시 입주 가능';
       }
       const year = date.getFullYear();

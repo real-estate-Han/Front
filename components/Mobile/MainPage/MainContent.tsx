@@ -100,7 +100,7 @@ const MainContent = () => {
 
   const resetButtonHandler = async () => {
     setIsFiltered(false);
-    console.log(clusterData?.allpost?.posts);
+
     const selected = await selectedDataFn(
       clusterData?.allpost?.posts,
       filterInitialData,

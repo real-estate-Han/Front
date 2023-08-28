@@ -141,7 +141,7 @@ const PostMain = ({
           itemWaterMark: waterMark,
           itemFavorCount: 0,
         };
-        // console.log(PostInputData);
+
         const Geo = position;
         CreatPost({
           variables: { postInput: PostInputData, geo: Geo },
