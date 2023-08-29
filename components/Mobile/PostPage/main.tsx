@@ -15,6 +15,7 @@ import CommonLabel from '@components/Label';
 import Hr from '@components/Hr';
 import SelectedButton from '@components/Button/selectedButton';
 import { S3UpLoadFile } from '../../../utils/S3util';
+import CircleLoading from '@components/Loding/circleLoding';
 
 interface KakaoMapProps {
   kakaoLoadAddress?: string;
@@ -56,7 +57,9 @@ const PostMain = ({
   const handleWaterMarkChange = (event: any) => {
     event && setWaterMark(event.target.value);
   };
+
   const [tabIndex, setTabIndex] = useState('monthly/House');
+
   const onFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
     const option = {
@@ -99,6 +102,7 @@ const PostMain = ({
       setDetailFile(fileArr);
     }
   };
+
   const [CreatPost, { data, loading: postLoading, error }] =
     useMutation(Creat_POST);
   const [checkLogin, { data: isLogined, error: loginErr }] = useLazyQuery(
@@ -109,7 +113,19 @@ const PostMain = ({
     },
   );
   useEffect(() => {
-    checkLogin();
+    checkLogin().then(res => {
+      if (
+        res?.data?.checklogin?.checklogin === 'failed' ||
+        res?.data?.checklogin?.status === 'geust'
+      ) {
+        Swal.fire({
+          title: '관리자자격이 필요합니다',
+          icon: 'error',
+          confirmButtonText: '확인',
+        });
+        router.push('/');
+      }
+    });
   }, []);
 
   const router = useRouter();
@@ -130,11 +146,11 @@ const PostMain = ({
         const PostInputData = {
           ...data,
           itemAddress: kakaoAddress,
-          itemLoadAddress: kakaoLoadAddress,
+          itemLoadAddress: kakaoLoadAddress ?? '',
           region_1depth,
           region_2depth,
           region_3depth,
-          itemTitleimg: titleS3URL,
+          itemTitleimg: titleS3URL ?? '',
           itemDetailimg: detailS3URL,
           itemType,
           transactionType,
@@ -143,6 +159,7 @@ const PostMain = ({
         };
 
         const Geo = position;
+
         CreatPost({
           variables: { postInput: PostInputData, geo: Geo },
           refetchQueries: [{ query: GET_CLUSTER_DATA }],
@@ -158,9 +175,9 @@ const PostMain = ({
             title: '매물이 등록되었습니다.',
             icon: 'success',
             confirmButtonText: '확인',
+          }).then(() => {
+            router.push('/main');
           });
-
-        router.push('/main');
       }
       if (
         res?.data?.checklogin?.checklogin === 'failed' ||
@@ -355,6 +372,7 @@ const PostMain = ({
           제출
         </CommonButton>
       </form>
+      {postLoading ? <CircleLoading /> : null}
     </>
   );
 };

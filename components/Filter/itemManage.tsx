@@ -36,7 +36,7 @@ const ItemManageFilter = ({ clusterData }: IProps) => {
     type: 'none',
     transaction: 'none',
     saleMin: 0,
-    saleMax: 100000,
+    saleMax: 190000,
     monthlyMin: 0,
     monthlyMax: 300,
     jenseMin: 0,

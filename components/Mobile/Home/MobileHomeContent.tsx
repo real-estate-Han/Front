@@ -171,16 +171,17 @@ const MobileHomeContent = () => {
       </div>
       <div className="filtertitle">문산읍 추천매물</div>
       <div className="recommandItem">
-        {postitem?.map((p: postType, idx: number) => {
-          // eslint-disable-next-line react/no-array-index-key
-          return (
-            <>
-              <PostItems key={p._id} widthPercent={40} postData={p} />
-
-              <div className="scrollRef" ref={ref} />
-            </>
-          );
-        })}
+        <>
+          {postitem?.map((p: postType, idx: number) => {
+            // eslint-disable-next-line react/no-array-index-key
+            return (
+              <>
+                <PostItems key={p._id} widthPercent={40} postData={p} />
+              </>
+            );
+          })}
+          <div className="scrollRef" ref={ref} />
+        </>
       </div>
     </Wrap>
   );

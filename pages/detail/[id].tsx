@@ -46,6 +46,7 @@ import {
   itemtransactionTypeString,
 } from '@utils/postString';
 import FixedMap from '@components/KakaoMap/fixedMap';
+import { type } from 'os';
 
 export interface LoginContentType {
   email: string;
@@ -217,14 +218,18 @@ const DetailPage = () => {
   const sendSMS = (uniqueID: number) => {
     if (window) {
       const { userAgent } = window.navigator;
+
       const customWindow: CustomWindow = window;
       const isIOS =
         (/iPad|iPhone|iPod/.test(userAgent) && !customWindow?.MSStream) ||
         false;
       const isAndroid = /Android/.test(userAgent);
-      const encodedPhoneNumber = encodeURIComponent('010-6788-7335');
+      const encodedPhoneNumber = encodeURIComponent('010-2725-1135');
       const encodedMessage = encodeURIComponent(
-        `매물번호 ${uniqueID} 보고 연락드립니다.`,
+        `
+        ${DetailData?.post.region_3depth}에 있는
+        매물번호 ${uniqueID} 보고 연락드립니다.
+        `,
       );
 
       if (isIOS) {
@@ -269,7 +274,7 @@ const DetailPage = () => {
 
       <Slider {...settings}>
         <ImageBox
-          src={DetailData?.post.itemTitleimg}
+          src={DetailData?.post.itemTitleimg || '/ready_img.jpg'}
           watermark={DetailData?.post.itemWaterMark}
           alt="title"
         />
@@ -430,14 +435,16 @@ const DetailPage = () => {
       <PostTable4>
         <div className="detailinfo">옵션</div>
         <div className="optionlist">
-          {OptiobnString?.map((element: string, idx: number) => {
-            return (
-              <div className="optiondiv" key={idx}>
-                {' '}
-                {element}
-              </div>
-            );
-          })}
+          <table>
+            {OptiobnString?.map((element: string, idx: number) => {
+              return (
+                <div className="optiondiv" key={idx}>
+                  {' '}
+                  {element}
+                </div>
+              );
+            })}
+          </table>
         </div>
       </PostTable4>
       <PostTable4>
@@ -462,7 +469,7 @@ const DetailPage = () => {
         <div className="detailinfo">담당 공인중개사 </div>
         <div className="chargeinfo">
           <div>
-            <span>담당</span> : {DetailData?.post?.itemCharge}
+            <span>담당</span> : {DetailData?.post?.itemCharge ?? '-'}
           </div>
           <div>
             <span>연락처</span> : 031-953-6300
@@ -601,7 +608,7 @@ const PostTable1 = styled.div`
   padding: 20px;
   gap: 8px;
   width: 100%;
-  height: 181px;
+  min-height: 181px;
   margin-bottom: 8px;
   .uniqeNuberbar {
     display: flex;
@@ -670,7 +677,7 @@ const PostTable2 = styled.div`
   padding: 20px;
 
   width: 100%;
-  height: 440px;
+  min-height: 440px;
   margin-bottom: 8px;
   position: relative;
   .detailinfo {
@@ -768,7 +775,7 @@ const PostTable4 = styled.div`
   padding: 20px;
 
   width: 100%;
-  height: 130px;
+  min-height: 130px;
   margin-bottom: 8px;
   position: relative;
   .detailinfo {
@@ -802,7 +809,7 @@ const PostTable5 = styled.div`
   padding: 20px;
 
   width: 100%;
-  height: 270px;
+  min-height: 270px;
   overflow-y: auto;
   margin-bottom: 8px;
   position: relative;
@@ -829,7 +836,7 @@ const PostTable6 = styled.div`
   padding: 20px;
 
   width: 100%;
-  height: 196px;
+  min-height: 196px;
   overflow-y: auto;
   margin-bottom: 8px;
   position: relative;

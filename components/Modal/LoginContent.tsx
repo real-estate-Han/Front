@@ -6,6 +6,7 @@ import { Inputs } from '@components/Inputs';
 import { useForm } from 'react-hook-form';
 import { GET_USER } from '@utils/apollo/gqls';
 import useStore from '@zustand/store';
+import CircleLoading from '@components/Loding/circleLoding';
 
 export interface LoginContentType {
   email: string;
@@ -30,7 +31,7 @@ const LoginContent = () => {
     },
   );
 
-  const { changeLikeState } = useStore(state => state);
+  const { changeLikeState, setIsLogin } = useStore(state => state);
 
   const LoginAPI = async (data: LoginContentType) => {
     await LoginQuery({
@@ -66,8 +67,9 @@ const LoginContent = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        closeLogin();
-        // setSideMemu();
+        setIsLogin(true);
+        closeLogin(false);
+        setSideMemu();
       }
     });
   };
@@ -90,6 +92,7 @@ const LoginContent = () => {
         </LoginButton>
       </form>
       <SwitchButton onClick={switchLogin}>회원가입</SwitchButton>
+      {loading && <CircleLoading />}
     </Wrap>
   );
 };

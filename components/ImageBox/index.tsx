@@ -13,7 +13,9 @@ const ImageBox = ({ src, alt, watermark }: ImageBoxProps) => {
         <Image src={src || './next.svg'} alt={alt} fill />
         {watermark === 'on' ? (
           <WaterMark>
-            <div>한세일부동산</div>
+            <span>한세일부동산</span>
+            <span>031-953-6300</span>
+            <span>010-5351-1613</span>
           </WaterMark>
         ) : null}
       </ImageWrap>
@@ -39,10 +41,12 @@ const WaterMark = styled.div`
   top: calc(50% - 50px);
   width: 200px;
   height: 100px;
-  background: rgba(245, 241, 241, 0.475);
+  background: rgba(226, 216, 216, 0.781);
   z-index: 3;
   color: ${({ theme }) => theme.mainColor.blue500};
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  opacity: 0.6;
 `;
