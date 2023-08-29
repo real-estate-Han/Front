@@ -30,15 +30,15 @@ const AdressMap = ({ setKakaoAddress, setKakaoGeo }: KakaoMapProps) => {
     });
   };
 
-  const getByAddress = (address: string) => {
-    if (!map) return;
-    let geocoder = new kakao.maps.services.Geocoder();
-    geocoder.addressSearch(address, function (result, status) {
-      if (status === kakao.maps.services.Status.OK) {
-        console.log(result);
-      }
-    });
-  };
+  // const getByAddress = (address: string) => {
+  //   if (!map) return;
+  //   let geocoder = new kakao.maps.services.Geocoder();
+  //   geocoder.addressSearch(address, function (result, status) {
+  //     if (status === kakao.maps.services.Status.OK) {
+  //       console.log(result);
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
     getByGeoCoder(position?.lng, position?.lat);

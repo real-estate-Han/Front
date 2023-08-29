@@ -1,10 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect } from 'react';
+
 import styled from '@emotion/styled';
 import LoginContent from '@components/Modal/LoginContent';
 import useStore from '@zustand/store';
 import SignupContent from '@components/Modal/SignupContent';
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import MenuBar from '@components/MenuBar';
 import { useMediaQuery } from 'react-responsive';
 import { Poppins } from '@next/font/google';
@@ -14,6 +15,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { Banner } from '@components/Banner';
 import Modal from '@components/Modal';
 import FooterContent from '@components/Footer/content';
+import CircleLoading from '@components/Loding/circleLoding';
 
 const poppins = Poppins({ weight: '700', subsets: ['latin'] });
 type childeren = { children?: React.ReactNode };
@@ -29,6 +31,24 @@ export const Layout = ({ children }: childeren) => {
   } = useStore(state => state);
   const param = useRouter();
   const isMobile: boolean = useMediaQuery({ query: '(max-width:768px)' });
+  const [isLoading, setLoading] = React.useState<boolean>(false);
+
+  useEffect(() => {
+    const start = () => {
+      setLoading(true);
+    };
+    const end = () => {
+      setLoading(false);
+    };
+    Router.events.on('routeChangeStart', start);
+    Router.events.on('routeChangeComplete', end);
+    Router.events.on('routeChangeError', end);
+    return () => {
+      Router.events.on('routeChangeStart', start);
+      Router.events.on('routeChangeComplete', end);
+      Router.events.on('routeChangeError', end);
+    };
+  }, []);
 
   useEffect(() => {
     const likeList = localStorage.getItem('likeposts');
@@ -44,6 +64,7 @@ export const Layout = ({ children }: childeren) => {
   return (
     <Wrapper className={poppins.className}>
       <>
+        {isLoading ? <CircleLoading /> : null}
         {loginState ? (
           <Modal
             customHeight="300px"

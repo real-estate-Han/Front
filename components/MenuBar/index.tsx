@@ -20,7 +20,7 @@ const MenuBar = () => {
   const router = useRouter();
   const [hiddenBar, setHiddenBar] = useState<boolean>(false);
   const [currentUrl, setCurrentUrl] = useState<string>('/');
-  const [isLogined, setIsLogined] = useState<string>('');
+  const { isLogin, setIsLogin } = useStore(state => state);
   const { sideMenu, setSideMenu, clearState, bannerToggle } = useStore(
     state => state,
   );
@@ -32,9 +32,9 @@ const MenuBar = () => {
   const checkLogin = async () => {
     const currentToken = await localStorage.getItem('token');
     if (currentToken) {
-      setIsLogined('success');
+      setIsLogin(true);
     } else {
-      setIsLogined('fail');
+      setIsLogin(false);
     }
   };
   const changeMenu = () => {
@@ -43,7 +43,7 @@ const MenuBar = () => {
   };
   useEffect(() => {
     checkLogin();
-  }, [isLogined]);
+  }, []);
 
   const LogoutButton = () => {
     Swal.fire({
@@ -64,6 +64,7 @@ const MenuBar = () => {
           icon: 'success',
           confirmButtonText: '확인',
         });
+        setIsLogin(false);
       }
       clearState();
     });
@@ -88,14 +89,13 @@ const MenuBar = () => {
           icon: 'warning',
           confirmButtonText: '확인',
         }).then(() => {
-          changeLoginState();
+          changeLoginState(true);
         });
       }
     });
   };
   const linktoPostpage = () => {
     checkLogined().then(res => {
-      console.log(res);
       if (res?.data?.checklogin?.status === 'owner') {
         router.push('/post');
       } else {
@@ -208,10 +208,13 @@ const MenuBar = () => {
       </div>
 
       <SideMenu sideMenu={sideMenu}>
-        {isLogined === 'success' ? (
+        {isLogin ? (
           <div onClick={LogoutButton}> 로그아웃 </div>
         ) : (
-          <div onClick={changeLoginState}> 로그인 및 회원가입 </div>
+          <div onClick={changeLoginState.bind(this, true)}>
+            {' '}
+            로그인 및 회원가입{' '}
+          </div>
         )}
         <div onClick={bannerToggle}> 공공사이트 보기</div>
         <div onClick={linktoPostpage}> 매물 올리기</div>

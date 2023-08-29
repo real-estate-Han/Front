@@ -82,13 +82,13 @@ export const itemSpace = (itemType: string, postData: postType) => {
     itemType === 'office' ||
     itemType === 'apartment'
   ) {
-    return `${postData.itemSupplyArea}m2`;
+    return `${postData.itemSupplyArea ?? '-'}m2`;
   }
   if (itemType === 'land') {
-    return `${postData.itemTotalAreaLand}m2`;
+    return `${postData.itemTotalAreaLand ?? '-'}m2`;
   }
   if (itemType === 'factory') {
-    return `${postData.itemAreaLand}m2`;
+    return `${postData.itemAreaLand ?? '-'}m2`;
   }
 };
 
@@ -110,21 +110,21 @@ export const itemSpacem2 = (itemType: string, postData: postType) => {
     itemType === 'office' ||
     itemType === 'apartment'
   ) {
-    return `공급면적 : ${postData.itemSupplyArea}m2(${m2ToPyong(
+    return `공급면적 : ${postData.itemSupplyArea ?? '-'}m2(${m2ToPyong(
       postData?.itemSupplyArea,
-    )}평) / 전용면적 : ${postData.itemExclusiveArea}m2 (${m2ToPyong(
+    )}평) / 전용면적 : ${postData.itemExclusiveArea ?? '-'}m2 (${m2ToPyong(
       postData.itemExclusiveArea,
     )}평)`;
   }
   if (itemType === 'land') {
-    return `토지합계면적 : ${postData.itemTotalAreaLand}m2 (${m2ToPyong(
+    return `토지합계면적 : ${postData.itemTotalAreaLand ?? '-'}m2 (${m2ToPyong(
       postData.itemTotalAreaLand,
     )}평) `;
   }
   if (itemType === 'factory') {
-    return `대지면적 : ${postData.itemAreaLand}m2 (${m2ToPyong(
+    return `대지면적 : ${postData.itemAreaLand ?? '-'}m2 (${m2ToPyong(
       postData.itemAreaLand,
-    )}평) / 건축면적 : ${postData.itemAreaBuilding}m2 (${m2ToPyong(
+    )}평) / 건축면적 : ${postData.itemAreaBuilding ?? '-'}m2 (${m2ToPyong(
       postData.itemAreaBuilding,
     )}평)`;
   }
@@ -136,25 +136,33 @@ export const itemRoomString = (itemType: string, postData: postType) => {
       return `토지 지목 : ${postData?.itemLandCategory} / 필지수 : ${postData?.itemLandNumber} `;
 
     case 'apartment':
-      return `방개수 : ${postData?.itemRooms}개 / 화장실 : ${postData?.itemBathroom}개 `;
+      return `방개수 : ${postData?.itemRooms ?? '-'}개 / 화장실 : ${
+        postData?.itemBathroom ?? '-'
+      }개 `;
 
     case 'oneroom':
-      return `원룸 / 화장실 : ${postData?.itemBathroom}개 `;
+      return `원룸 / 화장실 : ${postData?.itemBathroom ?? '-'}개 `;
 
     case 'tworoom':
-      return `투-쓰리룸 / 화장실 : ${postData?.itemBathroom}개 `;
+      return `투-쓰리룸 / 화장실 : ${postData?.itemBathroom ?? '-'}개 `;
 
     case 'office':
-      return `방개수 : ${postData?.itemRooms}개 / 화장실 : ${postData?.itemBathroom}개 `;
+      return `방개수 : ${postData?.itemRooms ?? '-'}개 / 화장실 : ${
+        postData?.itemBathroom ?? '-'
+      }개 `;
 
     case 'house':
-      return `방개수 : ${postData?.itemRooms}개 / 화장실 : ${postData?.itemBathroom}개 `;
+      return `방개수 : ${postData?.itemRooms ?? '-'}개 / 화장실 : ${
+        postData?.itemBathroom ?? '-'
+      }개 `;
 
     case 'factory':
       return `공장-창고 `;
 
     case 'shop':
-      return `방개수 : ${postData?.itemRooms}개 / 화장실 : ${postData?.itemBathroom}개 `;
+      return `방개수 : ${postData?.itemRooms ?? '-'}개 / 화장실 : ${
+        postData?.itemBathroom ?? '-'
+      }개 `;
     default:
       return '';
   }
@@ -177,13 +185,14 @@ export const itemParkingString = (itemType: string, postData: postType) => {
     itemType === 'office' ||
     itemType === 'apartment'
   ) {
-    return `주차 : ${postData.itemParking}`;
+    return `주차 : ${postData.itemParking || '문의'}`;
   }
   if (itemType === 'land') {
-    return `화물차량 진입 : ${postData.itemTruck}`;
+    return `화물차량 진입 : ${postData.itemTruck || '문의'}`;
   }
   if (itemType === 'factory') {
-    return `화물차량 진입 : ${postData.itemTruck}`;
+    console.log(postData);
+    return `화물차량 진입 : ${postData.itemTruck || '문의'}`;
   }
 };
 
@@ -200,7 +209,7 @@ export const itemFloorString = (itemType: string, postData: postType) => {
       <>
         <MdOutlineCalendarToday size={24} />
         <p>
-          {postData.itemFloor ?? '??'}층 / {postData.itemTotalFloor ?? '??'}층
+          {postData.itemFloor ?? '-'}층 / {postData.itemTotalFloor ?? '-'}층
         </p>
       </>
     );
@@ -210,13 +219,13 @@ export const itemFloorString = (itemType: string, postData: postType) => {
       <>
         <MdOutlineCalendarToday size={24} />
         <p>
-          {postData.itemFloor ?? '??'}층 / {postData.itemTotalFloor ?? '??'}층
+          {postData.itemFloor ?? '-'}층 / {postData.itemTotalFloor ?? '-'}층
         </p>
       </>
     );
   }
   if (itemType === 'factory') {
-    return `화물차량 진입 : ${postData.itemTruck}`;
+    return `화물차량 진입 : ${postData.itemTruck || '문의'}`;
   }
 };
 
@@ -231,7 +240,6 @@ export const itemMoveinString = (itemType: string, postData: postType) => {
         return '협의 입주';
       }
       if (date <= today) {
-        console.log(date, agreement);
         return '즉시 입주 가능';
       }
       const year = date.getFullYear();

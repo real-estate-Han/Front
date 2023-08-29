@@ -5,11 +5,11 @@ import { useEffect, useRef, useState } from 'react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { MdArrowForwardIos } from 'react-icons/md';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { MdOutlineSearch } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import { useInView } from 'react-intersection-observer';
-import { GET_CLUSTER_DATA } from '@utils/apollo/gqls';
+import { GET_CLUSTER_DATA, IS_LOGINED } from '@utils/apollo/gqls';
 import useStoreFilter, {
   filterInitialData,
   selectedDataFn,
@@ -63,16 +63,16 @@ const PCviewContent = () => {
   const [ref, inView] = useInView({
     threshold: 1,
   });
-  const [postitem, setPostitem] = useState<postType[]>([]);
+  const [scrollPostitem, setScrollPostitem] = useState<postType[]>([]);
   const [postCount, setpostCount] = useState<number>(0);
   const [popularItem, setPopularItem] = useState<postType[]>([]);
   const totalCount = clusterData?.allpost?.posts?.length;
 
   const scrollEvent = () => {
-    let predata = clusterData?.allpost?.posts;
+    let predata = filterdData;
 
     let currentdata = [...predata].slice(postCount, postCount + 5);
-    setPostitem([...postitem, ...currentdata]);
+    setScrollPostitem([...scrollPostitem, ...currentdata]);
   };
   useEffect(() => {
     if (clusterData?.allpost?.posts) {
@@ -86,7 +86,7 @@ const PCviewContent = () => {
   }, []);
   useEffect(() => {
     if (postCount === 0) {
-      setPostitem(clusterData?.allpost?.posts?.slice(0, 5));
+      setScrollPostitem(clusterData?.allpost?.posts?.slice(0, 5));
       setpostCount(postCount + 5);
     }
     if (inView && postCount <= totalCount) {
@@ -97,17 +97,29 @@ const PCviewContent = () => {
 
   const { changeLoginState } = useStore(state => state);
   const [isLogined, setIsLogined] = useState<string>('');
+
+  const [checkLogined, { data, loading: checklogin, error: loginErr }] =
+    useLazyQuery(IS_LOGINED, {
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'no-cache',
+    });
+
   const checkLogin = () => {
-    const currentToken = localStorage.getItem('token');
-    if (currentToken) {
-      setIsLogined('success');
-    } else {
-      setIsLogined('fail');
-    }
+    checkLogined().then(res => {
+      if (res?.data?.checklogin?.checklogin === 'success') {
+        setIsLogined('success');
+      } else {
+        setIsLogined('fail');
+      }
+    });
   };
   useEffect(() => {
-    checkLogin();
-    console.log(isLogined);
+    const check = setTimeout(() => {
+      checkLogin();
+    }, 100);
+    return () => {
+      clearTimeout(check);
+    };
   }, [isLogined]);
 
   const { clearState } = useStore(state => state);
@@ -146,7 +158,10 @@ const PCviewContent = () => {
             로그아웃
           </span>
         ) : (
-          <span className="loginspan" onClick={changeLoginState}>
+          <span
+            className="loginspan"
+            onClick={changeLoginState.bind(this, true)}
+          >
             로그인
           </span>
         )}
@@ -212,8 +227,6 @@ const PCviewContent = () => {
           return (
             <>
               <PostItems key={p._id} widthPercent={40} postData={p} />
-
-              {/* <div className="scrollRef" ref={ref} /> */}
             </>
           );
         })}

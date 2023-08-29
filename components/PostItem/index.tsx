@@ -37,10 +37,10 @@ const PostItems = ({ postData, widthPercent, wide }: PostItemProps) => {
       <div className="titmeImg">
         <Image
           priority
-          src={postData?.itemTitleimg}
+          src={postData?.itemTitleimg || '/ready_img.jpg'}
           style={{ borderRadius: '4px' }}
           alt="titleImage"
-          width={170}
+          width={167}
           height={200}
         />
         <div className="likeButton">

@@ -28,7 +28,7 @@ export const filterInitialData = {
   type: 'none',
   transaction: 'none',
   saleMin: 0,
-  saleMax: 100000,
+  saleMax: 190000,
   monthlyMin: 0,
   monthlyMax: 500,
   jenseMin: 0,
@@ -42,7 +42,7 @@ export const filterInitialData = {
   buildingMin: 0,
   buildingMax: 300,
   landMin: 0,
-  landMax: 300,
+  landMax: 700,
 };
 
 interface State {

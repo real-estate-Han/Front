@@ -33,7 +33,7 @@ const ItemAreaFilter = ({ clusterData }: IProps) => {
   };
   const initialData = {
     saleMin: 0,
-    saleMax: 100000,
+    saleMax: 190000,
     monthlyMin: 0,
     monthlyMax: 300,
     jenseMin: 0,
@@ -45,7 +45,7 @@ const ItemAreaFilter = ({ clusterData }: IProps) => {
     buildingMin: 0,
     buildingMax: 300,
     landMin: 0,
-    landMax: 300,
+    landMax: 700,
   };
 
   const rangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,7 +92,7 @@ const ItemAreaFilter = ({ clusterData }: IProps) => {
           {filtercondition.type === 'land' ? (
             <InputRange
               isLand
-              inputMaxtitle="300평"
+              inputMaxtitle="700평"
               inputTitle="토지면적"
               setFilterData={setFilterCondition}
               minRangeName="landMin"

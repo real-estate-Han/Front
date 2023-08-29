@@ -35,7 +35,7 @@ const ItemSaleTypeFilter = ({ clusterData }: IProps) => {
   };
   const initialData = {
     saleMin: 0,
-    saleMax: 100000,
+    saleMax: 190000,
     monthlyMin: 0,
     monthlyMax: 500,
     jenseMin: 0,
@@ -128,7 +128,7 @@ const ItemSaleTypeFilter = ({ clusterData }: IProps) => {
           ) : null}
           {filtercondition?.transaction === 'sale' ? (
             <InputRange
-              inputMaxtitle="10억"
+              inputMaxtitle="19억"
               inputTitle="매매"
               setFilterData={setFilterCondition}
               minRangeName="saleMin"

@@ -47,7 +47,7 @@ const HeartPage = () => {
     setFilterdData(clusterData?.allpost?.posts);
   }, [clusterData]);
   const baseRef = useRef<HTMLDivElement>(null);
-  // console.log(baseRef);
+
   const router = useRouter();
 
   const isSelected = (value: number, x: string, y: string) => {

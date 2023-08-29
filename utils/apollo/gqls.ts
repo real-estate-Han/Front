@@ -78,6 +78,7 @@ export const GET_CLUSTER_DATA = gql`
         itemBathroom
         itemLoan
         itemFavorCount
+        itemView
       }
       totalPosts
     }
@@ -146,6 +147,7 @@ export const GET_DETAIL_POST = gql`
       itemDirection
       itemBathroom
       itemLoan
+      itemView
       itemCharge
       creator {
         _id

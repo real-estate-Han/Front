@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 
 interface ModalProps {
   children: React.ReactNode;
-  closeModal: () => void;
+  closeModal: (data: boolean) => void;
   modalState: boolean;
   WideModal?: boolean;
   fullview?: boolean;
@@ -34,7 +34,7 @@ const Modal = (props: ModalProps) => {
     <ModalStyled
       WideModal={props?.WideModal}
       customHeight={props?.customHeight}
-      onClick={props.closeModal}
+      onClick={props.closeModal.bind(this, false)}
       fullview={props?.fullview}
     >
       <div className="modalBody" onClick={e => e.stopPropagation()}>
