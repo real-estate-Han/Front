@@ -1,6 +1,7 @@
 import { Global } from '@emotion/react';
 import { Html, Head, Main, NextScript } from 'next/document';
 import Script from 'next/script';
+
 import { GlobalStyles } from '@styles/global';
 
 const Document = () => {
@@ -15,6 +16,7 @@ const Document = () => {
           type="text/javascript"
           src={srcURL}
         />
+
         <meta
           name="naver-site-verification"
           content="ae0ed43bfa70207984a9bea85bf9abf2037a9bef"
