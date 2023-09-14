@@ -96,8 +96,8 @@ const PCviewContent = () => {
   }, [inView]);
 
   const { changeLoginState } = useStore(state => state);
-  const [isLogined, setIsLogined] = useState<string>('');
 
+  const { isLogin, setIsLogin } = useStore(state => state);
   const [checkLogined, { data, loading: checklogin, error: loginErr }] =
     useLazyQuery(IS_LOGINED, {
       fetchPolicy: 'network-only',
@@ -107,20 +107,20 @@ const PCviewContent = () => {
   const checkLogin = () => {
     checkLogined().then(res => {
       if (res?.data?.checklogin?.checklogin === 'success') {
-        setIsLogined('success');
+        setIsLogin(true);
       } else {
-        setIsLogined('fail');
+        setIsLogin(false);
       }
     });
   };
   useEffect(() => {
     const check = setTimeout(() => {
       checkLogin();
-    }, 100);
+    }, 0);
     return () => {
       clearTimeout(check);
     };
-  }, [isLogined]);
+  }, [isLogin]);
 
   const { clearState } = useStore(state => state);
 
@@ -147,16 +147,42 @@ const PCviewContent = () => {
       clearState();
     });
   };
-
+  const linktoPostpage = () => {
+    checkLogined().then(res => {
+      if (res?.data?.checklogin?.status === 'owner') {
+        router.push('/post');
+      } else {
+        const localdata = localStorage.getItem('token');
+        if (localdata) {
+          Swal.fire({
+            title: '재로그인이 필요합니다',
+            icon: 'warning',
+            confirmButtonText: '확인',
+          });
+        } else {
+          Swal.fire({
+            title: '관리자만 등록 가능합니다',
+            icon: 'warning',
+            confirmButtonText: '확인',
+          });
+        }
+      }
+    });
+  };
   return (
     <Wrap>
       <TopBanner>
         <span className="titleLogo">한세일 부동산</span>
 
-        {isLogined === 'success' ? (
-          <span className="loginspan" onClick={LogoutButton}>
-            로그아웃
-          </span>
+        {isLogin ? (
+          <>
+            <span className="loginspan" onClick={linktoPostpage}>
+              매물올리기
+            </span>
+            <span className="loginspan" onClick={LogoutButton}>
+              로그아웃
+            </span>
+          </>
         ) : (
           <span
             className="loginspan"
@@ -186,6 +212,22 @@ const PCviewContent = () => {
           </div>
         </BrandingBox>
       </TopBox>
+      <div className="filtertitle">조건별 매물 검색</div>
+      <div className="itemcategorylist ">
+        {filerImage.map(item => {
+          return (
+            <ItemBox
+              key={item.key}
+              onClick={() => {
+                prefilter(item.filtername);
+              }}
+              bg={item.imageData}
+            >
+              <span className="oneroomText">{item.title}</span>
+            </ItemBox>
+          );
+        })}
+      </div>
       <MapBOx>
         <StaticMap />
         <ItemList>
@@ -204,23 +246,8 @@ const PCviewContent = () => {
           </ItemBoxs>
         </ItemList>
       </MapBOx>
-      <div className="filtertitle">조건별 매물 검색</div>
-      <div className="itemcategorylist ">
-        {filerImage.map(item => {
-          return (
-            <ItemBox
-              key={item.key}
-              onClick={() => {
-                prefilter(item.filtername);
-              }}
-              bg={item.imageData}
-            >
-              <span className="oneroomText">{item.title}</span>
-            </ItemBox>
-          );
-        })}
-      </div>
-      <div className="filtertitle">문산읍 인기매물</div>
+
+      <div className="filtertitle">인기(급매)매물</div>
       <div className="recommandItem">
         {popularItem?.map((p: postType, idx: number) => {
           // eslint-disable-next-line react/no-array-index-key
@@ -342,7 +369,10 @@ const TopBanner = styled.div`
   box-sizing: border-box;
   .loginspan {
     margin-right: 20px;
-    width: 100px;
+    width: 120px;
+    &:hover {
+      cursor: pointer;
+    }
   }
   .titleLogo {
     color: #0059f9;
@@ -447,6 +477,31 @@ const ItemBoxs = styled.div`
 `;
 
 export const filerImage = [
+  {
+    key: 7,
+    imageData: '/landimage.jpg',
+    title: '토지',
+    filtername: 'land',
+  },
+  {
+    key: 6,
+    imageData: '/factory.jpg',
+    title: '공장-창고',
+    filtername: 'factory',
+  },
+  {
+    key: 5,
+    imageData: '/shopimage.jpg',
+    title: '상가-상가부지',
+    filtername: 'shop',
+  },
+  {
+    key: 3,
+    imageData: '/apartmentimage.jpg',
+    title: '아파트-분양권',
+    filtername: 'apartment',
+  },
+  { key: 4, imageData: '/house.jpg', title: '주택', filtername: 'house' },
   { key: 0, imageData: '/oneroom.jpg', title: '원룸', filtername: 'oneroom' },
   {
     key: 1,
@@ -459,31 +514,5 @@ export const filerImage = [
     imageData: '/officetel.jpg',
     title: '오피스텔',
     filtername: 'office',
-  },
-  {
-    key: 3,
-    imageData: '/apartmentimage.jpg',
-    title: '아파트',
-    filtername: 'apartment',
-  },
-  { key: 4, imageData: '/house.jpg', title: '주택', filtername: 'house' },
-  {
-    key: 5,
-    imageData: '/shopimage.jpg',
-    title: '상가',
-    filtername: 'shop',
-  },
-  {
-    key: 6,
-    imageData: '/factory.jpg',
-    title: '공장/창고',
-    filtername: 'factory',
-  },
-
-  {
-    key: 7,
-    imageData: '/landimage.jpg',
-    title: '토지',
-    filtername: 'land',
   },
 ];
