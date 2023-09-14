@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
-
-import KakaomapUtil from '@components/kakaoMapUtils';
 import { GeoLocation } from '@utils/type';
 import KakaoMapUtil from '@components/kakaoMapUtils';
 
