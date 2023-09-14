@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { Themes } from '@styles/themes';
 import { Layout } from '@components/Layout';
 import * as gtag from '../lib/gtag';
+import Head from 'next/head';
 
 const App = ({ Component, pageProps }: AppProps) => {
   const client = useApollo(pageProps.initialApolloState);
@@ -28,6 +29,13 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, [router.events]);
   return (
     <>
+      <Head>
+        <title>한세일부동산</title>
+        <meta
+          name="description"
+          content="파주시 부동산, 토지, 민통선 토지, 공장-창고 등 매물 보유중입니다. 031-954-6300 으로연락바랍니다."
+        />
+      </Head>
       {/* GA 설정 시작 */}
       {/* Global Site Tag (gtag.js) - Google Analytics */}
       <Script
