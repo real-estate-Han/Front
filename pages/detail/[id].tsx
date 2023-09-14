@@ -530,6 +530,10 @@ const Wrap = styled.div`
       z-index: 10;
     }
   }
+  @media (min-width: 1000px) {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
 `;
 const OwnerBox = styled.div`
   display: flex;
