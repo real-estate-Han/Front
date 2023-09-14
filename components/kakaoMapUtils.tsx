@@ -4,7 +4,7 @@ const KakaoMapUtil = () => {
   return (
     <>
       <ZoomControl position={kakao?.maps?.ControlPosition?.LEFT} />
-      <MapTypeControl position={kakao?.maps?.ControlPosition?.TOP} />
+      {/* <MapTypeControl position={kakao?.maps?.ControlPosition?.TOP} /> */}
     </>
   );
 };

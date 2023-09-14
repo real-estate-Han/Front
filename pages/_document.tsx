@@ -15,7 +15,10 @@ const Document = () => {
           type="text/javascript"
           src={srcURL}
         />
-
+        <meta
+          name="naver-site-verification"
+          content="ae0ed43bfa70207984a9bea85bf9abf2037a9bef"
+        />
         <Global styles={GlobalStyles} />
       </Head>
       <body>
